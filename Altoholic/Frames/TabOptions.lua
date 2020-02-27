@@ -231,9 +231,26 @@ function addon:SetOption(name, value)
 	end
 end
 
+local function UpdateRealmsOptionSelectivity()
+	f = AltoholicTooltipOptions
+    local connectedEnabled = addon:GetOption("UI.Tooltip.ShowMergedRealmsCount")
+    
+    if not connectedEnabled then
+        -- disable the all realms button, and make sure its deselected too
+        addon:SetOption("UI.Tooltip.ShowAllRealmsCount", false)
+        f.ShowAllRealmsCount:SetChecked(false)
+        f.ShowAllRealmsCount:SetEnabled(false)
+        f.ShowAllRealmsCount.Text:SetTextColor(.5,.5,.5)
+    else
+        -- enable the all realms button, but don't change its selection
+        f.ShowAllRealmsCount:SetEnabled(true)
+        f.ShowAllRealmsCount.Text:SetTextColor(1,1,1)        
+    end
+end
+
 function addon:ToggleOption(frame, option)
 	local value
-	
+
 	if frame then
 		value = frame:GetChecked() and true or false
 	else
@@ -241,6 +258,10 @@ function addon:ToggleOption(frame, option)
 	end
 	
 	addon:SetOption(option, value)
+    
+    if (option == "UI.Tooltip.ShowMergedRealmsCount") or (option == "UI.Tooltip.ShowAllRealmsCount") then
+        UpdateRealmsOptionSelectivity()
+    end 
 end
 
 function addon:SetupOptions()
@@ -420,6 +441,7 @@ function addon:SetupOptions()
 	L["Show counters for both factions"] = nil
 	L["Show counters for all accounts"] = nil
 	L["Include guild bank count in the total count"] = nil
+    UpdateRealmsOptionSelectivity()
 	
 	-- ** Calendar **
 	f = AltoholicCalendarOptions
