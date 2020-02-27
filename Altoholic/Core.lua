@@ -141,6 +141,7 @@ local AddonDB_Defaults = {
 			["UI.Tooltip.ShowGatheringNodesCount"] = true,		-- display counters when mousing over a gathering node (default:  on)
 			["UI.Tooltip.ShowCrossFactionCount"] = true,			-- display counters for both factions on a pve server
 			["UI.Tooltip.ShowMergedRealmsCount"] = true,			-- display counters for characters on connected realms
+            ["UI.Tooltip.ShowAllRealmsCount"] = true,               -- display counters for characters on all realms
 			["UI.Tooltip.ShowAllAccountsCount"] = true,			-- display counters for all accounts on the same realm
 			["UI.Tooltip.ShowGuildBankCount"] = true,				-- display guild bank counters
 			["UI.Tooltip.IncludeGuildBankInTotal"] = true,		-- total count = alts + guildbank (1) or alts only (0)
