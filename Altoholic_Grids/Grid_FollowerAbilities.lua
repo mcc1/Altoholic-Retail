@@ -41,7 +41,7 @@ local function AddIDToView(id, isCounter)
 	
 	if isCounter then
 		local counterID = C_Garrison.GetFollowerAbilityCounterMechanicInfo(id)
-		
+		if not counterID then return end -- fix for LUA errors due to unknown cause
 		if not counters[counterID] then	-- if this counter does not exist yet
 			counters[counterID] = true		-- add it
 			viewItems[id] = true				-- and add this ability to the view (any ability with that counter, it's the counter that matters anyway)
