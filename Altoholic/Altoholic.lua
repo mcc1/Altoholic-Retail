@@ -182,10 +182,10 @@ function AuctionFrameBrowse_UpdateHook()
                 -- Code added 2020/03/10: get the recipeRank
                 CreateFrame( "GameTooltip", "RecipeRankScanningTooltip", nil, "GameTooltipTemplate" );
                 RecipeRankScanningTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
-                RecipeRankScanningTooltip:AddFontStrings(
-                    RecipeRankScanningTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
-                    RecipeRankScanningTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) 
-                );
+                --RecipeRankScanningTooltip:AddFontStrings(
+                --    RecipeRankScanningTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
+                --    RecipeRankScanningTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) 
+                --);
                 RecipeRankScanningTooltip:ClearLines()
                 RecipeRankScanningTooltip:SetHyperlink(link)
                 local recipeRank = string.match(_G["RecipeRankScanningTooltipTextLeft2"]:GetText(), 'Rank (%d)')
@@ -284,10 +284,10 @@ local function MerchantFrame_UpdateMerchantInfoHook()
                         -- Code added 2020/03/10: get the recipeRank
                         CreateFrame( "GameTooltip", "RecipeRankScanningTooltip", nil, "GameTooltipTemplate" );
                         RecipeRankScanningTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
-                        RecipeRankScanningTooltip:AddFontStrings(
-                            RecipeRankScanningTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
-                            RecipeRankScanningTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) 
-                        );
+                        --RecipeRankScanningTooltip:AddFontStrings(
+                        --    RecipeRankScanningTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
+                        --    RecipeRankScanningTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) 
+                        --);
                         RecipeRankScanningTooltip:ClearLines()
                         RecipeRankScanningTooltip:SetHyperlink(link)
                         local recipeRank = string.match(_G["RecipeRankScanningTooltipTextLeft2"]:GetText(), 'Rank (%d)')
