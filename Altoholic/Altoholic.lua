@@ -178,8 +178,21 @@ function AuctionFrameBrowse_UpdateHook()
 			local itemID = addon:GetIDFromLink(link)
 			local _, _, _, _, _, itemType, itemSubType = GetItemInfo(itemID)
 			if itemType == L["ITEM_TYPE_RECIPE"] and itemSubType ~= L["ITEM_SUBTYPE_BOOK"] then		-- is it a recipe ?
-				
-				local _, couldLearn, willLearn = addon:GetRecipeOwners(itemSubType, link, addon:GetRecipeLevel(link))
+
+                -- Code added 2020/03/10: get the recipeRank
+                CreateFrame( "GameTooltip", "RecipeRankScanningTooltip", nil, "GameTooltipTemplate" );
+                RecipeRankScanningTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
+                RecipeRankScanningTooltip:AddFontStrings(
+                    RecipeRankScanningTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
+                    RecipeRankScanningTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) 
+                );
+                RecipeRankScanningTooltip:ClearLines()
+                RecipeRankScanningTooltip:SetHyperlink(link)
+                local recipeRank = string.match(_G["RecipeRankScanningTooltipTextLeft2"]:GetText(), 'Rank (%d)')
+                if not recipeRank then recipeRank = 0 end
+                RecipeRankScanningTooltip:Hide()
+                
+				local _, couldLearn, willLearn = addon:GetRecipeOwners(itemSubType, link, addon:GetRecipeLevel(link), recipeRank)
 				local tex
 
 				if (AuctioneerCompactUI) then
@@ -267,7 +280,22 @@ local function MerchantFrame_UpdateMerchantInfoHook()
 					if IsBOPItemKnown(itemID) then		-- recipe is bop and already known, useless to alts : red.
 						r, g, b = 1, 0, 0
 					elseif itemType == L["ITEM_TYPE_RECIPE"] and itemSubType ~= L["ITEM_SUBTYPE_BOOK"] then		-- is it a recipe ?
-						local _, couldLearn, willLearn = addon:GetRecipeOwners(itemSubType, link, addon:GetRecipeLevel(link))
+                    
+                        -- Code added 2020/03/10: get the recipeRank
+                        CreateFrame( "GameTooltip", "RecipeRankScanningTooltip", nil, "GameTooltipTemplate" );
+                        RecipeRankScanningTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
+                        RecipeRankScanningTooltip:AddFontStrings(
+                            RecipeRankScanningTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
+                            RecipeRankScanningTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) 
+                        );
+                        RecipeRankScanningTooltip:ClearLines()
+                        RecipeRankScanningTooltip:SetHyperlink(link)
+                        local recipeRank = string.match(_G["RecipeRankScanningTooltipTextLeft2"]:GetText(), 'Rank (%d)')
+                        if not recipeRank then recipeRank = 0 end
+                        RecipeRankScanningTooltip:Hide()
+                
+                
+						local _, couldLearn, willLearn = addon:GetRecipeOwners(itemSubType, link, addon:GetRecipeLevel(link), recipeRank)
 						if #couldLearn == 0 and #willLearn == 0 then		-- nobody could learn the recipe, neither now nor later : red
 							r, g, b = 1, 0, 0
 						elseif #couldLearn > 0 then							-- at least 1 could learn it : green (priority over "will learn")

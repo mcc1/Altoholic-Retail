@@ -395,15 +395,17 @@ local function GetItemCount(searchedID)
 	return count
 end
 
-function addon:GetRecipeOwners(professionName, link, recipeLevel)
-	local craftName
+function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
+	if not recipeRank then recipeRank = 1 end
+    
+    local craftName
 	local spellID = addon:GetSpellIDFromRecipeLink(link)
 
 	if not spellID then		-- spell id unknown ? let's parse the tooltip
 		craftName = GetCraftNameFromRecipeLink(link)
 		if not craftName then return end		-- still nothing usable ? then exit
 	end
-	
+
 	local know = {}				-- list of alts who know this recipe
 	local couldLearn = {}		-- list of alts who could learn it
 	local willLearn = {}			-- list of alts who will be able to learn it later
@@ -423,12 +425,17 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel)
 				isKnownByChar = DataStore:IsCraftKnown(profession, spellID)
 			else
 				DataStore:IterateRecipes(profession, 0, 0, function(recipeData)
-					local _, recipeID, isLearned = DataStore:GetRecipeInfo(recipeData)
+					local _, recipeID, isLearned, knownRecipeRank, totalRanks = DataStore:GetRecipeInfo(recipeData)
 					local skillName = GetSpellInfo(recipeID) or ""
 
 					if string.lower(skillName) == string.lower(craftName) and isLearned then
-						isKnownByChar = true
-						return true	-- stop iteration
+                        if tonumber(recipeRank) > tonumber(knownRecipeRank) then
+                            isKnownByChar = false
+                            return true
+                        else
+                            isKnownByChar = true
+						    return true	-- stop iteration
+                        end
 					end
 				end)
 			end
@@ -453,9 +460,8 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel)
 	return know, couldLearn, willLearn
 end
 
-local function GetRecipeOwnersText(professionName, link, recipeLevel)
-
-	local know, couldLearn, willLearn = addon:GetRecipeOwners(professionName, link, recipeLevel)
+local function GetRecipeOwnersText(professionName, link, recipeLevel, recipeRank)
+	local know, couldLearn, willLearn = addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
 	
 	local lines = {}
 	if #know > 0 then
@@ -606,7 +612,9 @@ local function ProcessTooltip(tooltip, link)
 	if itemSubType == L["ITEM_SUBTYPE_BOOK"] then return end		-- exit if it's a book
 
 	if not cachedRecipeOwners then
-		cachedRecipeOwners = GetRecipeOwnersText(itemSubType, link, addon:GetRecipeLevel(link, tooltip))
+        local recipeRank = string.match(_G["GameTooltipTextLeft2"]:GetText(), 'Rank (%d)')
+        if not recipeRank then recipeRank = 0 end
+		cachedRecipeOwners = GetRecipeOwnersText(itemSubType, link, addon:GetRecipeLevel(link, tooltip), recipeRank)
 	end
 	
 	if cachedRecipeOwners then
