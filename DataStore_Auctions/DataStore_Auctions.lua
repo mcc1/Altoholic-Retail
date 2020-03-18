@@ -199,6 +199,9 @@ local originalPostCommodity = C_AuctionHouse.PostCommodity
 
 -- bid and buyout are optional parameters
 C_AuctionHouse.PostItem = function(item, duration, quantity, bid, buyout)
+    -- Call the original Blizzard function
+    originalPostItem(item, duration, quantity, bid, buyout)
+
     -- item is an ItemLocationMixin from Blizzard's ItemLocation.lua
     local bagID, slotIndex = item:GetBagAndSlot()
     local itemID = GetContainerItemID(bagID, slotIndex)
@@ -209,12 +212,12 @@ C_AuctionHouse.PostItem = function(item, duration, quantity, bid, buyout)
     
     table.insert(character.Auctions, format("%s|%s|%s|%s|%s|%s|%s", 
 				AHZone, itemID, quantity, "", bid or "", buyout or "", duration or ""))
-                
-    -- Call the original Blizzard function
-    originalPostItem(item, duration, quantity, bid, buyout)
 end
 
 C_AuctionHouse.PostCommodity = function(item, duration, quantity, unitPrice)
+    -- Call the original Blizzard function
+    originalPostCommodity(item, duration, quantity, unitPrice)
+
     -- item is an ItemLocationMixin from Blizzard's ItemLocation.lua
     local bagID, slotIndex = item:GetBagAndSlot()
     local itemID = GetContainerItemID(bagID, slotIndex)
@@ -225,9 +228,6 @@ C_AuctionHouse.PostCommodity = function(item, duration, quantity, unitPrice)
     
     table.insert(character.Auctions, format("%s|%s|%s|%s|%s|%s|%s", 
 				AHZone, itemID, quantity, "", "", unitPrice or "", duration or ""))
-                
-    -- Call the original Blizzard function
-    originalPostCommodity(item, duration, quantity, unitPrice)
 end
 
 local function ScanBids()
