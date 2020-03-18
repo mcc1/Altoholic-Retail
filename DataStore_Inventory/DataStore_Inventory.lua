@@ -51,6 +51,8 @@ local AddonDB_Defaults = {
 				averageItemLvl = 0,
 				overallAIL = 0,
 				Inventory = {},		-- 19 inventory slots, a simple table containing item id's or full item string if enchanted
+                CorruptionLevel = 0, -- Added: 2020/03/18 tracks the patch 8.3 corruption level of the character
+                CloakLevel = 0, -- tracks the patch 8.3 cloak level
 			}
 		}
 	}
@@ -175,10 +177,39 @@ local function ScanInventorySlot(slot)
 	end
 end
 
+local function ScanCorruption()
+    local link = GetInventoryItemLink("player", 15)
+
+    -- This future-proofs the addon incase corruption gets removed in a future patch.
+    if not GetCorruption then return end
+    
+    addon.ThisCharacter.CloakLevel = 0
+    
+    if link then
+        local _,_,_,_, itemID = string.find(link, "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
+
+        if tonumber(itemID) == 169223 then -- is it shroud of resolve?
+            CreateFrame( "GameTooltip", "ItemRankScanningTooltip", nil, "GameTooltipTemplate" );
+            ItemRankScanningTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
+            ItemRankScanningTooltip:ClearLines()
+            ItemRankScanningTooltip:SetHyperlink(link)
+            local itemRank = string.match(_G["ItemRankScanningTooltipTextLeft2"]:GetText(), '.+ (%d+)')
+            if not itemRank then itemRank = 0 end
+            ItemRankScanningTooltip:Hide()
+            
+            addon.ThisCharacter.CloakLevel = itemRank
+        end
+    end
+    
+    addon.ThisCharacter.CorruptionLevel = GetCorruption() - GetCorruptionResistance()
+end
+
 local function ScanInventory()
 	for slot = 1, NUM_EQUIPMENT_SLOTS do
 		ScanInventorySlot(slot)
 	end
+    
+    ScanCorruption()
 	
 	addon.ThisCharacter.lastUpdate = time()
 end
@@ -287,6 +318,7 @@ end
 local function OnPlayerEquipmentChanged(event, slot)
 	ScanInventorySlot(slot)
 	ScanAverageItemLevel()
+    ScanCorruption()
 	addon.ThisCharacter.lastUpdate = time()
 end
 
@@ -326,6 +358,10 @@ local function _GetInventoryItemCount(character, searchedID)
 		end
 	end
 	return count
+end
+
+local function _GetCorruptionInfo(character)
+    return character.CloakLevel, character.CorruptionLevel
 end
 	
 local function _GetAverageItemLevel(character)
@@ -441,6 +477,7 @@ local PublicMethods = {
 	GetInventoryItem = _GetInventoryItem,
 	GetInventoryItemCount = _GetInventoryItemCount,
 	GetAverageItemLevel = _GetAverageItemLevel,
+    GetCorruptionInfo = _GetCorruptionInfo,
 	RequestGuildMemberEquipment = _RequestGuildMemberEquipment,
 	GetGuildMemberInventoryItem = _GetGuildMemberInventoryItem,
 	GetGuildMemberAverageItemLevel = _GetGuildMemberAverageItemLevel,
@@ -501,6 +538,7 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetInventoryItem")
 	DataStore:SetCharacterBasedMethod("GetInventoryItemCount")
 	DataStore:SetCharacterBasedMethod("GetAverageItemLevel")
+    DataStore:SetCharacterBasedMethod("GetCorruptionInfo")
 	DataStore:SetGuildBasedMethod("GetGuildMemberInventoryItem")
 	DataStore:SetGuildBasedMethod("GetGuildMemberAverageItemLevel")
 	
