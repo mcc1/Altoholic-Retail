@@ -184,17 +184,23 @@ local function ScanCorruption()
     if not GetCorruption then return end
     
     addon.ThisCharacter.CloakLevel = 0
-    
+
     if link then
         local _,_,_,_, itemID = string.find(link, "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
 
         if tonumber(itemID) == 169223 then -- is it shroud of resolve?
+            -- Make a virtual tooltip, grab line two of it which should read: Rank ##
             CreateFrame( "GameTooltip", "ItemRankScanningTooltip", nil, "GameTooltipTemplate" );
             ItemRankScanningTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
             ItemRankScanningTooltip:ClearLines()
             ItemRankScanningTooltip:SetHyperlink(link)
-            local itemRank = string.match(_G["ItemRankScanningTooltipTextLeft2"]:GetText(), '.+ (%d+)')
-            if not itemRank then itemRank = 0 end
+            local tooltipText = _G["ItemRankScanningTooltipTextLeft2"]:GetText()
+            
+            local itemRank
+            if tooltipText then
+                itemRank = string.match(tooltipText, '.+ (%d+)')
+                if not itemRank then itemRank = 0 end
+            end
             ItemRankScanningTooltip:Hide()
             
             addon.ThisCharacter.CloakLevel = itemRank
@@ -208,8 +214,6 @@ local function ScanInventory()
 	for slot = 1, NUM_EQUIPMENT_SLOTS do
 		ScanInventorySlot(slot)
 	end
-    
-    ScanCorruption()
 	
 	addon.ThisCharacter.lastUpdate = time()
 end
@@ -334,6 +338,10 @@ end
 local function OnTransmogCollectionUpdated()
 	ScanTransmogCollection()
 	ScanTransmogSets()
+end
+
+local function OnEnterWorld()
+    ScanCorruption()
 end
 
 
@@ -548,6 +556,7 @@ end
 
 function addon:OnEnable()
 	addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
+    addon:RegisterEvent("PLAYER_ENTERING_WORLD", OnEnterWorld)
 	addon:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", OnPlayerEquipmentChanged)
 	-- addon:RegisterEvent("PLAYER_AVG_ITEM_LEVEL_READY", OnPlayerAilReady)
 	-- addon:RegisterEvent("TRANSMOG_COLLECTION_LOADED", OnTransmogCollectionLoaded)
@@ -562,6 +571,7 @@ end
 
 function addon:OnDisable()
 	addon:UnregisterEvent("PLAYER_ALIVE")
+    addon:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	addon:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED")
 end
 
