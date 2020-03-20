@@ -190,18 +190,11 @@ local function ScanAuctions()
 	addon:SendMessage("DATASTORE_AUCTIONS_UPDATED")
 end
 
--- UPDATE 8.3.003:
+-- UPDATE 8.3.003 2020/03/21:
 -- Since addons can't seem to be able to scan the AH after selling an item, instead I will try to get the information about an item being sold directly
 
--- Hook the game UI's PostItem and PostCommodity functions, grabbing their parameter information
-local originalPostItem = C_AuctionHouse.PostItem
-local originalPostCommodity = C_AuctionHouse.PostCommodity
-
 -- bid and buyout are optional parameters
-C_AuctionHouse.PostItem = function(item, duration, quantity, bid, buyout)
-    -- Call the original Blizzard function
-    originalPostItem(item, duration, quantity, bid, buyout)
-
+local function onPostItem(item, duration, quantity, bid, buyout)
     -- item is an ItemLocationMixin from Blizzard's ItemLocation.lua
     local bagID, slotIndex = item:GetBagAndSlot()
     local itemID = GetContainerItemID(bagID, slotIndex)
@@ -210,14 +203,11 @@ C_AuctionHouse.PostItem = function(item, duration, quantity, bid, buyout)
     local character = addon.ThisCharacter
 	character.lastUpdate = time()
     
-    table.insert(character.Auctions, format("%s|%s|%s|%s|%s|%s|%s", 
+   table.insert(character.Auctions, format("%s|%s|%s|%s|%s|%s|%s", 
 				AHZone, itemID, quantity, "", bid or "", buyout or "", duration or ""))
 end
 
-C_AuctionHouse.PostCommodity = function(item, duration, quantity, unitPrice)
-    -- Call the original Blizzard function
-    originalPostCommodity(item, duration, quantity, unitPrice)
-
+local function onPostCommodity(item, duration, quantity, unitPrice)
     -- item is an ItemLocationMixin from Blizzard's ItemLocation.lua
     local bagID, slotIndex = item:GetBagAndSlot()
     local itemID = GetContainerItemID(bagID, slotIndex)
@@ -229,6 +219,11 @@ C_AuctionHouse.PostCommodity = function(item, duration, quantity, unitPrice)
     table.insert(character.Auctions, format("%s|%s|%s|%s|%s|%s|%s", 
 				AHZone, itemID, quantity, "", "", unitPrice or "", duration or ""))
 end
+
+-- Hook the game UI's PostItem and PostCommodity functions, grabbing their parameter information
+hooksecurefunc(C_AuctionHouse, "PostItem", onPostItem)
+hooksecurefunc(C_AuctionHouse, "PostCommodity", onPostCommodity)
+
 
 local function ScanBids()
 	local AHZone = 0		-- 0 means faction AH
