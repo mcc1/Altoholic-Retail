@@ -465,7 +465,10 @@ columns["Name"] = {
 			tt:SetOwner(frame, "ANCHOR_RIGHT")
 			
 			tt:AddDoubleLine(DataStore:GetColoredCharacterName(character), DataStore:GetColoredCharacterFaction(character))
-			tt:AddLine(format("%s %s%s |r%s %s", L["Level"], 
+			if DataStore:GetCharacterRealm(character) then
+                tt:AddLine("Realm: "..colors.green..DataStore:GetCharacterRealm(character))
+            end
+            tt:AddLine(format("%s %s%s |r%s %s", L["Level"], 
 				colors.green, DataStore:GetCharacterLevel(character), DataStore:GetCharacterRace(character), DataStore:GetCharacterClass(character)),1,1,1)
 
 			local zone, subZone = DataStore:GetLocation(character)
@@ -2049,6 +2052,7 @@ function ns:Update()
 				else
 					isRealmShown = false
 				end
+                
 				rowFrame:DrawRealmLine(line, realm, account, Name_OnClick)
 			
 				rowIndex = rowIndex + 1
@@ -2057,13 +2061,15 @@ function ns:Update()
 			elseif isRealmShown then
 				if (lineType == INFO_CHARACTER_LINE) then
 					rowFrame:DrawCharacterLine(line, columns, currentMode)
+                    rowIndex = rowIndex + 1
+				    numVisibleRows = numVisibleRows + 1
+				    numDisplayedRows = numDisplayedRows + 1
 				elseif (lineType == INFO_TOTAL_LINE) then
 					rowFrame:DrawTotalLine(line, columns, currentMode)
+                    rowIndex = rowIndex + 1
+				    numVisibleRows = numVisibleRows + 1
+				    numDisplayedRows = numDisplayedRows + 1
 				end
-
-				rowIndex = rowIndex + 1
-				numVisibleRows = numVisibleRows + 1
-				numDisplayedRows = numDisplayedRows + 1
 			end
 		end
 	end
