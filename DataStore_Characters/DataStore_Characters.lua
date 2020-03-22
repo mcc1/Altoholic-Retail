@@ -37,6 +37,7 @@ local AddonDB_Defaults = {
 				playedThisLevel = 0,	-- /played at this level, in seconds
 				zone = nil,				-- character location
 				subZone = nil,
+                realm = nil,
 				
 				-- ** XP **
 				XP = nil,				-- current level xp
@@ -63,6 +64,7 @@ end
 local function ScanPlayerLocation()
 	local character = addon.ThisCharacter
 	character.zone = GetRealZoneText()
+    character.realm = GetRealmName()
 	character.subZone = GetSubZoneText()
 end
 
@@ -138,6 +140,10 @@ end
 -- ** Mixins **
 local function _GetCharacterName(character)
 	return character.name
+end
+
+local function _GetCharacterRealm(character)
+    return character.realm
 end
 
 local function _GetCharacterLevel(character)
@@ -325,6 +331,7 @@ local PublicMethods = {
 	GetCharacterLevel = _GetCharacterLevel,
 	GetCharacterRace = _GetCharacterRace,
 	GetCharacterClass = _GetCharacterClass,
+    GetCharacterRealm = _GetCharacterRealm,
 	GetColoredCharacterName = _GetColoredCharacterName,
 	GetCharacterClassColor = _GetCharacterClassColor,
 	GetClassColor = _GetClassColor,
@@ -353,6 +360,7 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetCharacterLevel")
 	DataStore:SetCharacterBasedMethod("GetCharacterRace")
 	DataStore:SetCharacterBasedMethod("GetCharacterClass")
+    DataStore:SetCharacterBasedMethod("GetCharacterRealm")
 	DataStore:SetCharacterBasedMethod("GetColoredCharacterName")
 	DataStore:SetCharacterBasedMethod("GetCharacterClassColor")
 	DataStore:SetCharacterBasedMethod("GetCharacterFaction")
