@@ -172,7 +172,7 @@ local function ScanMailbox()
 	wipe(character.Mails)
 	wipe(character.MailCache)	-- fully clear the mail cache, since the mailbox will now be properly scanned
 	
-	local numItems = GetInboxNumItems();
+	local numItems, totalItems = GetInboxNumItems();
 	if numItems == 0 then
 		return
 	end
@@ -210,6 +210,23 @@ local function ScanMailbox()
 	
 	-- show mails with the lowest expiry first
 	table.sort(character.Mails, function(a, b) return a.daysLeft < b.daysLeft end)
+    
+    -- Code added 2020/03/23: also include mail that can't be seen beyond the first 50
+    -- Since we can't see the headers or contents of this mail, just making up generic data for the mail
+    if totalItems > numItems then
+        for i = numItems, totalItems do
+            table.insert(character.Mails, {
+                icon = ICON_NOTE,
+                money = 0,
+                text = "",
+                subject = "",
+                sender = "",
+                lastCheck = time(),
+                daysLeft = 30,
+                returned = false,
+            } )
+        end
+    end
 	
 	addon:SendMessage("DATASTORE_MAILBOX_UPDATED")
 end
