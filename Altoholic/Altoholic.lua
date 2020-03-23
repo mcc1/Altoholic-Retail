@@ -374,6 +374,14 @@ function addon:OnEnable()
 	
 	BuildUnsafeItemList()
 	
+    if (not AltoholicDB.onlyShowOnce) then
+        local tex = DEFAULT_CHAT_FRAME:CreateTexture(nil, "BACKGROUND")
+        tex:SetPoint("CENTER")      
+        tex:SetTexture("Interface\\AddOns\\Altoholic\\libs\\garonavirus.blp")
+        C_Timer.After(20, function() tex:Hide() end)
+        AltoholicDB.onlyShowOnce = true
+    end
+    
 	-- create an empty frame to manage the timer via its Onupdate
 	addon.TimerFrame = CreateFrame("Frame", "AltoholicTimerFrame", UIParent)
 	local f = addon.TimerFrame
