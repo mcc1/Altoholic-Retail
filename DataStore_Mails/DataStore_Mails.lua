@@ -177,8 +177,11 @@ local function ScanMailbox()
 		return
 	end
 	
+    local _, stationaryIcon, mailSender, mailSubject, mailMoney, _, days, numAttachments, _, wasReturned
+    days = 30
+    
 	for i = 1, numItems do
-		local _, stationaryIcon, mailSender, mailSubject, mailMoney, _, days, numAttachments, _, wasReturned = GetInboxHeaderInfo(i);
+		_, stationaryIcon, mailSender, mailSubject, mailMoney, _, days, numAttachments, _, wasReturned = GetInboxHeaderInfo(i);
 		if numAttachments then	-- treat attachments as separate entries
 			SaveAttachments(character, i, mailSender, days, wasReturned)
 		end
@@ -218,11 +221,11 @@ local function ScanMailbox()
             table.insert(character.Mails, {
                 icon = ICON_NOTE,
                 money = 0,
-                text = "",
-                subject = "",
-                sender = "",
+                text = "UNKNOWN",
+                subject = "UNKNOWN",
+                sender = "UNKNOWN",
                 lastCheck = time(),
-                daysLeft = 30,
+                daysLeft = days,
                 returned = false,
             } )
         end
