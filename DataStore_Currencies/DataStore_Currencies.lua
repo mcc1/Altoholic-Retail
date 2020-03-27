@@ -47,17 +47,6 @@ local AddonDB_Defaults = {
 }
 
 -- *** Utility functions ***
-local bAnd = bit.band
-
-local function LeftShift(value, numBits)
-	return value * (2 ^ numBits)
-end
-
-local function RightShift(value, numBits)
-	-- for bits beyond bit 31
-	return math.floor(value / 2^numBits)
-end
-
 local headersState
 local headerCount
 
@@ -129,7 +118,7 @@ local function ScanCurrencies()
 	local currencies = addon.ThisCharacter.Currencies
 	wipe(currencies)
 	
-	local attrib, refIndex
+	local refIndex
 	
 	
 	for i = 1, GetCurrencyListSize() do
@@ -140,21 +129,20 @@ local function ScanCurrencies()
 			ref.CurrencyTextRev[name] = #ref.Currencies		-- ["PVP"] = 3
 		end
 
-		-- bit 0 : isHeader
+        -- Update 2020/03/28: This is the old system
+        -- It was stored as a number directly under: Currencies[index] = number
+        -- bit 0 : isHeader
 		-- bits 1-6 : index in the reference table (up to 64 values, should leave room for some time)
 		-- bits 7- : count
+        --
+        -- Now, this is the new system:
+        -- Currencies[index] = { isHeader = false, index = 1, count = 400 }
 		
 		if isHeader then
-			attrib = 1
 			count = 0
-		else
-			attrib = 0
 		end
-		
-		attrib = attrib + LeftShift(ref.CurrencyTextRev[name], 1)	-- index in the ref table
-		attrib = attrib + LeftShift(count, 7)	-- item count
 
-		currencies[i] = attrib
+		currencies[i] = { ["isHeader"] = isHeader, ["index"] = ref.CurrencyTextRev[name], ["count"] = count }
 	end
 	
 	RestoreHeaders()
@@ -209,12 +197,9 @@ local function _GetCurrencyInfo(character, index)
 	local ref = addon.db.global.Reference
 	local currency = character.Currencies[index]
 	
-	
-	local isHeader = bAnd(currency, 1)
-	isHeader = (isHeader == 1) and true or nil
-	
-	local refIndex = bAnd(RightShift(currency, 1), 63)
-	local count = RightShift(currency, 7)
+	local isHeader = currency.isHeader
+	local refIndex = currency.index
+	local count = currency.count
 
 	local info = ref.Currencies[refIndex]
 	local name, icon = strsplit("|", info or "")
@@ -236,19 +221,8 @@ local function _GetCurrencyInfoByName(character, token)
 end
 
 local function _GetCurrencyItemCount(character, searchedID)
-	return 0		-- quick workaround / temporary fix
-	
-	-- local isHeader, id, count
-	
-	-- for i = 1, #character.Currencies do
-		-- isHeader, id, count = strsplit("|", character.Currencies[i])
-	
-		-- if isHeader == "1" then
-			-- if tonumber(id) == searchedID then
-				-- return tonumber(count)
-			-- end
-		-- end
-	-- end
+	local _, _, count = _GetCurrencyInfo(character, searchedID)
+    return count
 end
 
 local function _GetArcheologyCurrencyInfo(character, index)
@@ -357,6 +331,15 @@ local PublicMethods = {
 
 function addon:OnInitialize()
 	addon.db = LibStub("AceDB-3.0"):New(addonName .. "DB", AddonDB_Defaults)
+    
+    -- Update 2020/03/28: Clearing all old character data due to change in datastructure. Cannot salvage old data as it is corrupted now due to a datatype overflow bug.
+    if not addon.db.global.Characters then
+        addon.db.global.DatastoreCurrencies8_3_006Update = true
+    end
+    if not addon.db.global.DatastoreCurrencies8_3_006Update then
+        wipe(addon.db.global.Characters)
+        addon.db.global.DatastoreCurrencies8_3_006Update = true
+    end
 
 	DataStore:RegisterModule(addonName, addon, PublicMethods)
 	DataStore:SetCharacterBasedMethod("GetNumCurrencies")
