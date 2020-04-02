@@ -39,7 +39,7 @@ local function OnGuildChange(frame, guildBank)
 	local guildKey = frame.value
 	
 	guildBank:SetCurrentGuild(guildKey)
-	guildBank:SetCurrentBankTab(nil)
+	guildBank:SetCurrentBankTab(1)
 	guildBank:Update()
 	
 	local _, _, guildName = strsplit(".", guildKey)
