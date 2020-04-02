@@ -25,6 +25,8 @@ local CURRENCY_ID_BFA_SOWF = 1580				-- BfA: Seals of the Wartorn Fate
 local CURRENCY_ID_BFA_DUBLOONS = 1710			-- BfA: Seafarer's Dubloon
 local CURRENCY_ID_BFA_WAR_SUPPLIES = 1587		-- BfA: War Supplies
 local CURRENCY_ID_BFA_AZERITE = 1565			-- BfA: Rich Azerite Fragment
+local CURRENCY_ID_BFA_COAL_VISIONS = 1755
+local CURRENCY_ID_BFA_TITAN_RESIDUUM = 1718
 
 local AddonDB_Defaults = {
 	global = {
@@ -107,8 +109,8 @@ local function ScanTotals()
 	ScanCurrencyTotals(CURRENCY_ID_BFA_WAR_RES)
 	ScanCurrencyTotals(CURRENCY_ID_BFA_SOWF)
 	ScanCurrencyTotals(CURRENCY_ID_BFA_DUBLOONS)
-	ScanCurrencyTotals(CURRENCY_ID_BFA_WAR_SUPPLIES)
-	ScanCurrencyTotals(CURRENCY_ID_BFA_AZERITE)
+	ScanCurrencyTotals(CURRENCY_ID_BFA_COAL_VISIONS)
+	ScanCurrencyTotals(CURRENCY_ID_BFA_TITAN_RESIDUUM)
 end
 
 local function ScanCurrencies()
@@ -234,7 +236,7 @@ local function _GetCurrencyTotals(character, id)
 	if not info then
 		return 0, 0, 0, 0
 	end
-	
+
 	local amount, earnedThisWeek, weeklyMax, totalMax = strsplit("-", info)
 	return tonumber(amount), tonumber(earnedThisWeek), tonumber(weeklyMax), tonumber(totalMax)
 end
@@ -305,6 +307,14 @@ local function _GetBfARichAzerite(character)
 	return _GetCurrencyTotals(character, CURRENCY_ID_BFA_AZERITE)
 end
 
+local function _GetBfACoalVisions(character)
+    return _GetCurrencyTotals(character, CURRENCY_ID_BFA_COAL_VISIONS)
+end
+
+local function _GetBfATitanResiduum(character)
+    return _GetCurrencyTotals(character, CURRENCY_ID_BFA_TITAN_RESIDUUM)
+end
+
 local PublicMethods = {
 	GetNumCurrencies = _GetNumCurrencies,
 	GetCurrencyInfo = _GetCurrencyInfo,
@@ -327,6 +337,8 @@ local PublicMethods = {
 	GetBfADubloons = _GetBfADubloons,
 	GetBfAWarSupplies = _GetBfAWarSupplies,
 	GetBfARichAzerite = _GetBfARichAzerite,
+    GetBfACoalVisions = _GetBfACoalVisions,
+    GetBfATitanResiduum = _GetBfATitanResiduum,
 }
 
 function addon:OnInitialize()
@@ -363,6 +375,8 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetBfADubloons")
 	DataStore:SetCharacterBasedMethod("GetBfAWarSupplies")
 	DataStore:SetCharacterBasedMethod("GetBfARichAzerite")
+    DataStore:SetCharacterBasedMethod("GetBfACoalVisions")
+    DataStore:SetCharacterBasedMethod("GetBfATitanResiduum")
 end
 
 function addon:OnEnable()
