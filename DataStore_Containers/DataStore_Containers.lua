@@ -366,18 +366,19 @@ local function ScanGuildBankInfo()
 	-- only the current tab can be updated
 	local thisGuild = GetThisGuild()
 	if not thisGuild then return end
-	
+
 	local tabID = GetCurrentGuildBankTab()
 	local t = thisGuild.Tabs[tabID]	-- t = current tab
-
 	t.name, t.icon = GetGuildBankTabInfo(tabID)
 	t.visitedBy = UnitName("player")
 	t.ClientTime = time()
+    
 	if GetLocale() == "enUS" then				-- adjust this test if there's demand
 		t.ClientDate = date("%m/%d/%Y")
 	else
 		t.ClientDate = date("%d/%m/%Y")
 	end
+    
 	t.ClientHour = tonumber(date("%H"))
 	t.ClientMinute = tonumber(date("%M"))
 	t.ServerHour, t.ServerMinute = GetGameTime()

@@ -864,7 +864,7 @@ function addon:SetLongRealmName(realm, name)
 end
 
 function addon:GetLongRealmName(realm)
-	return (realm) and addon.db.global.ShortToLongRealmNames[realm] or nil
+	return (realm) and addon.db.global.ShortToLongRealmNames[realm] or (realm)
 end
 
 function addon:GetRealmsConnectedWith(realm)
