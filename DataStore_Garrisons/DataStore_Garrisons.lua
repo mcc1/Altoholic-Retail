@@ -27,7 +27,7 @@ local AddonDB_Defaults = {
 			MissionInfos = {},
 		},
 		Options = {
-			ReportUncollected = true,			-- Report uncollected resources
+			ReportUncollected = false,			-- Report uncollected resources
 			ReportLevel = 400,
 		},
 		Characters = {
