@@ -28,7 +28,7 @@ addon:Controller("AltoholicUI.GuildBank", { "AltoholicUI.Formatter", function(fo
 				for guildName, guild in pairs(DataStore:GetGuilds(currentRealm, THIS_ACCOUNT)) do
 					local money = DataStore:GetGuildBankMoney(guild)
 					if money then		-- if money is not nil, the guild bank has been populated
-						currentGuild = guildName
+						currentGuildKey = DataStore:GetGuildKeyByGuildName(guildName)
 						break	-- if there's at least one guild, let's set the right value and break immediately
 					end
 				end
@@ -37,7 +37,9 @@ addon:Controller("AltoholicUI.GuildBank", { "AltoholicUI.Formatter", function(fo
 			-- if the current guild or at least a guild on this realm was found, then set the right values
 			if currentGuild then
 				currentGuildKey = DataStore:GetThisGuildKey()
-
+            end
+            
+            if currentGuildKey then
 				-- pick the first available tab
 				for i = 1, MAX_BANK_TABS do 
 					local tabName = DataStore:GetGuildBankTabName(currentGuildKey, i)

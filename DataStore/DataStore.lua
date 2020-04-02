@@ -500,6 +500,14 @@ function addon:GetThisGuildKey()
 	return format("%s.%s.%s", THIS_ACCOUNT, longName, guild)
 end
 
+-- Used by Altoholic_Guild, only for guilds on the same account and realm as the current player
+function addon:GetGuildKeyByGuildName(guildName)
+    local longName = addon:GetLongRealmName(GetRealmName())
+    if not longName then return end
+    
+   	return format("%s.%s.%s", THIS_ACCOUNT, longName, guildName) 
+end
+
 function addon:GetCharacter(name, realm, account)
 	local key = GetKey(name, realm, account)
 	if Characters[key] then		-- if the key is known, return it to caller, it can be passed to other modules
