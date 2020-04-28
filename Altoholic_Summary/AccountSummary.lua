@@ -11,6 +11,7 @@ local MODE_SKILLS = 3
 local MODE_ACTIVITY = 4
 local MODE_CURRENCIES = 5
 local MODE_FOLLOWERS = 6
+local MODE_KEYSTONES = 7
 
 local SKILL_CAP = 900
 local CURRENCY_ID_JUSTICE = 395
@@ -1944,6 +1945,115 @@ columns["FollowersItems"] = {
 		end,
 }
 
+columns["CurrentKeystoneName"] = {
+	-- Header
+	headerWidth = 100,
+	headerLabel = L["COLUMN_CURRENT_KEYSTONE_NAME_SHORT"],
+	tooltipTitle = L["COLUMN_CURRENT_KEYSTONE_NAME"],
+	tooltipSubTitle = nil,
+	headerOnClick = nil,
+	headerSort = nil,
+	
+	-- Content
+	Width = 100,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local keystoneName = DataStore:GetCurrentKeystone(character)
+            if not keystoneName then return end
+			return colors.white .. keystoneName 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["CurrentKeystoneLevel"] = {
+	-- Header
+	headerWidth = 60,
+	headerLabel = L["COLUMN_CURRENT_KEYSTONE_LEVEL_SHORT"],
+	tooltipTitle = L["COLUMN_CURRENT_KEYSTONE_LEVEL"],
+	tooltipSubTitle = nil,
+	headerOnClick = nil,
+	headerSort = nil,
+	
+	-- Content
+	Width = 60,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local _, _, keystoneLevel = DataStore:GetCurrentKeystone(character)
+            if not keystoneLevel then return end
+			return colors.white .. keystoneLevel 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["HighestKeystoneName"] = {
+	-- Header
+	headerWidth = 100,
+	headerLabel = L["COLUMN_HIGHEST_KEYSTONE_NAME_SHORT"],
+	tooltipTitle = L["COLUMN_HIGHEST_KEYSTONE_NAME"],
+	tooltipSubTitle = nil,
+	headerOnClick = nil,
+	headerSort = nil,
+	
+	-- Content
+	Width = 100,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local keystoneName = DataStore:GetHighestKeystone(character)
+            if not keystoneName then return end
+			return colors.white .. keystoneName 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["HighestKeystoneLevel"] = {
+	-- Header
+	headerWidth = 60,
+	headerLabel = L["COLUMN_HIGHEST_KEYSTONE_LEVEL_SHORT"],
+	tooltipTitle = L["COLUMN_HIGHEST_KEYSTONE_LEVEL"],
+	tooltipSubTitle = nil,
+	headerOnClick = nil,
+	headerSort = nil,
+	
+	-- Content
+	Width = 60,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local _, _, keystoneLevel = DataStore:GetHighestKeystone(character)
+            if not keystoneLevel then return end
+			return colors.white .. keystoneLevel 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["HighestKeystoneTime"] = {
+	-- Header
+	headerWidth = 120,
+	headerLabel = L["COLUMN_HIGHEST_KEYSTONE_TIME_SHORT"],
+	tooltipTitle = L["COLUMN_HIGHEST_KEYSTONE_TIME"],
+	tooltipSubTitle = nil,
+	headerOnClick = nil,
+	headerSort = nil,
+	
+	-- Content
+	Width = 120,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local _, keystoneTime = DataStore:GetHighestKeystone(character)
+            if not keystoneTime then return end
+            local seconds = math.floor(keystoneTime / 1000)
+            local minutes = math.floor(seconds / 60)
+            seconds = math.floor(seconds % 60)
+			return format("%s%sm %ss", colors.white, minutes, seconds) 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+
 
 local function ColumnHeader_OnEnter(frame)
 	local column = frame.column
@@ -1982,6 +2092,7 @@ local modes = {
 	-- [MODE_CURRENCIES] = { "Name", "Level", "CurrencyBfAWarResources", "CurrencyBfASOWF", "CurrencyBfADubloons", "CurrencyBfAWarSupplies", "CurrencyBfARichAzerite" },
     [MODE_CURRENCIES] = { "Name", "Level", "CurrencyBfAWarResources", "CurrencyBfASOWF", "CurrencyBfADubloons", "CurrencyBfACoalVisions", "CurrencyBfATitanResiduum" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
+    [MODE_KEYSTONES] = { "Name", "Level", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
 }
 
 function ns:SetMode(mode)
