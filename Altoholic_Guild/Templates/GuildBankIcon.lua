@@ -76,6 +76,16 @@ local function OnHideInTooltip(frame, guildBank)
 	guildBank.ContextualMenu:Close()
 end
 
+local function OnShowGoldOnSummary(frame, guildBank)
+	local account, realm, name = strsplit(".", frame.value)
+    local guild = addon:GetGuild(name, realm, account)
+    if guild then
+        guild.showGoldOnSummary = not guild.showGoldOnSummary
+    end
+    
+    guildBank.ContextualMenu:Close()
+end
+
 local function OnGuildDelete(frame, guildBank)
 	local guildKey = frame.value
 	local _, realm, guildName = strsplit(".", guildKey)
@@ -158,6 +168,13 @@ local function GuildIcon_Initialize(frame, level)
 		info.func = OnHideInTooltip
 		info.arg1 = guildBank
 		frame:AddButtonInfo(info, level)
+        
+        info.text = colors.white .. "Include this guild's gold on the Summary totals"
+        info.value = currentMenu
+        info.checked = guild.showGoldOnSummary
+        info.func = OnShowGoldOnSummary
+        info.arg1 = guildBank
+        frame:AddButtonInfo(info, level)
 		
 		info.text = colors.white .. DELETE
 		-- info.value = UIDROPDOWNMENU_MENU_VALUE

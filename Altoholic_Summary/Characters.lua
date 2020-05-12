@@ -204,6 +204,16 @@ local function AddRealm(AccountName, RealmName)
 		  realmAiL = (numCharacters ~= 0) and (realmAiL / numCharacters) or 0,
 	   } )
     end
+    
+    -- Code inserted 13/05/2020: add selected guild bank gold
+    for guildName, guild in pairs(DataStore:GetGuilds(RealmName, AccountName)) do
+        local altoSavedVariableGuild = addon:GetGuild(guildName, RealmName, AccountName)
+        if altoSavedVariableGuild then
+            if altoSavedVariableGuild.showGoldOnSummary then
+                totalMoney = totalMoney + DataStore:GetGuildBankMoney(guild)
+            end
+        end
+    end
 
 	totalMoney = totalMoney + realmMoney
 	totalPlayed = totalPlayed + realmPlayed
@@ -228,8 +238,8 @@ local function BuildList()
 	realmCount = 0 -- will be required for sorting purposes
 	ProcessRealms(AddRealm)
 
-	local levels = format("%s%s |rLv", colors.white, BreakUpLargeNumbers(totalLevels))
-	local gold = format(GOLD_AMOUNT_TEXTURE_STRING, BreakUpLargeNumbers(floor( totalMoney / 10000 )), 13, 13)
+	local levels = format("%s%s |rLv", colors.white, BreakUpLargeNumbers(totalLevels))    
+    local gold = format(GOLD_AMOUNT_TEXTURE_STRING, BreakUpLargeNumbers(floor( totalMoney / 10000 )), 13, 13)
 	local played = format("%s%sd", BreakUpLargeNumbers(floor(totalPlayed / 86400)), colors.gold)
 	
 	AltoholicTabSummary.Totals:SetText(format("%s: %s%s / %s%s / %s", L["Totals"], levels, colors.white, gold, colors.white, played))
