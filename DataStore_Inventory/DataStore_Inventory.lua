@@ -207,7 +207,9 @@ local function ScanCorruption()
         end
     end
     
-    addon.ThisCharacter.CorruptionLevel = GetCorruption() - GetCorruptionResistance()
+    local corruption = GetCorruption() - GetCorruptionResistance()
+    if corruption < 1 then corruption = 0 end
+    addon.ThisCharacter.CorruptionLevel = corruption
 end
 
 local function ScanInventory()

@@ -40,7 +40,7 @@ local callbacks = {
 				button.key = character
 				button.Background:SetTexture(C_Item.GetItemIconByID(169223))
 				button.Name:SetText(cloakLevel)
-			elseif (dataRowID == 2) and corruptionLevel and (tonumber(corruptionLevel) > 0) then
+			elseif (dataRowID == 2) and corruptionLevel then
                 button.key = character 
                 button.Background:SetTexture(3004126)
                 button.Name:SetText(corruptionLevel)
