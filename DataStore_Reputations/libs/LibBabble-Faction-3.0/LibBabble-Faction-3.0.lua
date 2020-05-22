@@ -656,8 +656,8 @@ elseif GAME_LOCALE == "frFR" then
 	["Wrynn's Vanguard"] = "Avant-garde de Wrynn",
 	["Zandalar Tribe"] = "Tribu Zandalar",
 	--[[Translation missing --]]    
-    ["The Unshackled"] = "(Translation missing) The Unshackled",
-    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
+    ["The Unshackled"] = "Affranchis",
+    ["Waveblade Ankoan"] = "Ankoïens du Brisant",
 }
 elseif GAME_LOCALE == "koKR" then
 	lib:SetCurrentTranslations {
