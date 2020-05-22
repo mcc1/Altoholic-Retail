@@ -375,7 +375,11 @@ local function GetItemCount(searchedID)
 						
 						if #tabCounters > 0 then
 							guildCount = DataStore:GetGuildBankItemCount(guildKey, searchedID) or 0
-							AddCounterLine(colors.green..guildName, format("%s %s(%s%s)", colors.orange .. guildCount, colors.white, table.concat(tabCounters, ","), colors.white))
+                            if altoGuild.showGuildRealmInTooltip then
+							    AddCounterLine(colors.green..guildName.." ("..realm..")", format("%s %s(%s%s)", colors.orange .. guildCount, colors.white, table.concat(tabCounters, ","), colors.white))
+                            else
+                                AddCounterLine(colors.green..guildName, format("%s %s(%s%s)", colors.orange .. guildCount, colors.white, table.concat(tabCounters, ","), colors.white))
+                            end
 						end
 					else
 						guildCount = DataStore:GetGuildBankItemCount(guildKey, searchedID) or 0

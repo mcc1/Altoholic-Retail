@@ -50,6 +50,7 @@ local AddonDB_Defaults = {
 		Guilds = {
 			['*'] = {			-- ["Account.Realm.Name"] 
 				hideInTooltip = nil,		-- true if this guild should not be shown in the tooltip counters
+                showGuildRealmInTooltip = nil, -- true if this guild's realm name should be shown in the tooltip counters
 			},
 		},
 		Characters = {

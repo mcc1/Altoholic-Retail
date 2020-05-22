@@ -69,8 +69,18 @@ end
 local function OnHideInTooltip(frame, guildBank)
 	local account, realm, name = strsplit(".", frame.value)
 	local guild = addon:GetGuild(name, realm, account)
-	if guild	then
+	if guild then
 		guild.hideInTooltip = not guild.hideInTooltip
+	end
+
+	guildBank.ContextualMenu:Close()
+end
+
+local function OnShowGuildRealmInTooltip(frame, guildBank)
+	local account, realm, name = strsplit(".", frame.value)
+	local guild = addon:GetGuild(name, realm, account)
+	if guild then
+		guild.showGuildRealmInTooltip = not guild.showGuildRealmInTooltip
 	end
 
 	guildBank.ContextualMenu:Close()
@@ -166,6 +176,13 @@ local function GuildIcon_Initialize(frame, level)
 		info.value = currentMenu
 		info.checked = guild.hideInTooltip
 		info.func = OnHideInTooltip
+		info.arg1 = guildBank
+		frame:AddButtonInfo(info, level)
+        
+        info.text = colors.white ..  "Show this guild's realm in the tooltip"
+		info.value = currentMenu
+		info.checked = guild.showGuildRealmInTooltip
+		info.func = OnShowGuildRealmInTooltip
 		info.arg1 = guildBank
 		frame:AddButtonInfo(info, level)
         
