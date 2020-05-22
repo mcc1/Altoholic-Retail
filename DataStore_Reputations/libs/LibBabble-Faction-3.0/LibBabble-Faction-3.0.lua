@@ -224,24 +224,24 @@ elseif GAME_LOCALE == "deDE" then
 	["Acquaintance"] = "Bekannter",
 	["Aeda Brightdawn"] = "Aeda Morgenglanz",
 	--[[Translation missing --]]
-	--[[ ["Akule Riverhorn"] = "Akule Riverhorn",--]] 
+	["Akule Riverhorn"] = "(Translation missing) Akule Riverhorn", 
 	["Alliance"] = "Allianz",
 	["Alliance Vanguard"] = "Vorposten der Allianz",
 	["Arakkoa Outcasts"] = "Ausgestoßene Arakkoa",
 	["Argent Crusade"] = "Argentumkreuzzug",
 	["Argent Dawn"] = "Argentumdämmerung",
 	--[[Translation missing --]]
-	--[[ ["Argussian Reach"] = "Argussian Reach",--]] 
+	["Argussian Reach"] = "(Translation missing) Argussian Reach", 
 	--[[Translation missing --]]
-	--[[ ["Argussian Reach (Paragon)"] = "Argussian Reach (Paragon)",--]] 
+	["Argussian Reach (Paragon)"] = "(Translation missing) Argussian Reach (Paragon)", 
 	--[[Translation missing --]]
-	--[[ ["Armies of Legionfall"] = "Armies of Legionfall",--]] 
+	["Armies of Legionfall"] = "(Translation missing) Armies of Legionfall", 
 	--[[Translation missing --]]
-	--[[ ["Armies of Legionfall (Paragon)"] = "Armies of Legionfall (Paragon)",--]] 
+	["Armies of Legionfall (Paragon)"] = "(Translation missing) Armies of Legionfall (Paragon)", 
 	--[[Translation missing --]]
-	--[[ ["Army of the Light"] = "Army of the Light",--]] 
+	["Army of the Light"] = "(Translation missing) Army of the Light", 
 	--[[Translation missing --]]
-	--[[ ["Army of the Light (Paragon)"] = "Army of the Light (Paragon)",--]] 
+	["Army of the Light (Paragon)"] = "(Translation missing) Army of the Light (Paragon)", 
 	["Ashtongue Deathsworn"] = "Die Todeshörigen",
 	["Avengers of Hyjal"] = "Rächer des Hyjal",
 	["Baradin's Wardens"] = "Wächter von Baradin",
@@ -258,11 +258,11 @@ elseif GAME_LOCALE == "deDE" then
 	["Cenarion Expedition"] = "Expedition des Cenarius",
 	["Chee Chee"] = "Chi-Chi",
 	--[[Translation missing --]]
-	--[[ ["Corbyn"] = "Corbyn",--]] 
+	["Corbyn"] = "(Translation missing) Corbyn", 
 	["Council of Exarchs"] = "Exarchenrat",
 	["Court of Farondis"] = "Farondis' Hofstaat",
 	--[[Translation missing --]]
-	--[[ ["Court of Farondis (Paragon)"] = "Court of Farondis (Paragon)",--]] 
+	["Court of Farondis (Paragon)"] = "(Translation missing) Court of Farondis (Paragon)", 
 	["Darkmoon Faire"] = "Dunkelmond-Jahrmarkt",
 	["Darkspear Trolls"] = "Dunkelspeertrolle",
 	["Darnassus"] = "Darnassus",
@@ -272,7 +272,7 @@ elseif GAME_LOCALE == "deDE" then
 	["Dragonmaw Clan"] = "Drachenmalklan",
 	["Dreamweavers"] = "Die Traumweber",
 	--[[Translation missing --]]
-	--[[ ["Dreamweavers (Paragon)"] = "Dreamweavers (Paragon)",--]] 
+	["Dreamweavers (Paragon)"] = "(Translation missing) Dreamweavers (Paragon)", 
 	["Ella"] = "Ella",
 	["Everlook"] = "Ewige Warte",
 	["Exalted"] = "Ehrfürchtig",
@@ -302,7 +302,7 @@ elseif GAME_LOCALE == "deDE" then
 	["Hellscream's Reach"] = "Höllschreis Hand",
 	["Highmountain Tribe"] = "Der Hochbergstamm",
 	--[[Translation missing --]]
-	--[[ ["Highmountain Tribe (Paragon)"] = "Highmountain Tribe (Paragon)",--]] 
+	["Highmountain Tribe (Paragon)"] = "(Translation missing) Highmountain Tribe (Paragon)", 
 	["Honor Hold"] = "Ehrenfeste",
 	["Honored"] = "Wohlwollend",
 	["Horde"] = "Horde",
@@ -311,14 +311,14 @@ elseif GAME_LOCALE == "deDE" then
 	["Hydraxian Waterlords"] = "Hydraxianer",
 	["Illidari"] = "Illidari",
 	--[[Translation missing --]]
-	--[[ ["Ilyssia of the Waters"] = "Ilyssia of the Waters",--]] 
+	["Ilyssia of the Waters"] = "(Translation missing) Ilyssia of the Waters", 
 	--[[Translation missing --]]
-	--[[ ["Impus"] = "Impus",--]] 
+	["Impus"] = "(Translation missing) Impus", 
 	["Ironforge"] = "Eisenschmiede",
 	["Jandvik Vrykul"] = "Vrykul von Jandvik",
 	["Jogu the Drunk"] = "Jogu der Betrunkene",
 	--[[Translation missing --]]
-	--[[ ["Keeper Raynae"] = "Keeper Raynae",--]] 
+	--[[ ["Keeper Raynae"] = "(Translation missing) Keeper Raynae",--]] 
 	["Keepers of Time"] = "Hüter der Zeit",
 	["Kirin Tor"] = "Kirin Tor",
 	["Kirin Tor Offensive"] = "Offensive der Kirin Tor",
@@ -336,7 +336,7 @@ elseif GAME_LOCALE == "deDE" then
 	["Ogri'la"] = "Ogri'la",
 	["Old Hillpaw"] = "Der alte Hügelpranke",
 	--[[Translation missing --]]
-	--[[ ["Operation: Aardvark"] = "Operation: Aardvark",--]] 
+	["Operation: Aardvark"] = "(Translation missing) Operation: Aardvark", 
 	["Operation: Shieldwall"] = "Operation Schildwall",
 	["Order of the Awakened"] = "Orden der Erwachten",
 	["Order of the Cloud Serpent"] = "Der Orden der Wolkenschlange",
@@ -358,7 +358,7 @@ elseif GAME_LOCALE == "deDE" then
 	["Shado-Pan Assault"] = "Shado-Pan-Vorstoß",
 	["Shadowmoon Exiles"] = "Exilanten des Schattenmondklans",
 	--[[Translation missing --]]
-	--[[ ["Sha'leth"] = "Sha'leth",--]] 
+	["Sha'leth"] = "(Translation missing) Sha'leth", 
 	["Shang Xi's Academy"] = "Akademie des Shang Xi",
 	["Sha'tari Defense"] = "Sha'tarverteidigung",
 	["Sha'tari Skyguard"] = "Himmelswache der Sha'tari",
@@ -434,10 +434,10 @@ elseif GAME_LOCALE == "deDE" then
 	["Winterfin Retreat"] = "Zuflucht der Winterflossen",
 	["Wintersaber Trainers"] = "Wintersäblerausbilder",
 	["Wrynn's Vanguard"] = "Wrynns Vorhut",
-	["Zandalar Tribe"] = "Stamm der Zandalari"
+	["Zandalar Tribe"] = "Stamm der Zandalari",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
     
 }
 elseif GAME_LOCALE == "frFR" then
@@ -654,10 +654,10 @@ elseif GAME_LOCALE == "frFR" then
 	["Winterfin Retreat"] = "Retraite des Ailerons-d'hiver",
 	["Wintersaber Trainers"] = "Éleveurs de sabres-d'hiver",
 	["Wrynn's Vanguard"] = "Avant-garde de Wrynn",
-	["Zandalar Tribe"] = "Tribu Zandalar"
-    --[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+	["Zandalar Tribe"] = "Tribu Zandalar",
+	--[[Translation missing --]]    
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "koKR" then
 	lib:SetCurrentTranslations {
@@ -880,10 +880,10 @@ elseif GAME_LOCALE == "koKR" then
 	["Winterfin Retreat"] = "겨울지느러미 은신처",
 	["Wintersaber Trainers"] = "눈호랑이 조련사",
 	["Wrynn's Vanguard"] = "린의 선봉대",
-	["Zandalar Tribe"] = "잔달라 부족"
+	["Zandalar Tribe"] = "잔달라 부족",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "esES" then
 	lib:SetCurrentTranslations {
@@ -1114,10 +1114,10 @@ elseif GAME_LOCALE == "esES" then
 	["Winterfin Retreat"] = "Retiro Aleta Invernal",
 	["Wintersaber Trainers"] = "Instructores de Sableinvernales",
 	["Wrynn's Vanguard"] = "Vanguardia de Wrynn",
-	["Zandalar Tribe"] = "Tribu Zandalar"
+	["Zandalar Tribe"] = "Tribu Zandalar",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "esMX" then
 	lib:SetCurrentTranslations {
@@ -1368,10 +1368,10 @@ elseif GAME_LOCALE == "esMX" then
 	["Wintersaber Trainers"] = "Instructores de sableinvernales",
 	--[[Translation missing --]]
 	--[[ ["Wrynn's Vanguard"] = "Wrynn's Vanguard",--]] 
-	["Zandalar Tribe"] = "Tribu Zandalar"
+	["Zandalar Tribe"] = "Tribu Zandalar",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "ptBR" then
 	lib:SetCurrentTranslations {
@@ -1621,10 +1621,10 @@ elseif GAME_LOCALE == "ptBR" then
 	["Wintersaber Trainers"] = "Treinadores de Sabres-do-inverno",
 	--[[Translation missing --]]
 	--[[ ["Wrynn's Vanguard"] = "Wrynn's Vanguard",--]] 
-	["Zandalar Tribe"] = "Tribo dos Zandalar"
+	["Zandalar Tribe"] = "Tribo dos Zandalar",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "itIT" then
 	lib:SetCurrentTranslations {
@@ -1840,10 +1840,10 @@ elseif GAME_LOCALE == "itIT" then
 	["Winterfin Retreat"] = "Rifugio dei Pinnafredda",
 	["Wintersaber Trainers"] = "Addestratori delle Fiere Glaciali",
 	["Wrynn's Vanguard"] = "Lancia di Vol'jin",
-	["Zandalar Tribe"] = "Tribù Zandalari"
+	["Zandalar Tribe"] = "Tribù Zandalari",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "ruRU" then
 	lib:SetCurrentTranslations {
@@ -2093,10 +2093,10 @@ elseif GAME_LOCALE == "ruRU" then
 	["Wintersaber Trainers"] = "Укротители ледопардов",
 	--[[Translation missing --]]
 	--[[ ["Wrynn's Vanguard"] = "Wrynn's Vanguard",--]] 
-	["Zandalar Tribe"] = "Племя Зандалар"
+	["Zandalar Tribe"] = "Племя Зандалар",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "zhCN" then
 	lib:SetCurrentTranslations {
@@ -2294,10 +2294,10 @@ elseif GAME_LOCALE == "zhCN" then
 	["Winterfin Retreat"] = "冬鳞避难所",
 	["Wintersaber Trainers"] = "冬刃豹训练师",
 	["Wrynn's Vanguard"] = "乌瑞恩先锋军",
-	["Zandalar Tribe"] = "赞达拉部族"
+	["Zandalar Tribe"] = "赞达拉部族",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 elseif GAME_LOCALE == "zhTW" then
 	lib:SetCurrentTranslations {
@@ -2495,10 +2495,10 @@ elseif GAME_LOCALE == "zhTW" then
 	["Winterfin Retreat"] = "冬鰭避居地",
 	["Wintersaber Trainers"] = "冬刃豹訓練師",
 	["Wrynn's Vanguard"] = "烏瑞恩先鋒",
-	["Zandalar Tribe"] = "贊達拉部族"
+	["Zandalar Tribe"] = "贊達拉部族",
 	--[[Translation missing --]]    
-    --["The Unshackled"] = "The Unshackled",
-    --["Waveblade Ankoan"] = "Waveblade Ankoan",
+    ["The Unshackled"] = "(Translation missing) The Unshackled",
+    ["Waveblade Ankoan"] = "(Translation missing) Waveblade Ankoan",
 }
 else
 	error(("%s: Locale %q not supported"):format(MAJOR_VERSION, GAME_LOCALE))
