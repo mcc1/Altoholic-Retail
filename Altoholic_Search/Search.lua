@@ -812,8 +812,12 @@ function ns:FindItem(searchType, searchSubType)
 	filters:EnableFilter("Existence")	-- should be first in the list !
 	
 	if value ~= "" then
-		filters:SetFilterValue("itemName", currentValue)
-		filters:EnableFilter("Name")
+        filters:SetFilterValue("itemName", currentValue)
+		if (AltoholicTabSearch.IncludeDescriptionButton:GetChecked()) then
+            filters:EnableFilter("NameOrDescription")
+        else
+            filters:EnableFilter("Name")
+        end
 	end
 	
 	if searchType then

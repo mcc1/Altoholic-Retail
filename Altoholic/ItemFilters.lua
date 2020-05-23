@@ -50,6 +50,28 @@ local function FilterName()
 	end
 end
 
+local function FilterNameOrDescription()
+    if string.find(strlower(searchedItem["itemName"]), filters["itemName"], 1, true) then
+		return true		-- name contains the filter value, keep the item
+	end
+    
+    local tooltip = AltoScanningTooltip
+	
+	tooltip:ClearLines()
+	tooltip:SetHyperlink(searchedItem["itemLink"])
+	
+	local tooltipName = tooltip:GetName()
+	
+	for i = tooltip:NumLines(), 2, -1 do			-- parse all tooltip lines, from last to second
+		local tooltipText = _G[tooltipName .. "TextLeft" .. i]:GetText()
+		if tooltipText then
+            if string.find(strlower(tooltipText), filters["itemName"], 1, true) then
+                return true		-- name contains the filter value, keep the item
+            end
+		end
+	end
+end
+
 local function FilterMinimumLevel()
 	local minLevel = searchedItem["itemMinLevel"]
 	if (minLevel == nil) or (minLevel == 0) then
@@ -79,6 +101,7 @@ local filterFunctions = {
 	["Name"] = FilterName,
 	["MinLevel"] = FilterMinimumLevel,
 	["Maxlevel"] = FilterMaximumLevel,
+    ["NameOrDescription"] = FilterNameOrDescription,
 }
 
 addon.ItemFilters = {}

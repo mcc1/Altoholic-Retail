@@ -129,6 +129,7 @@ function ns:OnLoad()
 	parent.SortButtons.Sort3:SetText(L["Realm"])
 	parent.Slot:SetText(L["Equipment Slot"])
 	parent.Location:SetText(L["Location"])
+    parent.IncludeDescription:SetText("Also Search Description")
 end
 
 function ns:Update()
