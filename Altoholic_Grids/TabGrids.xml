@@ -191,7 +191,16 @@
 					<KeyValue key="iconFile" value="1386548" />
 				</KeyValues>
 			</Button>
-			
+
+            <Button parentKey="Tasks" inherits="AltoTabGridsMenuIconTemplate" id="15">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Corruption" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="Interface\Icons\INV_Misc_Book_17" />
+				</KeyValues>
+			</Button>
+            			
 			<!-- Tooltip for Garrison Levels, to avoid messing with Blizzard's own -->
 			<Frame parentKey="BuildingLevelTooltip" inherits="TooltipBorderedFrameTemplate" hidden="true" frameStrata="TOOLTIP" clampedToScreen="true">
 				<Size x="230" y="300" />

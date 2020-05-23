@@ -18,6 +18,7 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.FollowerAbilities.text = format("%s/%s", GARRISON_RECRUIT_ABILITIES, GARRISON_RECRUIT_TRAITS)
 		frame.Sets.text = WARDROBE_SETS
         frame.Corruption.text = "Corruption"
+        frame.Tasks.text = "Tasks"
 		
 		frame.SelectRealm:RegisterClassEvent("RealmChanged", function()
 				frame.Status:SetText("")

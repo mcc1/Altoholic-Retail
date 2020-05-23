@@ -531,6 +531,7 @@ L["Midsummer Fire Festival"] = true
 L["Minimap Icon Angle"] = true
 L["Minimap Icon Radius"] = true
 L["Minimum Level: %s"] = true
+L["Minimum Level"] = true
 L["Mining"] = true
 L["Miscellaneous"] = true
 L["Mithril Deposit"] = true
@@ -851,3 +852,9 @@ L[ [=[Your confirmation will still be required any time someone requests your in
 L["Zelemar the Wrathful"] = true
 L["Zone"] = true
 
+-- Added for Grids_Tasks
+L["Task"] = true
+L["New"] = true
+L["Expansion"] = true
+L["Target"] = true
+L["Task Type"] = true
