@@ -96,6 +96,9 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 	["Storm Silver Seam"]				   	= 152579, -- Storm Silver Ore
 	["Platinum Deposit"]				   		= 152513, -- Platinum Ore
 	["Rich Platinum Deposit"]			   	= 152513, -- Platinum Ore
+    ["Osmenite Ore"] = 168185,
+    ["Osmenite Seam"] = 168185,
+    ["Rich Osmenite Deposit"] = 168185,
 
 	
 	-- Herbs
@@ -446,18 +449,20 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
 
 			local coloredName = DataStore:GetColoredCharacterName(character)
 			
-			if isKnownByChar then
-				table.insert(know, coloredName)
-			else
-				local currentLevel = DataStore:GetProfessionInfo(DataStore:GetProfession(character, professionName))
-				if currentLevel > 0 then
-					if currentLevel < recipeLevel then
-						table.insert(willLearn, format("%s |r(%d)", coloredName, currentLevel))
-					else
-						table.insert(couldLearn, format("%s |r(%d)", coloredName, currentLevel))
-					end
-				end
-			end
+            if coloredName then
+    			if isKnownByChar then
+    				table.insert(know, coloredName)
+    			else
+    				local currentLevel = DataStore:GetProfessionInfo(DataStore:GetProfession(character, professionName))
+    				if currentLevel > 0 then
+    					if currentLevel < recipeLevel then
+    						table.insert(willLearn, format("%s |r(%d)", coloredName, currentLevel))
+    					else
+    						table.insert(couldLearn, format("%s |r(%d)", coloredName, currentLevel))
+    					end
+    				end
+    			end
+            end
 		end
 	end
 	
