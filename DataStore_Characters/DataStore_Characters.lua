@@ -38,6 +38,7 @@ local AddonDB_Defaults = {
 				zone = nil,				-- character location
 				subZone = nil,
                 realm = nil,
+                hearthstone = nil,      -- eg: "Brill"
 				
 				-- ** XP **
 				XP = nil,				-- current level xp
@@ -115,6 +116,7 @@ local function OnPlayerAlive()
 	character.faction = UnitFactionGroup("player")
 	character.lastLogoutTimestamp = MAX_LOGOUT_TIMESTAMP
 	character.lastUpdate = time()
+    character.hearthstone = GetBindLocation()
 	
 	OnPlayerMoney()
 	OnPlayerXPUpdate()
@@ -130,6 +132,10 @@ end
 
 local function OnPlayerLevelUp(event, newLevel)
 	addon.ThisCharacter.level = newLevel
+end
+
+local function OnPlayerHearthstoneBound(event)
+    addon.ThisCharacter.hearthstone = GetBindLocation()
 end
 
 local function OnTimePlayedMsg(event, totalTime, currentLevelTime)
@@ -199,6 +205,10 @@ end
 
 local function _GetMoney(character)
 	return character.money or 0
+end
+
+local function _GetHearthstone(character)
+    return character.hearthstone
 end
 
 local function _GetXP(character)
@@ -340,6 +350,7 @@ local PublicMethods = {
 	GetCharacterGender = _GetCharacterGender,
 	GetLastLogout = _GetLastLogout,
 	GetMoney = _GetMoney,
+    GetHearthstone = _GetHearthstone,
 	GetXP = _GetXP,
 	GetXPRate = _GetXPRate,
 	GetXPMax = _GetXPMax,
@@ -368,6 +379,7 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetCharacterGender")
 	DataStore:SetCharacterBasedMethod("GetLastLogout")
 	DataStore:SetCharacterBasedMethod("GetMoney")
+    DataStore:SetCharacterBasedMethod("GetHearthstone")
 	DataStore:SetCharacterBasedMethod("GetXP")
 	DataStore:SetCharacterBasedMethod("GetXPRate")
 	DataStore:SetCharacterBasedMethod("GetXPMax")
@@ -387,6 +399,7 @@ function addon:OnEnable()
 	addon:RegisterEvent("PLAYER_MONEY", OnPlayerMoney)
 	addon:RegisterEvent("PLAYER_XP_UPDATE", OnPlayerXPUpdate)
 	addon:RegisterEvent("PLAYER_UPDATE_RESTING", OnPlayerUpdateResting)
+    addon:RegisterEvent("HEARTHSTONE_BOUND", OnPlayerHearthstoneBound)
 	addon:RegisterEvent("ENABLE_XP_GAIN", ScanXPDisabled)
 	addon:RegisterEvent("DISABLE_XP_GAIN", ScanXPDisabled)
 	addon:RegisterEvent("PLAYER_GUILD_UPDATE", OnPlayerGuildUpdate)				-- for gkick, gquit, etc..
@@ -394,7 +407,7 @@ function addon:OnEnable()
 	addon:RegisterEvent("ZONE_CHANGED_NEW_AREA", ScanPlayerLocation)
 	addon:RegisterEvent("ZONE_CHANGED_INDOORS", ScanPlayerLocation)
 	addon:RegisterEvent("TIME_PLAYED_MSG", OnTimePlayedMsg)					-- register the event if RequestTimePlayed is not called afterwards. If another addon calls it, we want to get the data anyway.
-	
+    
 	addon:SetupOptions()
 	
 	if GetOption("RequestPlayTime") then
@@ -407,6 +420,7 @@ function addon:OnDisable()
 	addon:UnregisterEvent("PLAYER_LOGOUT")
 	addon:UnregisterEvent("PLAYER_LEVEL_UP")
 	addon:UnregisterEvent("PLAYER_MONEY")
+    addon:UnregisterEvent("HEARTHSTONE_BOUND")
 	addon:UnregisterEvent("PLAYER_XP_UPDATE")
 	addon:UnregisterEvent("PLAYER_UPDATE_RESTING")
 	addon:UnregisterEvent("ENABLE_XP_GAIN")

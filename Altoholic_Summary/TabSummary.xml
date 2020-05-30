@@ -47,11 +47,17 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MenuItem5" relativePoint="BOTTOMLEFT" x="0" y="0" />
 				</Anchors>
 			</Button>
-			<Button parentKey="MenuItem7" inherits="AltoTabSummaryMenuItemTemplate" id="7"> -->
+			<Button parentKey="MenuItem7" inherits="AltoTabSummaryMenuItemTemplate" id="7">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.MenuItem6" relativePoint="BOTTOMLEFT" x="0" y="0" />
 				</Anchors>
 			</Button>
+            <Button parentKey="MenuItem8" inherits="AltoTabSummaryMenuItemTemplate" id="8">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.MenuItem7" relativePoint="BOTTOMLEFT" x="0" y="0" />
+				</Anchors>
+			</Button>
+            
 			
 			<Button parentKey="RealmsIcon" inherits="AltoTabSummaryIconTemplate" id="1">
 				<Anchors>
@@ -186,6 +192,8 @@
 				self.MenuItem5:SetText(CURRENCY)
 				self.MenuItem6:SetText(GARRISON_FOLLOWERS_TITLE)
                 self.MenuItem7:SetText(PVEFrameTab3:GetText())
+                local textHearthstone = GetItemInfo(6948)
+                self.MenuItem8:SetText(textHearthstone)
 				
 				-- "Artifacts"
 				-- self.MenuItem7:SetText(GetCategoryInfo(15256))	

@@ -12,6 +12,7 @@ local MODE_ACTIVITY = 4
 local MODE_CURRENCIES = 5
 local MODE_FOLLOWERS = 6
 local MODE_KEYSTONES = 7
+local MODE_HEARTHSTONE = 8
 
 local SKILL_CAP = 900
 local CURRENCY_ID_JUSTICE = 395
@@ -2053,7 +2054,25 @@ columns["HighestKeystoneTime"] = {
 		end,
 }
 
-
+columns["BindLocation"] = {
+	-- Header
+	headerWidth = 120,
+	headerLabel = "Location",
+	tooltipTitle = "Bind Location",
+	tooltipSubTitle = nil,
+	headerOnClick = nil,
+	headerSort = DataStore.GetHearthstone,
+	
+	-- Content
+	Width = 120,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local name = DataStore:GetHearthstone(character) or ""
+			return format("%s%s", colors.white, name) 
+		end,
+	OnEnter = function(frame)
+		end,
+}
 
 local function ColumnHeader_OnEnter(frame)
 	local column = frame.column
@@ -2093,6 +2112,7 @@ local modes = {
     [MODE_CURRENCIES] = { "Name", "Level", "CurrencyBfAWarResources", "CurrencyBfASOWF", "CurrencyBfADubloons", "CurrencyBfACoalVisions", "CurrencyBfATitanResiduum" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "Level", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
+    [MODE_HEARTHSTONE] = { "Name", "BindLocation" },
 }
 
 function ns:SetMode(mode)
