@@ -2060,7 +2060,7 @@ columns["BindLocation"] = {
 	headerLabel = "Location",
 	tooltipTitle = "Bind Location",
 	tooltipSubTitle = nil,
-	headerOnClick = nil,
+	headerOnClick = function() SortView("BindLocation") end,
 	headerSort = DataStore.GetHearthstone,
 	
 	-- Content
