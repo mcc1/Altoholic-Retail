@@ -497,7 +497,20 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                         if numCategories > 0 then
                             for index = 1, numCategories do 
                                 local id, categoryName, rank, maxRank = DataStore:GetRecipeCategoryInfo(charactersProfession, index)
-                                if ((string.len(expansionRequirement) == 0) and string.find(categoryName, professionName)) or ((string.len(expansionRequirement) > 0) and string.find(categoryName, expansionRequirement)) then
+                                local shouldAdd = false
+                                if (string.len(expansionRequirement) == 0) then
+                                    local classicProfIDs = {362, 419, 379, 667, 604, 590, 415, 1044, 72, 372, 1078} 
+                                    for _,v in pairs(classicProfIDs) do
+                                        if id == v then
+                                            shouldAdd = true
+                                        end
+                                    end 
+                                else
+                                    if string.find(categoryName, expansionRequirement) then
+                                        shouldAdd = true
+                                    end
+                                end
+                                if shouldAdd then
                                     if rank < recipeLevel then
                                         table.insert(willLearn, format("%s |r(%d)", coloredName, rank))
                                     else
@@ -539,7 +552,7 @@ local function GetRecipeOwnersText(professionName, link, recipeLevel, recipeRank
 	end
 	
 	if #willLearn > 0 then
-		table.insert(lines, colors.red .. L["Will be learnable by "] ..": ".. colors.white.. table.concat(willLearn, ", "))
+		table.insert(lines, colors.red .. L["Will be learnable by "] ..": ".. colors.white.. table.concat(willLearn, ", ") .."\n")
 	end
 	
 	return table.concat(lines, "\n")
