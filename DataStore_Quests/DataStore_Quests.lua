@@ -66,7 +66,9 @@ local emissaryQuests = {
 	[50602] = true, -- Talanji's Expedition
 	[50606] = true, -- Horde War Effort
 	[56119] = true, -- The Waveblade Ankoan
-	
+    [53982] = true, -- The Unshackled
+    [58096] = true, -- Rajani
+    [58097] = true, -- Uldum Accord
 }
 
 -- *** Utility functions ***
