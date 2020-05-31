@@ -208,7 +208,7 @@ local function _GetMoney(character)
 end
 
 local function _GetHearthstone(character)
-    return character.hearthstone
+    return character.hearthstone or ""
 end
 
 local function _GetXP(character)
