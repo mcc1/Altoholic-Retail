@@ -195,7 +195,8 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 	["Sea Stalk"]               = 152511,
 	["Siren's Pollen"]          = 152509,	
 	["Star Moss"]               = 152506,	
-	["Winter's Kiss"]           = 152508,	
+	["Winter's Kiss"]           = 152508,
+    ["Zin'anthid"]              = 168487,	
 }
 
 -- *** Utility functions ***
@@ -243,6 +244,9 @@ local function GetRequirementsFromRecipeLink(link)
     
     -- yup, I did pattern matching on a pattern. If theres a better way to do that, let me know.
     
+    local localizedGoblinEngineering = GetSpellInfo(20222)
+    local localizedGnomishEngineering = GetSpellInfo(20219)
+    
     local tooltip = AltoScanningTooltip
 	tooltip:ClearLines()
 	tooltip:SetHyperlink(link)	
@@ -250,12 +254,23 @@ local function GetRequirementsFromRecipeLink(link)
 	for i = tooltip:NumLines(), 2, -1 do			-- parse all tooltip lines, from last to second
 		local tooltipText = _G[tooltipName .. "TextLeft" .. i]:GetText()
 		if tooltipText then
-            expansionRequirement = string.match(tooltipText, pattern)
-            if expansionRequirement then break end
+            if not expansionRequirement then
+                expansionRequirement = string.match(tooltipText, pattern)
+            end
+            if not specializationRequirement then
+                if string.find(tooltipText, string.format(ITEM_REQ_SKILL, localizedGoblinEngineering)) then
+                    specializationRequirement = "Goblin"
+                end
+            end
+            if not specializationRequirement then
+                if string.find(tooltipText, string.format(ITEM_REQ_SKILL, localizedGnomishEngineering)) then
+                    specializationRequirement = "Gnomish"
+                end
+            end
 		end
 	end
     
-    return expansionRequirement
+    return expansionRequirement, specializationRequirement
 end
 
 local isTooltipDone, isNodeDone			-- for informant
@@ -499,7 +514,7 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                                 local id, categoryName, rank, maxRank = DataStore:GetRecipeCategoryInfo(charactersProfession, index)
                                 local shouldAdd = false
                                 if (string.len(expansionRequirement) == 0) then
-                                    local classicProfIDs = {362, 419, 379, 667, 604, 590, 415, 1044, 72, 372, 1078} 
+                                    local classicProfIDs = {362, 419, 379, 667, 604, 590, 415, 1044, 72, 372, 1078, 1060} 
                                     for _,v in pairs(classicProfIDs) do
                                         if id == v then
                                             shouldAdd = true
@@ -511,12 +526,35 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                                     end
                                 end
                                 if shouldAdd then
-                                    if rank < recipeLevel then
-                                        table.insert(willLearn, format("%s |r(%d)", coloredName, rank))
+                                    -- one final check before we actually add it: does it require gnomish/goblin engineering?
+                                    if specializationRequirement == "Goblin" then
+                                        local localizedGoblinEngineering = GetSpellInfo(20222)
+                                        if string.find(charactersProfession.FullLink, localizedGoblinEngineering) then
+                                            if rank < recipeLevel then
+                                                table.insert(willLearn, format("%s |r(%d)", coloredName, rank))
+                                            else
+                                                table.insert(couldLearn, format("%s |r(%d)", coloredName, rank))
+                                            end
+                                            break
+                                        end    
+                                    elseif specializationRequirement == "Gnomish" then
+                                        local localizedGnomishEngineering = GetSpellInfo(20219)
+                                        if string.find(charactersProfession.FullLink, localizedGnomishEngineering) then
+                                            if rank < recipeLevel then
+                                                table.insert(willLearn, format("%s |r(%d)", coloredName, rank))
+                                            else
+                                                table.insert(couldLearn, format("%s |r(%d)", coloredName, rank))
+                                            end
+                                            break
+                                        end                                         
                                     else
-                                        table.insert(couldLearn, format("%s |r(%d)", coloredName, rank))
+                                        if rank < recipeLevel then
+                                            table.insert(willLearn, format("%s |r(%d)", coloredName, rank))
+                                        else
+                                            table.insert(couldLearn, format("%s |r(%d)", coloredName, rank))
+                                        end
+                                        break
                                     end
-                                    break
                                 end
                             end
                         end
@@ -691,7 +729,12 @@ local function ProcessTooltip(tooltip, link)
 	if itemSubType == L["ITEM_SUBTYPE_BOOK"] then return end		-- exit if it's a book
 
 	if not cachedRecipeOwners then
-        local recipeRank = string.match(_G["GameTooltipTextLeft2"]:GetText(), 'Rank (%d)')
+        local recipeRank
+        if (_G["GameTooltipTextLeft2"]:GetText()) then
+            recipeRank = string.match(_G["GameTooltipTextLeft2"]:GetText(), 'Rank (%d)')
+        else
+            recipeRank = string.match(_G["ItemRefTooltipTextLeft2"]:GetText(), 'Rank (%d)')
+        end
         if not recipeRank then recipeRank = 0 end
 		cachedRecipeOwners = GetRecipeOwnersText(itemSubType, link, addon:GetRecipeLevel(link, tooltip), recipeRank)
 	end
