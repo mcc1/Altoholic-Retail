@@ -229,6 +229,35 @@ local function GetCraftNameFromRecipeLink(link)
 	return string.sub(craftName, 2, -2)	-- at this point, get rid of the leading space and trailing square bracket
 end
 
+local function GetRequirementsFromRecipeLink(link)
+    local expansionRequirement, specializationRequirement
+    
+    local pattern = ITEM_MIN_SKILL
+    -- this pattern is setup for use in string.format, need to change it to a regular expression for use in string.match
+    -- in english, it is: ITEM_MIN_SKILL = "Requires %s (%d)"
+    -- swap the (%d) to a %(%d+%)
+    pattern = pattern:gsub("%(%%d%)", "%%%(%%d+%%%)")
+    -- swap the %s to a (.+)
+    pattern = pattern:gsub("%%s", "(.+)")
+    -- in english, it should now look like: "Requires (.+) %(%d+%)"
+    
+    -- yup, I did pattern matching on a pattern. If theres a better way to do that, let me know.
+    
+    local tooltip = AltoScanningTooltip
+	tooltip:ClearLines()
+	tooltip:SetHyperlink(link)	
+	local tooltipName = tooltip:GetName()
+	for i = tooltip:NumLines(), 2, -1 do			-- parse all tooltip lines, from last to second
+		local tooltipText = _G[tooltipName .. "TextLeft" .. i]:GetText()
+		if tooltipText then
+            expansionRequirement = string.match(tooltipText, pattern)
+            if expansionRequirement then break end
+		end
+	end
+    
+    return expansionRequirement
+end
+
 local isTooltipDone, isNodeDone			-- for informant
 local cachedItemID, cachedCount, cachedTotal, cachedSource
 local cachedRecipeOwners
@@ -421,7 +450,9 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
 		-- it seems that some tooltip libraries interfere and cause a recipeLevel to be nil
 		return know, couldLearn, willLearn
 	end
-	
+    
+    local expansionRequirement, specializationRequirement = GetRequirementsFromRecipeLink(link)
+
 	local profession, isKnownByChar
 	for characterName, character in pairs(DataStore:GetCharacters()) do
 		profession = DataStore:GetProfession(character, professionName)
@@ -453,14 +484,40 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
     			if isKnownByChar then
     				table.insert(know, coloredName)
     			else
-    				local currentLevel = DataStore:GetProfessionInfo(DataStore:GetProfession(character, professionName))
-    				if currentLevel > 0 then
-    					if currentLevel < recipeLevel then
-    						table.insert(willLearn, format("%s |r(%d)", coloredName, currentLevel))
-    					else
-    						table.insert(couldLearn, format("%s |r(%d)", coloredName, currentLevel))
-    					end
-    				end
+    				-- Which expansion's profession does it require?
+                    local charactersProfession = DataStore:GetProfession(character, professionName)
+                    if expansionRequirement then
+                        -- remove the profession name from the string
+                        expansionRequirement = string.gsub(expansionRequirement, professionName, "")
+                        -- and trim it
+                        expansionRequirement = string.gsub(expansionRequirement, "^%s*(.-)%s*$", "%1") 
+
+                        -- iterate through each professions category
+                        local numCategories = DataStore:GetNumRecipeCategories(charactersProfession)
+                        if numCategories > 0 then
+                            for index = 1, numCategories do 
+                                local id, categoryName, rank, maxRank = DataStore:GetRecipeCategoryInfo(charactersProfession, index)
+
+                                if string.find(categoryName, expansionRequirement) then
+                                    if rank < recipeLevel then
+                                        table.insert(willLearn, format("%s |r(%d)", coloredName, rank))
+                                    else
+                                        table.insert(couldLearn, format("%s |r(%d)", coloredName, rank))
+                                    end
+                                    break
+                                end
+                            end
+                        end
+                    else                        
+                        local currentLevel = DataStore:GetProfessionInfo(charactersProfession)
+        				if currentLevel > 0 then
+        					if currentLevel < recipeLevel then
+        						table.insert(willLearn, format("%s |r(%d)", coloredName, currentLevel))
+        					else
+        						table.insert(couldLearn, format("%s |r(%d)", coloredName, currentLevel))
+        					end
+        				end
+                    end
     			end
             end
 		end
