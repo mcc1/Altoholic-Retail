@@ -412,9 +412,9 @@ local function GetCharacterLoginText(character)
 			last = format("%s: %s", LASTONLINE, colors.yellow..date("%m/%d/%Y %H:%M", last))
 		end
 	else
-		last = format("%s: %s", LASTONLINE, RED..L["N/A"])
+		last = format("%s: %s", LASTONLINE, colors.red..L["N/A"])
 	end
-	return format("%s %s(%s%s)", DataStore:GetColoredCharacterName(character), colors.white, last, colors.white)
+	return format("%s %s(%s%s)", (DataStore:GetColoredCharacterName(character) or ""), colors.white, last, colors.white)
 end
 
 -- ** Menu Icons **
@@ -879,7 +879,7 @@ function ns:OnLoad()
 	local LVMax = 110
 	local numLvMax = 0
 	for _, character in pairs(DataStore:GetCharacters()) do
-		if DataStore:GetCharacterLevel(character) >= LVMax then
+		if (DataStore:GetCharacterLevel(character) or 0) >= LVMax then
 			numLvMax = numLvMax + 1
 		end
 	end
