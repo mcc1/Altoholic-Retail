@@ -65,6 +65,7 @@ local emissaryQuests = {
 	[50603] = true, -- Voldunai
 	[50602] = true, -- Talanji's Expedition
 	[50606] = true, -- Horde War Effort
+	[56119] = true, -- The Waveblade Ankoan
 	
 }
 
