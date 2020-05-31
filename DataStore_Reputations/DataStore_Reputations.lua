@@ -329,7 +329,7 @@ local function ScanReputations()
 	
 	for i = 1, GetNumFactions() do		-- 2nd pass, data collection
 		local name, _, _, _, _, earned, _, _, _, _, _, _, _, factionID = GetFactionInfo(i)
-		if (earned and earned > 0) then		-- new in 3.0.2, headers may have rep, ex: alliance vanguard + horde expedition
+		if (earned ~= nil) then		-- new in 3.0.2, headers may have rep, ex: alliance vanguard + horde expedition
 			if FactionUIDsRev[name] then		-- is this a faction we're tracking ?
 				-- check paragon factions
 				if (C_Reputation.IsFactionParagon(factionID)) then
