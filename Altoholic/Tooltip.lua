@@ -491,14 +491,13 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                         expansionRequirement = string.gsub(expansionRequirement, professionName, "")
                         -- and trim it
                         expansionRequirement = string.gsub(expansionRequirement, "^%s*(.-)%s*$", "%1") 
-
+                        
                         -- iterate through each professions category
                         local numCategories = DataStore:GetNumRecipeCategories(charactersProfession)
                         if numCategories > 0 then
                             for index = 1, numCategories do 
                                 local id, categoryName, rank, maxRank = DataStore:GetRecipeCategoryInfo(charactersProfession, index)
-
-                                if string.find(categoryName, expansionRequirement) then
+                                if ((string.len(expansionRequirement) == 0) and string.find(categoryName, professionName)) or ((string.len(expansionRequirement) > 0) and string.find(categoryName, expansionRequirement)) then
                                     if rank < recipeLevel then
                                         table.insert(willLearn, format("%s |r(%d)", coloredName, rank))
                                     else
@@ -509,6 +508,7 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                             end
                         end
                     else                        
+                        -- Code should no longer get to this, as expansionRequirement should always have something. Keeping this here just in case a recipe slips through.
                         local currentLevel = DataStore:GetProfessionInfo(charactersProfession)
         				if currentLevel > 0 then
         					if currentLevel < recipeLevel then
