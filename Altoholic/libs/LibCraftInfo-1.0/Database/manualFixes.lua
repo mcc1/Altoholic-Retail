@@ -30,6 +30,7 @@ lib:DeleteCraftInfo(57021)
 lib:DeleteCraftInfo(57244)
 lib:DeleteCraftInfo(162836)
 
+lib:SetCraftInfo(2, 20036, 1, 38875, 16249)
 lib:SetCraftInfo(2, 33992, 2, 38930, 28270)
 lib:SetCraftInfo(1, 9972, 1, 7935, 7986)
 lib:SetCraftInfo(8, 56007, 3, 41599, 42186)
