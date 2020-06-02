@@ -523,6 +523,16 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                                 else
                                     if string.find(categoryName, expansionRequirement) then
                                         shouldAdd = true
+                                    else
+                                        -- cooking has weird category names, also some "pandaren" instead of "pandaria" and "broken isles" instead of "legion"
+                                        -- TODO: Get localized versions of these names, move them all to the /Locales/ folder.
+                                        if (expansionRequirement == "Northrend" and professionName == "Cooking" and id == 74) or
+                                            (expansionRequirement == "Pandaria" and professionName == "Cooking" and id == 90) or
+                                            (expansionRequirement == "Pandaria" and professionName == "Blacksmithing" and id == 553) or
+                                            (expansionRequirement == "Legion" and professionName == "Alchemy" and id == 433) or
+                                            (expansionRequirement == "Legion" and professionName == "Cooking" and id == 475) then
+                                                shouldAdd = true
+                                        end
                                     end
                                 end
                                 if shouldAdd then
