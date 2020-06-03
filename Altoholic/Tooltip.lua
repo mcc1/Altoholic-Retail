@@ -236,6 +236,9 @@ local function GetRequirementsFromRecipeLink(link)
     local pattern = ITEM_MIN_SKILL
     -- this pattern is setup for use in string.format, need to change it to a regular expression for use in string.match
     -- in english, it is: ITEM_MIN_SKILL = "Requires %s (%d)"
+    -- in Deutsch, it is: ITEM_MIN_SKILL = "Benotigi %1$s (%2$d)"
+    -- remove any %1s and %2s in the string
+    pattern = pattern:gsub("%%%d", "")
     -- swap the (%d) to a %(%d+%)
     pattern = pattern:gsub("%(%%d%)", "%%%(%%d+%%%)")
     -- swap the %s to a (.+)
