@@ -15,6 +15,8 @@ local xPacks = {
 	EXPANSION_NAME3,	-- "Cataclysm"
 	EXPANSION_NAME4,	-- "Mists of Pandaria"
 	EXPANSION_NAME5,	-- "Warlords of Draenor"
+    EXPANSION_NAME6,    -- "Legion"
+    EXPANSION_NAME7,    -- "BfA"
 }
 
 local OPTION_XPACK = "UI.Tabs.Grids.Tradeskills.CurrentXPack"
@@ -176,10 +178,14 @@ local callbacks = {
 			local text = icons.notReady
 			local vc = 0.25	-- vertex color
 			local tradeskills = addon.TradeSkills.spellIDs
-			local profession = DataStore:GetProfession(character, GetSpellInfo(tradeskills[addon:GetOption(OPTION_TRADESKILL)]))			
-
-			if #profession.Crafts ~= 0 then
-				-- do not enable this yet .. working fine, but better if more filtering allowed. ==> filtering on rarity
+			local tradeSkillID = tradeskills[addon:GetOption(OPTION_TRADESKILL)]
+            
+            -- convert "Mining Skills" to just "Mining" to match the name in DataStore
+            if tradeSkillID == 2656 then tradeSkillID = 2575 end
+            local profession = DataStore:GetProfession(character, GetSpellInfo(tradeSkillID))			
+            
+			if profession.Crafts then
+            	-- do not enable this yet .. working fine, but better if more filtering allowed. ==> filtering on rarity
 				
 				-- local _, _, itemRarity, itemLevel = GetItemInfo(currentItemID)
 				-- if itemRarity and itemRarity >= 2 then
@@ -194,7 +200,7 @@ local callbacks = {
 				else
 					vc = 0.4
 				end
-			end
+            end
 
 			button.Background:SetVertexColor(vc, vc, vc)
 			button.Name:SetText(text)
