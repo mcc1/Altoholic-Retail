@@ -26,7 +26,7 @@ local function isTaskComplete(taskID, character)
     local task = tasks[taskID]
     if task == nil then return false end
     
-    if (task.Category == nil) or (task.Expansion == nil) or (task.Target == nil) then return false end
+    if (task.Category == nil) or (task.Target == nil) then return false end
     
     if task.Category == "Daily Quest" then
         local completed = false
@@ -44,6 +44,7 @@ local function isTaskComplete(taskID, character)
     end
     
     if task.Category == "Dungeon" then
+        if (task.Expansion == nil) then return false end
         if (task.Difficulty == nil) then return false end
         
         local completed = false
@@ -68,6 +69,20 @@ local function isTaskComplete(taskID, character)
         else
             return false
         end
+    end
+    
+    if task.Category == "Profession Cooldown" then
+        for _ , profession in pairs(DataStore:GetProfessions(character)) do
+            if DataStore:GetNumActiveCooldowns(profession) > 0 then
+                for i = 1, DataStore:GetNumActiveCooldowns(profession) do
+                    local name, expiresIn, resetsIn, expiresAt = DataStore:GetCraftCooldownInfo(profession, i)
+                    if name == task.Target then
+                        return true
+                    end
+                end
+            end
+        end
+        return false
     end
 end
 
