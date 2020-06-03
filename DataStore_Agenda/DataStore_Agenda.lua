@@ -91,7 +91,9 @@ local function ScanDungeonIDs()
 	wipe(dungeons)
 
 	for i = 1, GetNumSavedInstances() do
-		local instanceName, instanceID, instanceReset, difficulty, _, extended, _, isRaid, maxPlayers, difficultyName = GetSavedInstanceInfo(i)
+        -- Update 2020/06/03: adding tracking of numEncounters and encounterProgress.
+        -- These were added to the game in patch 4.0.1, its about time we track them with this addon, too!
+		local instanceName, instanceID, instanceReset, difficulty, _, extended, _, isRaid, maxPlayers, difficultyName, numEncounters, encounterProgress = GetSavedInstanceInfo(i)
 
 		if instanceReset > 0 then		-- in 3.2, instances with reset = 0 are also listed (to support raid extensions)
 			extended = extended and 1 or 0
@@ -102,7 +104,7 @@ local function ScanDungeonIDs()
 			end
 
 			local key = instanceName.. "|" .. instanceID
-			dungeons[key] = format("%s|%s|%s|%s", instanceReset, time(), extended, isRaid )
+			dungeons[key] = format("%s|%s|%s|%s|%s|%s", instanceReset, time(), extended, isRaid, numEncounters, encounterProgress )
 		end
 	end
 end
@@ -362,9 +364,9 @@ local function _GetSavedInstanceInfo(character, key)
 	if not instanceInfo then return end
 
 	local hasExpired
-	local reset, lastCheck, isExtended, isRaid = strsplit("|", instanceInfo)
+	local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress = strsplit("|", instanceInfo)
 
-	return tonumber(reset), tonumber(lastCheck), (isExtended == "1") and true or nil, (isRaid == "1") and true or nil
+	return tonumber(reset), tonumber(lastCheck), (isExtended == "1") and true or nil, (isRaid == "1") and true or nil, numEncounters or 0, encounterProgress or 0
 end
 
 local function _HasSavedInstanceExpired(character, key)
