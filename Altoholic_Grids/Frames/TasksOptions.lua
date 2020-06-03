@@ -33,7 +33,7 @@ local currentTask = nil
 -- array Tasks
 -- > Name = STRING
 -- > ID = NUMBER UNIQUE PRIMARY KEY
--- > Category = ENUM {Daily / Dungeon / Raid / DungeonBoss / RaidBoss / ProfessionCooldown / Rare Spawn}
+-- > Category = ENUM {Daily Quest / Dungeon / Raid / Dungeon Boss / Raid Boss / Profession Cooldown / Rare Spawn}
 -- > Expansion = ENUM {Classic / TBC / WOTLK / Cataclysm / MOP / WOD / Legion / BFA / Shadowlands}
 -- > Target = NUMBER variable {instanceID / questID / bossID / recipeID}
 -- > (INTERNAL) Difficulty = ENUM {heroic / mythic} - for dungeons only
@@ -75,14 +75,31 @@ local QuestTitleFromID = setmetatable({}, { __index = function(t, id)
 	end
 end })
 
-local function TaskTargetDropdown_SetSelected(self, targetID, difficulty)
+local function TaskTargetDropdown_SetSelectedDungeon(self, instanceID, difficulty)
     -- Make the dropdown have the name of the selected target
-    local name = EJ_GetInstanceInfo(targetID)
+    local name = EJ_GetInstanceInfo(instanceID)
     UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, name)
     
     -- Save the selected target
-    currentTask.Target = targetID
+    currentTask.Target = instanceID
     currentTask.Difficulty = difficulty
+end
+
+local function TaskTargetDropdown_SetSelectedDailyQuest(self, dailyQuestID, dailyQuestName)
+    -- Make the dropdown have the name of the selected target
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, dailyQuestName)
+    
+    -- Save the selected target
+    currentTask.Target = dailyQuestID
+end
+
+-- DataStore only saves the name of the cooldown, not any associated spell ID, so have to store the target as a string and do string matching in grids
+local function TaskTargetDropdown_SetSelectedProfessionCooldown(self, cooldownName)
+    -- Make the dropdown have the name of the selected target
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, cooldownName)
+    
+    -- Save the selected target
+    currentTask.Target = cooldownName
 end
 
 local function TaskTargetDropdown_Opened(frame, level, menuList)
@@ -110,7 +127,7 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
         while instanceID do
             local info = UIDropDownMenu_CreateInfo()
             info.text = name.." (Heroic)"
-            info.func = TaskTargetDropdown_SetSelected
+            info.func = TaskTargetDropdown_SetSelectedDungeon
             info.arg1 = instanceID
             info.arg2 = "heroic"
             UIDropDownMenu_AddButton(info)
@@ -130,7 +147,7 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             a = true
             local info = UIDropDownMenu_CreateInfo()
             info.text = daily.title
-            info.func = TaskTargetDropdown_SetSelected
+            info.func = TaskTargetDropdown_SetSelectedDailyQuest
             info.arg1 = daily.id
             info.arg2 = daily.title
             UIDropDownMenu_AddButton(info)
@@ -138,6 +155,28 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
         
         if not a then
             print("Altoholic: The Daily Quest dropdown will only list Daily Quests you have completed today on the character you are currently playing.")
+        end
+    end
+    
+    if category == "Profession Cooldown" then
+        local a = false
+        
+        for _, profession in pairs(DataStore:GetProfessions(DataStore:GetCharacter())) do
+            if DataStore:GetNumActiveCooldowns(profession) > 0 then
+                for i = 1, DataStore:GetNumActiveCooldowns(profession) do
+                    local name, expiresIn, resetsIn, expiresAt = DataStore:GetCraftCooldownInfo(profession, i)
+                    a = true
+                    local info = UIDropDownMenu_CreateInfo()
+                    info.text = name
+                    info.func = TaskTargetDropdown_SetSelectedProfessionCooldown
+                    info.arg1 = name
+                    UIDropDownMenu_AddButton(info)
+                end
+            end
+        end
+        
+        if not a then
+            print("Altoholic: The Profession Cooldown dropdown will only list cooldowns you actually have on cooldown on the character you are currently playing.")
         end
     end
 end
@@ -159,6 +198,10 @@ local function getCurrentTargetName()
     if category == "Daily Quest" then
         local name = QuestTitleFromID[targetID]
         return name
+    end
+    
+    if category == "Profession Cooldown" then
+        return targetID
     end
     
     AltoholicTabGrids:Update()        
@@ -208,9 +251,21 @@ local function TaskTypeDropdown_SetSelected(self, categoryName)
     -- Save the selected category
     currentTask.Category = categoryName
     
-    -- If both a category and an expansion are selected, enable the target dropdown
-    if currentTask.Expansion then
-        UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)
+    -- Daily Quests and Profession Cooldowns don't need an expansion. 
+    -- So, clear the expansion, disable it, and enable the target dropdown
+    if (categoryName == "Daily Quest") or (categoryName == "Profession Cooldown") then
+        UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
+        UIDropDownMenu_SetText(AltoTasksOptions_TaskExpansionDropdown, "")
+        currentTask.Expansion = nil
+        UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)        
+    
+    -- For Dungeons, an expansion is required
+    else
+        UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskExpansionDropdown)
+        if currentTask.Expansion then
+            -- If both a category and an expansion are selected, enable the target dropdown
+            UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)
+        end
     end
     
     -- Wipe any selected target
@@ -259,7 +314,11 @@ local function TaskNameDropdown_SetSelected(self, id)
     UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, getCurrentTargetName())
 
     -- Target Dropdown should only be enabled if there is a category and expansion selected
-    if currentTask.Category and currentTask.Expansion then
+    -- OR the selected category is a category that doesn't require an expansion
+    if currentTask.Category and ((currentTask.Category == "Daily Quest") or (currentTask.Category == "Profession Cooldown")) then 
+        UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
+        UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)
+    elseif currentTask.Category and currentTask.Expansion then
         UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)
     else
         UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskTargetDropdown)
