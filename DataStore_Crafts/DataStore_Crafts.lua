@@ -94,6 +94,15 @@ local bAnd = bit.band
 local LShift = bit.lshift
 local RShift = bit.rshift
 
+-- Added this to replace the usage of #table, because that only works for arrays with ordered indexes, eg [1] = ..., [2] = ...
+local function getTableSize(t)
+    local count = 0
+    for _, __ in pairs(t) do
+        count = count + 1
+    end
+    return count
+end
+
 local function TestBit(value, pos)
 	-- note: this function works up to bit 51
 	local mask = 2 ^ pos		-- 0-based indexing
@@ -295,7 +304,7 @@ local function ScanRecipes()
 	wipe(crafts)
 		
 	local recipes = C_TradeSkillUI.GetAllRecipeIDs()
-	if not recipes or (#recipes == 0) then return end
+	if not recipes or (getTableSize(recipes) == 0) then return end
 	
 	local resultItems = addon.ref.global.ResultItems
 	local reagentsDB = addon.ref.global.Reagents
@@ -526,8 +535,8 @@ local function _GetProfessionInfo(profession)
 	return tonumber(rank) or 0, tonumber(maxRank) or 0, tonumber(spellID)
 end
 	
-local function _GetNumRecipeCategories(profession)
-	return (profession.Categories) and #profession.Categories or 0
+local function _GetNumRecipeCategories(profession)                
+	return (profession.Categories) and getTableSize(profession.Categories) or 0
 end
 
 local function GetCategoryName(id)
@@ -541,7 +550,7 @@ end
 
 local function _GetNumRecipeCategorySubItems(profession, index)
 	local category = profession.Categories[index]
-	return #category.SubCategories
+	return getTableSize(category.SubCategories)
 end
 
 local function _GetRecipeSubCategoryInfo(profession, catIndex, subCatIndex)
@@ -568,7 +577,7 @@ local function _IterateRecipes(profession, mainCategory, subCategory, callback)
 	-- mainCategory : category index (or 0 for all)
 	-- subCategory : sub-category index (or 0 for all)
 	local crafts = profession.Crafts
-	
+
 	-- loop through categories
 	for catIndex = 1, _GetNumRecipeCategories(profession) do
 		-- if there is no filter on main category, or if it is just the one we want to see
@@ -581,7 +590,7 @@ local function _IterateRecipes(profession, mainCategory, subCategory, callback)
 					
 					if type(recipes) == "table" then
 						-- loop through recipes
-						for i = 1, #recipes do
+						for i = 1, getTableSize(recipes) do
 							local stop = callback(recipes[i])
 							
 							-- exit if the callback returns true
@@ -607,13 +616,13 @@ end
 
 local function _GetNumActiveCooldowns(profession)
 	assert(type(profession) == "table")		-- this is the pointer to a profession table, obtained through addon:GetProfession()
-	return #profession.Cooldowns
+	return getTableSize(profession.Cooldowns)
 end
 
 local function _ClearExpiredCooldowns(profession)
 	assert(type(profession) == "table")		-- this is the pointer to a profession table, obtained through addon:GetProfession()
 	
-	for i = #profession.Cooldowns, 1, -1 do		-- from last to first, to avoid messing up indexes when removing entries
+	for i = getTableSize(profession.Cooldowns), 1, -1 do		-- from last to first, to avoid messing up indexes when removing entries
 		local _, expiresIn = _GetCraftCooldownInfo(profession, i)
 		if expiresIn <= 0 then		-- already expired ? remove it
 			table.remove(profession.Cooldowns, i)
@@ -636,7 +645,7 @@ end
 local function _IsCraftKnown(profession, spellID)
 	-- returns true if a given spell ID is known in the profession passed as first argument
 	local isKnown
-	
+
 	_IterateRecipes(profession, 0, 0, function(recipeData) 
 		local _, recipeID, isLearned = _GetRecipeInfo(recipeData)
 		if recipeID == spellID and isLearned then
@@ -714,7 +723,7 @@ local function _GetArchaeologyRaceArtifacts(race)
 end
 
 local function _GetRaceNumArtifacts(race)
-	return #addon.artifactDB[race]
+	return getTableSize(addon.artifactDB[race])
 end
 
 local function _GetArtifactInfo(race, index)
@@ -790,6 +799,7 @@ function addon:OnInitialize()
 	
 	DataStore:SetGuildBasedMethod("GetGuildCrafters")
 	DataStore:SetGuildBasedMethod("GetGuildMemberProfession")
+    
 end
 
 function addon:OnEnable()
@@ -798,6 +808,7 @@ function addon:OnEnable()
 	addon:RegisterEvent("CHAT_MSG_SKILL", OnChatMsgSkill)
 	addon:RegisterEvent("CHAT_MSG_SYSTEM", OnChatMsgSystem)
 	addon:RegisterEvent("TRADE_SKILL_DATA_SOURCE_CHANGED", OnDataSourceChanged)
+    addon:RegisterEvent("TRADE_SKILL_LIST_UPDATE", OnDataSourceChanged)
 		
 	local _, _, arch = GetProfessions()
 
@@ -818,6 +829,7 @@ function addon:OnDisable()
 	addon:UnregisterEvent("CHAT_MSG_SKILL")
 	addon:UnregisterEvent("CHAT_MSG_SYSTEM")
 	addon:UnregisterEvent("TRADE_SKILL_DATA_SOURCE_CHANGED")
+    addon:UnregisterEvent("TRADE_SKILL_LIST_UPDATE")
 end
 
 function addon:IsTradeSkillWindowOpen()
