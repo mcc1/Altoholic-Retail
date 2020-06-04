@@ -29,6 +29,7 @@ local lib = LibStub("LibCraftInfo-1.0")
 lib:DeleteCraftInfo(57021)
 lib:DeleteCraftInfo(57244)
 lib:DeleteCraftInfo(162836)
+lib:DeleteCraftInfo(171718)
 
 lib:SetCraftInfo(7, 46353, 2, 35128, 35273)
 lib:SetCraftInfo(2, 20036, 1, 38875, 16249)
