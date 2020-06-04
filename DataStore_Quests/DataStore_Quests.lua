@@ -67,6 +67,19 @@ local emissaryQuests = {
 	[50606] = true, -- Horde War Effort
 	[56119] = true, -- The Waveblade Ankoan
     [56120] = true, -- The Unshackled
+    
+    -- Mechagon World Quest
+    [56139] = true, -- 6 treasure chests
+    [55901] = true, -- complete activities in Mechagon
+    [56131] = true, -- kill three rares on Mechagon
+     
+    -- Assaults / Invasions / Etc
+    [56064] = true, -- The Black Empire in Vale
+    [57157] = true, -- The Black Empire in Uldum
+    [55350] = true, -- Amathet in Uldum
+    [56308] = true, -- Aqir in Uldum
+    [57728] = true, -- Mantid in Vale
+    [57008] = true, -- Mogu in Vale
 }
 
 -- *** Utility functions ***

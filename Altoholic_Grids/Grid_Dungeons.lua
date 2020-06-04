@@ -254,7 +254,7 @@ local Dungeons = {
 			{ id = 986, achID = 10027, bosses = 1, difficulty = DIFFICULTY_RAID_LFR }, --  The Black Gate
 		},
         {   -- [2] Normal Raids
-            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_NORMAL)),
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_FLEX)),
             { id = 895, achID = 8988, difficulty = DIFFICULTY_RAID_FLEX },	--	Highmaul
         },
         {   -- [3] Heroic Raids
