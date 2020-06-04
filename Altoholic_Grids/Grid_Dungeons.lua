@@ -252,20 +252,121 @@ local Dungeons = {
 			{ id = 984, achID = 10025, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, --  Bastion of Shadows
 			{ id = 985, achID = 10026, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, --  Destructor's Rise
 			{ id = 986, achID = 10027, bosses = 1, difficulty = DIFFICULTY_RAID_LFR }, --  The Black Gate
-		},
+		}, -- Datamined from: https://wow.gamepedia.com/LfgDungeonID
         {   -- [2] Normal Raids
             name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_FLEX)),
             { id = 895, achID = 8988, difficulty = DIFFICULTY_RAID_FLEX },	--	Highmaul
+            { id = 898, achID = 8992, difficulty = DIFFICULTY_RAID_FLEX },	-- BRF
+            { id = 987, achID = 10027, difficulty = DIFFICULTY_RAID_FLEX },	-- HFC
+            
         },
         {   -- [3] Heroic Raids
             name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_HEROIC)),
             { id = 896, achID = 8988, difficulty = DIFFICULTY_RAID_HEROIC },	--	Highmaul
+            { id = 899, achID = 8992, difficulty = DIFFICULTY_RAID_HEROIC },	-- BRF
+            { id = 988, achID = 10027, difficulty = DIFFICULTY_RAID_FLEX },	-- HFC
         },
         {   -- [4] Mythic Raids
             name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_MYTHIC)),
             { id = 897, achID = 8965, difficulty = DIFFICULTY_RAID_MYTHIC },	--	Highmaul
+            { id = 900, achID = 8992, difficulty = DIFFICULTY_RAID_MYTHIC },	-- BRF
+            { id = 989, achID = 10027, difficulty = DIFFICULTY_RAID_FLEX },	-- HFC
         },
 	},
+    { -- [7]
+        name = EXPANSION_NAME6, -- "Legion"
+        { -- [1] LFR
+             name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_LFR)),
+			{ id = 1287, achID = 10818, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	--	Darkbough
+			{ id = 1288, achID = 10819, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	--	Tormented Guardians
+			{ id = 1289, achID = 10820, bosses = 1, difficulty = DIFFICULTY_RAID_LFR },	--	Rift of Aln
+			{ id = 1290, achID = 10829, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	--	Arcing Aqueducts
+			{ id = 1291, achID = 10837, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	--	Royal Athenaeum
+			{ id = 1292, achID = 10838, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	--	Nightspire
+			{ id = 1293, achID = 10839, bosses = 1, difficulty = DIFFICULTY_RAID_LFR },	--	Betrayer's Rise
+			{ id = 1411, achID = 11394, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Trial of Valor 
+			{ id = 1494, achID = 11787, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- The Gates of Hell
+			{ id = 1495, achID = 11788, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Wailing Halls
+			{ id = 1496, achID = 11789, bosses = 2, difficulty = DIFFICULTY_RAID_LFR }, -- Chamber of the Avatar
+			{ id = 1497, achID = 11790, bosses = 1, difficulty = DIFFICULTY_RAID_LFR }, -- Deceiver's Fall
+            { id = 1610, achID = 11988, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Light's Breach
+			{ id = 1611, achID = 11989, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Forbidden Descent
+			{ id = 1612, achID = 11990, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Hope's End
+			{ id = 1613, achID = 11991, bosses = 2, difficulty = DIFFICULTY_RAID_LFR }, -- Seat of the Pantheon
+        },
+        {   -- [2] Normal Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_FLEX)),
+            { id = 1348, achID = 10820, difficulty = DIFFICULTY_RAID_FLEX },	-- TEN
+            { id = 1351, achID = 10839, difficulty = DIFFICULTY_RAID_FLEX },	-- Nighthold
+            { id = 1437, achID = 11394, difficulty = DIFFICULTY_RAID_FLEX },	-- Trial of Valor
+            { id = 1525, achID = 11790, difficulty = DIFFICULTY_RAID_FLEX },	-- Tomb of Sargeras
+            { id = 1640, achID = 11991, difficulty = DIFFICULTY_RAID_FLEX },	-- Antorus, the Burning Throne
+        },
+        {   -- [3] Heroic Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_HEROIC)),
+            { id = 1349, achID = 10820, difficulty = DIFFICULTY_RAID_HEROIC },	-- TEN
+            { id = 1352, achID = 10839, difficulty = DIFFICULTY_RAID_HEROIC },	-- Nighthold
+            { id = 1438, achID = 11394, difficulty = DIFFICULTY_RAID_HEROIC },	-- Trial of Valor
+            { id = 1526, achID = 11790, difficulty = DIFFICULTY_RAID_HEROIC },	-- Tomb of Sargeras
+            { id = 1641, achID = 11991, difficulty = DIFFICULTY_RAID_HEROIC },	-- Antorus, the Burning Throne
+        },
+        {   -- [4] Mythic Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_MYTHIC)),
+            { id = 1350, achID = 10827, difficulty = DIFFICULTY_RAID_MYTHIC },	-- TEN
+            { id = 1353, achID = 10850, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Nighthold
+            { id = 1439, achID = 11398, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Trial of Valor
+            { id = 1527, achID = 11781, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Tomb of Sargeras
+            { id = 1642, achID = 12002, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Antorus, the Burning Throne
+        },
+    },
+    { -- [8]
+        name = EXPANSION_NAME7, -- "Bad for Azeroth"
+        { -- [1] LFR
+             name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_LFR)),
+			{ id = 1731, achID = 12521, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Halls of Containment
+			{ id = 1732, achID = 12522, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Crimson Descent
+			{ id = 1733, achID = 12523, bosses = 2, difficulty = DIFFICULTY_RAID_LFR },	-- Heart of Corruption
+			{ id = 1945, achID = 13286, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Siege of Dazar'alor
+			{ id = 1946, achID = 13287, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Empire's Fall
+			{ id = 1947, achID = 13288, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Might of the Alliance
+			{ id = 1948, achID = 13289, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Defense of Dazar'alor
+			{ id = 1949, achID = 13290, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Death's Bargain  
+			{ id = 1950, achID = 13291, bosses = 1, difficulty = DIFFICULTY_RAID_LFR }, -- Victory or Death 
+			{ id = 1951, achID = 13414, bosses = 2, difficulty = DIFFICULTY_RAID_LFR }, -- Crucible of Storms 
+			{ id = 2009, achID = 13718, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- The Grand Reception
+			{ id = 2010, achID = 13719, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Depths of the Devoted
+            { id = 2011, achID = 13725, bosses = 2, difficulty = DIFFICULTY_RAID_LFR }, -- The Circle of Stars
+			{ id = 2036, achID = 14193, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Vision of Destiny
+			{ id = 2037, achID = 14194, bosses = 4, difficulty = DIFFICULTY_RAID_LFR }, -- Halls of Devotion
+			{ id = 2038, achID = 14195, bosses = 3, difficulty = DIFFICULTY_RAID_LFR }, -- Gift of Flesh
+            { id = 2039, achID = 14196, bosses = 2, difficulty = DIFFICULTY_RAID_LFR }, -- The Waking Dream
+        },
+        {   -- [2] Normal Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_FLEX)),
+            { id = 1889, achID = 12523, difficulty = DIFFICULTY_RAID_FLEX },	-- Uldir
+            { id = 1942, achID = 10839, difficulty = DIFFICULTY_RAID_FLEX },	-- Battle of Dazar'alor
+            { id = 1952, achID = 13414, difficulty = DIFFICULTY_RAID_FLEX },	-- Crucible of Storms
+            { id = 2014, achID = 13725, difficulty = DIFFICULTY_RAID_FLEX },	-- The Eternal Palace
+            { id = 2033, achID = 14196, difficulty = DIFFICULTY_RAID_FLEX },	-- Ny'alotha, the Waking City
+        },
+        {   -- [3] Heroic Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_HEROIC)),
+            { id = 1888, achID = 12523, difficulty = DIFFICULTY_RAID_HEROIC },	-- Uldir 
+            { id = 1943, achID = 10839, difficulty = DIFFICULTY_RAID_HEROIC },	-- Battle of Dazar'alor
+            { id = 1953, achID = 13414, difficulty = DIFFICULTY_RAID_HEROIC },	-- Crucible of Storms 
+            { id = 2015, achID = 13725, difficulty = DIFFICULTY_RAID_HEROIC },	-- The Eternal Palace
+            { id = 2034, achID = 14196, difficulty = DIFFICULTY_RAID_HEROIC },	-- Ny'alotha, the Waking City
+        },
+        {   -- [4] Mythic Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_MYTHIC)),
+            { id = 1887, achID = 12533, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Uldir
+            { id = 1944, achID = 10850, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Battle of Dazar'alor
+            { id = 1954, achID = 13417, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Crucible of Storms  
+            { id = 2016, achID = 13733, difficulty = DIFFICULTY_RAID_MYTHIC },	-- The Eternal Palace   
+            { id = 2035, achID = 14055, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Ny'alotha, the Waking City   
+        },
+    },
+    
 }
 
 local view
