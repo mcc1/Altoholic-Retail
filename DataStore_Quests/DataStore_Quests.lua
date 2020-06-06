@@ -30,6 +30,7 @@ local AddonDB_Defaults = {
 				QuestHeaders = {},
 				QuestTags = {},
 				Emissaries = {},
+                RegularZoneQuests = {},
 				Rewards = {},
 				Money = {},
 				Dailies = {},
@@ -38,7 +39,8 @@ local AddonDB_Defaults = {
 				HistorySize = 0,
 				HistoryLastUpdate = nil,
 			}
-		}
+		},
+        RegularZoneQuests = {},     -- tracks assault quests and rustbolt and such. This tracks overall quest info, while the character one tracks that characters progress
 	}
 }
 
@@ -67,7 +69,9 @@ local emissaryQuests = {
 	[50606] = true, -- Horde War Effort
 	[56119] = true, -- The Waveblade Ankoan
     [56120] = true, -- The Unshackled
-    
+}
+
+local regularZoneQuests = {    
     -- Mechagon World Quest
     [56139] = true, -- 6 treasure chests
     [55901] = true, -- complete activities in Mechagon
@@ -292,6 +296,7 @@ local function ScanQuests()
 	local tags = char.QuestTags
 	local emissaries = char.Emissaries
 	local money = char.Money
+    local savedRegularZoneQuests = addon.db.global.RegularZoneQuests
 
 	wipe(quests)
 	wipe(links)
@@ -355,6 +360,27 @@ local function ScanQuests()
 			end
 		end
 	end
+    
+    for questID, _ in pairs(regularZoneQuests) do
+        -- initialize the saved variable if needed
+        if not savedRegularZoneQuests then savedRegularZoneQuests = {} end
+        local objective, _, _, numFulfilled, numRequired
+        if IsQuestTask(questID) then
+            objective = GetQuestObjectiveInfo(questID, 1, false)
+            numFulfilled = C_TaskQuest.GetQuestProgressBarInfo(questID)
+            numRequired = 100
+        else
+            objective, _, _, numFulfilled, numRequired = GetQuestObjectiveInfo(questID, 1, false)
+        end
+        -- if the current character has completed the quest already, then C_TaskQuest.GetQuestTimeLeftMinutes(questID) will return nil, so we can't give an accurate time remaining
+        local timeRemaining = C_TaskQuest.GetQuestTimeLeftMinutes(questID)
+        if not IsQuestFlaggedCompleted(questID) then
+            savedRegularZoneQuests[questID] = format("%d|%d|%s|%d|%s", timeRemaining, numRequired, objective or "", time(), C_TaskQuest.GetQuestInfoByQuestID(questID))
+        else
+            return
+        end
+        char.RegularZoneQuests[questID] = {["numFulfilled"] = numFulfilled}    
+    end
 
 	RestoreHeaders()
 	SelectQuestLogEntry(currentSelection)		-- restore the selection to match the cursor, must be properly set if a user abandons a quest
@@ -534,6 +560,10 @@ local function _GetEmissaryQuests()
 	return emissaryQuests
 end
 
+local function _GetRegularZoneQuests()
+    return regularZoneQuests
+end
+
 local function _GetEmissaryQuestInfo(character, questID)
 	local quest = character.Emissaries[questID]
 	if not quest then return end
@@ -555,6 +585,35 @@ local function _GetEmissaryQuestInfo(character, questID)
 	end
 
 	return numFulfilled, numRequired, timeLeft, objective
+end
+
+local function _GetRegularZoneQuestInfo(character, questID)
+	local sharedQuestInfo = addon.db.global.RegularZoneQuests[questID]
+	if not sharedQuestInfo then return end
+
+	local timeLeft, numRequired, objective, lastUpdate, title = strsplit("|", sharedQuestInfo)
+    
+    local characterSpecificQuestInfo = character.RegularZoneQuests[questID]
+    local numFulfilled = 0
+    if (characterSpecificQuestInfo) then
+        numFulfilled = characterSpecificQuestInfo.numFulfilled
+    end  
+
+	numFulfilled = tonumber(numFulfilled) or 0
+	numRequired = tonumber(numRequired) or 0
+	timeLeft = (tonumber(timeLeft) or 0) * 60		-- we want the time left to be in seconds
+	
+	if timeLeft > 0 then
+		local secondsSinceLastUpdate = time() - lastUpdate
+		if secondsSinceLastUpdate > timeLeft then		-- if the info has expired ..
+			addon.RegularZoneQuests[questID] = nil			-- .. clear the entry
+			return
+		end
+		
+		timeLeft = timeLeft - secondsSinceLastUpdate
+	end
+
+	return numFulfilled, numRequired, timeLeft, objective, title    
 end
 
 local function _IsCharacterOnQuest(character, questID)
@@ -621,7 +680,9 @@ local PublicMethods = {
 	GetDailiesHistorySize = _GetDailiesHistorySize,
 	GetDailiesHistoryInfo = _GetDailiesHistoryInfo,
 	GetEmissaryQuests = _GetEmissaryQuests,
+    GetRegularZoneQuests = _GetRegularZoneQuests,
 	GetEmissaryQuestInfo = _GetEmissaryQuestInfo,
+    GetRegularZoneQuestInfo = _GetRegularZoneQuestInfo,
 	IsCharacterOnQuest = _IsCharacterOnQuest,
 	GetCharactersOnQuest = _GetCharactersOnQuest,
 	IterateQuests = _IterateQuests,
@@ -644,6 +705,7 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetDailiesHistorySize")
 	DataStore:SetCharacterBasedMethod("GetDailiesHistoryInfo")
 	DataStore:SetCharacterBasedMethod("GetEmissaryQuestInfo")
+    DataStore:SetCharacterBasedMethod("GetRegularZoneQuestInfo")
 	DataStore:SetCharacterBasedMethod("IsCharacterOnQuest")
 	DataStore:SetCharacterBasedMethod("IterateQuests")
 end
@@ -700,7 +762,7 @@ hooksecurefunc("GetQuestReward", function(choiceIndex)
 	history[index] = bOr((history[index] or 0), 2^bitPos)	-- read: value = SetBit(value, bitPosition)
 
 	-- track daily quests turn-ins
-	if QuestIsDaily() or emissaryQuests[questID] then
+	if QuestIsDaily() or emissaryQuests[questID] or regularZoneQuests[questID] then
 		-- I could not find a function to test if a quest is emissary, so their id's are tracked manually
 		table.insert(addon.ThisCharacter.Dailies, { title = GetTitleText(), id = questID, timestamp = time() })
 	end

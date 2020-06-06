@@ -48,6 +48,21 @@ local function BuildView()
 				questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
 			end
 		end
+        for questID, _ in pairs(DataStore:GetRegularZoneQuests()) do
+            local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
+			local numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetRegularZoneQuestInfo(character, questID)
+			
+			if numRequired and timeLeft and timeLeft > 0 then
+				if not questList[questID] then
+					questList[questID] = {}
+					questList[questID].title = questName
+					questList[questID].timeLeft = timeLeft
+					questList[questID].completionStatus = {}
+				end				
+
+				questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+			end
+        end
 	end
 
 	-- .. and only when the questList table is ready with emissaries info for all alts, loop again on the dailies
@@ -78,6 +93,7 @@ local callbacks = {
 	RowSetup = function(self, rowFrame, dataRowID)
 			local name = questList[ view[dataRowID] ].title
 			if name then
+                if name == "Argussian Reach" then name = "Australian Reach" end
 				rowFrame.Name.Text:SetText(format("%s%s", colors.white, name))
 				rowFrame.Name.Text:SetJustifyH("LEFT")
 			end
@@ -112,7 +128,10 @@ local callbacks = {
 				text = icons.ready
 				button.Background:SetVertexColor(1.0, 1.0, 1.0)
 			else			
-				local numFulfilled, numRequired, timeLeft = DataStore:GetEmissaryQuestInfo(character, questID)
+				local numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetEmissaryQuestInfo(character, questID)
+                if not numFulfilled then
+                    numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetRegularZoneQuestInfo(character, questID)
+                end
 
 				-- if not timeLeft or timeLeft == 0 then
 				-- 	button:Hide()
@@ -141,6 +160,9 @@ local callbacks = {
 			local questID = self.questID
 			local quest = questList[questID]
 			local _, _, timeLeft, objective = DataStore:GetEmissaryQuestInfo(character, questID)
+            if not objective then
+                _, _, timeLeft, objective = DataStore:GetRegularZoneQuestInfo(character, questID)
+            end
 
 			local tooltip = AltoTooltip
 			tooltip:SetOwner(self, "ANCHOR_LEFT")
