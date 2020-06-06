@@ -303,9 +303,19 @@ local function ScanQuests()
 	wipe(headers)
 	wipe(rewards)
 	wipe(tags)
-	wipe(emissaries)
+	-- wipe(emissaries)  -- going to try a different approach
 	wipe(money)
-
+    
+    for questID, details in pairs(emissaries) do
+        local numFulfilled, numRequired, timeLeft, objective, timeSaved = strsplit("|", details)
+        if timeSaved and timeLeft and (timeSaved > 0) and (timeLeft > 0) then
+		    local secondsSinceLastUpdate = time()
+		    if secondsSinceLastUpdate > timeLeft then		-- if the info has expired ..
+			     emissaries[questID] = nil			-- .. clear the entry
+		    end
+        end
+	end
+    
 	local currentSelection = GetQuestLogSelection()		-- save the currently selected quest
 	SaveHeaders()
 
@@ -347,7 +357,7 @@ local function ScanQuests()
 			-- is the quest an emissary quest ?
 			if emissaryQuests[questID] then
 				local objective, _, _, numFulfilled, numRequired = GetQuestObjectiveInfo(questID, 1, false)
-				emissaries[questID] = format("%d|%d|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(questID), objective or "")
+				emissaries[questID] = format("%d|%d|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(questID), objective or "", time())
 			end
 
 			wipe(rewardsCache)
