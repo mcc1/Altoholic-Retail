@@ -606,7 +606,7 @@ local function _GetRegularZoneQuestInfo(character, questID)
 	if timeLeft > 0 then
 		local secondsSinceLastUpdate = time() - lastUpdate
 		if secondsSinceLastUpdate > timeLeft then		-- if the info has expired ..
-			addon.RegularZoneQuests[questID] = nil			-- .. clear the entry
+			addon.db.global.RegularZoneQuests[questID] = nil			-- .. clear the entry
 			return
 		end
 		
