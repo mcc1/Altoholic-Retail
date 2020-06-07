@@ -224,51 +224,13 @@ end
 hooksecurefunc(C_AuctionHouse, "PostItem", onPostItem)
 hooksecurefunc(C_AuctionHouse, "PostCommodity", onPostCommodity)
 
-
-local function ScanBids()
-	local AHZone = 0		-- 0 means faction AH
-	-- local zoneFaction = GetZonePVPInfo()	-- "friendly", "sanctuary", "contested" (PvP server) or nil (PvE server)
-	-- if ( zoneFaction ~= "friendly" ) and ( zoneFaction ~= "sanctuary" ) then
-		-- AHZone = 1			-- 1 means goblin AH
-	-- end
-	
-	local zoneID = C_Map.GetBestMapForUnit("player")
-	if zoneID == 161 or zoneID == 281 or zoneID == 673 then
- 		AHZone = 1			-- 1 means goblin AH
- 	end
-	
-	local character = addon.ThisCharacter
-	character.lastUpdate = time()
-	character.lastVisitDate = date("%Y/%m/%d %H:%M")
-	
-	_ClearAuctionEntries(character, "Bids", AHZone)
-	
-	for i = 1, C_AuctionHouse.GetNumReplicateItems("bidder") do
-		local itemName, _, count, _, _, _, _, _, 
-			_, buyoutPrice, bidPrice, _, ownerName = C_AuctionHouse.GetReplicateItemInfo("bidder", i);
-			
-		if itemName then
-			local link = C_AuctionHouse.GetReplicateItemLink("bidder", i)
-			if not link:match("battlepet:(%d+)") then		-- temporarily skip battle pets
-				local id = tonumber(link:match("item:(%d+)"))
-				local timeLeft = C_AuctionHouse.GetReplicateItemTimeLeft("bidder", i)
-			
-				table.insert(character.Bids, format("%s|%s|%s|%s|%s|%s|%s", 
-					AHZone, id, count, ownerName or "", bidPrice, buyoutPrice, timeLeft))
-			end
-		end
-	end
-end
-
 -- *** EVENT HANDLERS ***
 function addon:AUCTION_HOUSE_SHOW()
 	addon:RegisterEvent("AUCTION_HOUSE_CLOSED")
 	addon:RegisterEvent("OWNED_AUCTIONS_UPDATED", ScanAuctions)
-	addon:RegisterEvent("BIDS_UPDATED", ScanBids)
 end
 
 function addon:AUCTION_HOUSE_CLOSED()
 	addon:UnregisterEvent("AUCTION_HOUSE_CLOSED")
 	addon:UnregisterEvent("OWNED_AUCTIONS_UPDATED")
-	addon:UnregisterEvent("BIDS_UPDATED")
 end
