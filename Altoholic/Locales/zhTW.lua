@@ -865,3 +865,7 @@ L[ [=[Your confirmation will still be required any time someone requests your in
 L["Zelemar the Wrathful"] = "憤怒者塞雷瑪爾"
 L["Zone"] = "地區"
 
+L["will be returned upon expiry"] = true
+L["Closest return in"] = true
+L["Closest deletion in"] = true
+L["MAIL_WILL_BE_DELETED_PATTERN"] = "|cFF00FF00%d|cFFFFFFFF will be |cFFFF0000deleted|cFFFFFFFF upon expiry"

@@ -858,3 +858,8 @@ L["New"] = true
 L["Expansion"] = true
 L["Target"] = true
 L["Task Type"] = true
+
+L["will be returned upon expiry"] = true
+L["Closest return in"] = true
+L["Closest deletion in"] = true
+L["MAIL_WILL_BE_DELETED_PATTERN"] = "|cFF00FF00%d|cFFFFFFFF will be |cFFFF0000deleted|cFFFFFFFF upon expiry"

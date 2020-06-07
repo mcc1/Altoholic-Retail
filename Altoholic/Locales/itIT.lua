@@ -609,3 +609,7 @@ L[ [=[Your confirmation will still be required any time someone requests your in
 ]=] ] = "La conferma verrà richiesta ogni volta che qualcuno richiederà informazioni."
 L["Zone"] = "Zona"
 
+L["will be returned upon expiry"] = true
+L["Closest return in"] = true
+L["Closest deletion in"] = true
+L["MAIL_WILL_BE_DELETED_PATTERN"] = "|cFF00FF00%d|cFFFFFFFF will be |cFFFF0000deleted|cFFFFFFFF upon expiry"
