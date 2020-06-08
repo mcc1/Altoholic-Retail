@@ -33,10 +33,14 @@ local function BuildView()
 	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
 		for questID, _ in pairs(DataStore:GetEmissaryQuests()) do
 			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
-			local _, _, timeLeft = DataStore:GetEmissaryQuestInfo(character, questID)
+            local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
+			local _, _, timeLeft, objective, emissaryQuestName = DataStore:GetEmissaryQuestInfo(character, questID)
 			
-			if isOnQuest and timeLeft and timeLeft > 0 then
+			if timeLeft and timeLeft > 0 then
 				local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
+                if not questName then questName = emissaryQuestName end
+                if not emissaryQuestName then questName = C_QuestLog.GetQuestInfo(questID) end
+                if not questName then questName = "" end
 
 				if not questList[questID] then
 					questList[questID] = {}
@@ -45,11 +49,16 @@ local function BuildView()
 					questList[questID].completionStatus = {}
 				end				
 
-				questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                if isOnQuest then
+				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                elseif isCompleted then
+                    questList[questID].completionStatus[character] = QUEST_COMPLETE
+                end
 			end
 		end
         for questID, _ in pairs(DataStore:GetRegularZoneQuests()) do
             local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
+            local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
 			local numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetRegularZoneQuestInfo(character, questID)
 			
 			if numRequired and timeLeft and timeLeft > 0 then
@@ -60,7 +69,11 @@ local function BuildView()
 					questList[questID].completionStatus = {}
 				end				
 
-				questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                if isOnQuest then
+				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                elseif isCompleted then
+                    questList[questID].completionStatus[character] = QUEST_COMPLETE
+                end
 			end
         end
 	end
@@ -93,7 +106,7 @@ local callbacks = {
 	RowSetup = function(self, rowFrame, dataRowID)
 			local name = questList[ view[dataRowID] ].title
 			if name then
-                if name == "Argussian Reach" then name = "Australian Reach" end
+                --if name == "Argussian Reach" then name = "Australian Reach" end
 				rowFrame.Name.Text:SetText(format("%s%s", colors.white, name))
 				rowFrame.Name.Text:SetJustifyH("LEFT")
 			end

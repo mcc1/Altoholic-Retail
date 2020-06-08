@@ -307,13 +307,21 @@ local function ScanQuests()
 	wipe(money)
     
     for questID, details in pairs(emissaries) do
-        local numFulfilled, numRequired, timeLeft, objective, timeSaved = strsplit("|", details)
-        if timeSaved and timeLeft and (timeSaved > 0) and (timeLeft > 0) then
-		    local secondsSinceLastUpdate = time()
-		    if secondsSinceLastUpdate > timeLeft then		-- if the info has expired ..
+        local numFulfilled, numRequired, timeLeft, objective, timeSaved, questName = strsplit("|", details)
+        if timeSaved and timeLeft and (tonumber(timeSaved) > 0) and (tonumber(timeLeft) > 0) then
+		    local secondsSinceLastUpdate = (time() - timeSaved)
+		    if secondsSinceLastUpdate > (tonumber(timeLeft) * 60) then		-- if the info has expired ..
 			     emissaries[questID] = nil			-- .. clear the entry
 		    end
         end
+        
+        -- delete data saved before the addon update, if past its expiry
+        if (not timeSaved) and timeLeft and (tonumber(timeLeft) > 0) then
+		    local secondsSinceLastUpdate = (time() - char.lastUpdate)
+		    if secondsSinceLastUpdate > (tonumber(timeLeft) * 60) then
+			     emissaries[questID] = nil			-- .. clear the entry
+		    end
+        end            
 	end
     
 	local currentSelection = GetQuestLogSelection()		-- save the currently selected quest
@@ -357,7 +365,7 @@ local function ScanQuests()
 			-- is the quest an emissary quest ?
 			if emissaryQuests[questID] then
 				local objective, _, _, numFulfilled, numRequired = GetQuestObjectiveInfo(questID, 1, false)
-				emissaries[questID] = format("%d|%d|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(questID), objective or "", time())
+				emissaries[questID] = format("%d|%d|%d|%s|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(questID), objective or "", time(), C_QuestLog.GetQuestInfo(questID))
 			end
 
 			wipe(rewardsCache)
@@ -386,8 +394,6 @@ local function ScanQuests()
         local timeRemaining = C_TaskQuest.GetQuestTimeLeftMinutes(questID)
         if not IsQuestFlaggedCompleted(questID) then
             savedRegularZoneQuests[questID] = format("%d|%d|%s|%d|%s", timeRemaining, numRequired, objective or "", time(), C_TaskQuest.GetQuestInfoByQuestID(questID))
-        else
-            return
         end
         char.RegularZoneQuests[questID] = {["numFulfilled"] = numFulfilled}    
     end
@@ -578,7 +584,7 @@ local function _GetEmissaryQuestInfo(character, questID)
 	local quest = character.Emissaries[questID]
 	if not quest then return end
 
-	local numFulfilled, numRequired, timeLeft, objective = strsplit("|", quest)
+	local numFulfilled, numRequired, timeLeft, objective, timeSaved, questName = strsplit("|", quest)
 
 	numFulfilled = tonumber(numFulfilled) or 0
 	numRequired = tonumber(numRequired) or 0
@@ -594,7 +600,7 @@ local function _GetEmissaryQuestInfo(character, questID)
 		timeLeft = timeLeft - secondsSinceLastUpdate
 	end
 
-	return numFulfilled, numRequired, timeLeft, objective
+	return numFulfilled, numRequired, timeLeft, objective, questName
 end
 
 local function _GetRegularZoneQuestInfo(character, questID)
