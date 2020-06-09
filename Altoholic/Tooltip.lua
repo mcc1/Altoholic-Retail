@@ -203,7 +203,7 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 local function IsGatheringNode(name)
 	if name then
 		for k, v in pairs(GatheringNodes) do
-			if name == k then				-- returns the itemID if "name" is a known type of gathering node (mines & herbs)
+			if string.find(name, k) then				-- returns the itemID if "name" is a known type of gathering node (mines & herbs)
 				return v
 			end
 		end
@@ -634,7 +634,20 @@ local function AddGlyphOwners(itemID, tooltip)
 	end
 end
 
+-- Sequence of events:
+-- Mouse over a gathering node
+-- Triggers OnShow
+-- Keep mousing over it, and OnUpdate repeatedly gets called
+-- Mouse away, and theres a window of a few seconds where not much happens, as the tooltip fades
+-- Tooltip fades completely, and OnHide is triggered
+-- Mouse onto a different object or link or whatever, and OnTooltipCleared is called
+-- Plan: during OnShow, set this to true
+-- During OnTooltipCleared, set this to false
+-- During OnUpdate, call ShowGatheringNodeCounters only if this is false
+local gatheringNodeWasShown
+
 local function ShowGatheringNodeCounters()
+    gatheringNodeWasShown = true
 	-- exit if player does not want counters for known gathering nodes
 	if addon:GetOption("UI.Tooltip.ShowGatheringNodesCount") == false then return end
 
@@ -771,6 +784,13 @@ local function OnGameTooltipShow(tooltip, ...)
 	GameTooltip:Show()
 end
 
+local function OnGameTooltipUpdate(tooltip, ...)
+    if not gatheringNodeWasShown then
+        ShowGatheringNodeCounters()
+        GameTooltip:Show()
+    end
+end
+
 local function OnGameTooltipSetItem(tooltip, ...)
 	if (not isTooltipDone) and tooltip then
 		isTooltipDone = true
@@ -795,6 +815,8 @@ local function OnGameTooltipCleared(tooltip, ...)
 	isTooltipDone = nil
 	isNodeDone = nil		-- for informant
 	storedLink = nil
+    cachedItemID = nil
+    gatheringNodeWasShown = nil
 end
 
 local function Hook_SetCurrencyToken(self,index,...)
@@ -894,6 +916,7 @@ function addon:InitTooltip()
 
 	-- script hooks
 	GameTooltip:HookScript("OnShow", OnGameTooltipShow)
+    GameTooltip:HookScript("OnUpdate", OnGameTooltipUpdate)
 	GameTooltip:HookScript("OnTooltipSetItem", OnGameTooltipSetItem)
 	GameTooltip:HookScript("OnTooltipCleared", OnGameTooltipCleared)
 

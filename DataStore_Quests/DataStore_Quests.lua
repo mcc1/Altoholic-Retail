@@ -729,6 +729,7 @@ end
 function addon:OnEnable()
 	addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
 	addon:RegisterEvent("UNIT_QUEST_LOG_CHANGED", OnUnitQuestLogChanged)
+    addon:RegisterEvent("WORLD_QUEST_COMPLETED_BY_SPELL", ScanQuests)
 
 	addon:SetupOptions()
 
@@ -757,6 +758,7 @@ function addon:OnDisable()
 	addon:UnregisterEvent("PLAYER_ALIVE")
 	addon:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
 	addon:UnregisterEvent("QUEST_QUERY_COMPLETE")
+    addon:UnregisterEvent("WORLD_QUEST_COMPLETED_BY_SPELL")
 end
 
 -- *** Hooks ***
