@@ -45,60 +45,59 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 	[L["Rich Adamantite Deposit"]]         = 23425, -- Adamantite Ore
 	
 	-- WotLK
-	["Cobalt Deposit"]                     = 36909, -- Cobalt Ore
-	["Rich Cobalt Deposit"]                = 36909, -- Cobalt Ore
-	["Saronite Deposit"]                   = 36912, -- Saronite Ore
-	["Rich Saronite Deposit"]              = 36912, -- Saronite Ore
-	["Titanium Vein"]                      = 36910, -- Titanium Ore
+	[L["Cobalt Deposit"]]                     = 36909, -- Cobalt Ore
+	[L["Rich Cobalt Deposit"]]                = 36909, -- Cobalt Ore
+	[L["Saronite Deposit"]]                   = 36912, -- Saronite Ore
+	[L["Rich Saronite Deposit"]]              = 36912, -- Saronite Ore
+	[L["Titanium Vein"]]                      = 36910, -- Titanium Ore
 
 	-- Cataclysm
-	["Obsidium Deposit"]                   = 53038, -- Obsidium Ore
-	["Rich Obsidium Deposit"]              = 53038, -- Obsidium Ore
-	["Elementium Vein"]                    = 52185, -- Elementium Ore
-	["Rich Elementium Vein"]               = 52185, -- Elementium Ore
-	["Pyrite Deposit"]                     = 52183, -- Pyrite Ore
-	["Rich Pyrite Deposit"]                = 52183, -- Pyrite Ore
+	[L["Obsidium Deposit"]]                   = 53038, -- Obsidium Ore
+	[L["Rich Obsidium Deposit"]]              = 53038, -- Obsidium Ore
+	[L["Elementium Vein"]]                    = 52185, -- Elementium Ore
+	[L["Rich Elementium Vein"]]               = 52185, -- Elementium Ore
+	[L["Pyrite Deposit"]]                     = 52183, -- Pyrite Ore
+	[L["Rich Pyrite Deposit"]]                = 52183, -- Pyrite Ore
 
 	-- MoP
-	["Ghost Iron Deposit"]                 = 72092, -- Ghost Iron Ore
-	["Rich Ghost Iron Deposit"]            = 72092, -- Ghost Iron Ore
-	["Kyparite Deposit"]                   = 72093, -- Kyparite Ore
-	["Rich Kyparite Deposit"]              = 72093, -- Kyparite Ore
-	["Trillium Vein"]                      = 72095, -- Trillium Bar, because this node produces two ores
-	["Rich Trillium Vein"]                 = 72095, -- Trillium Bar, because this node produces two ores
+	[L["Ghost Iron Deposit"]]                 = 72092, -- Ghost Iron Ore
+	[L["Rich Ghost Iron Deposit"]]            = 72092, -- Ghost Iron Ore
+	[L["Kyparite Deposit"]]                   = 72093, -- Kyparite Ore
+	[L["Rich Kyparite Deposit"]]              = 72093, -- Kyparite Ore
+	[L["Trillium Vein"]]                      = 72095, -- Trillium Bar, because this node produces two ores
+	[L["Rich Trillium Vein"]]                 = 72095, -- Trillium Bar, because this node produces two ores
 
 	-- WoD
-	["Blackrock Deposit"]                  = 109118, -- Blackrock Ore
-	["Rich Blackrock Deposit"]             = 109118, -- Blackrock Ore
-	["True Iron Deposit"]                  = 109119, -- True Iron Ore 
-	["Rich True Iron Deposit"]             = 109119, -- True Iron Ore
-	["Smoldering True Iron Deposit"]       = 109119, -- True Iron Ore
+	[L["Blackrock Deposit"]]                  = 109118, -- Blackrock Ore
+	[L["Rich Blackrock Deposit"]]             = 109118, -- Blackrock Ore
+	[L["True Iron Deposit"]]                  = 109119, -- True Iron Ore 
+	[L["Rich True Iron Deposit"]]             = 109119, -- True Iron Ore
+	[L["Smoldering True Iron Deposit"]]       = 109119, -- True Iron Ore
 
 	-- Legion
-	["Leystone Deposit"]                   = 123918, -- Leystone Ore
-	["Leystone Seam"]                      = 123918, -- Leystone Ore
-	["Rich Leystone Deposit"]              = 123918, -- Leystone Ore
-	["Felslate Deposit"]                   = 123919, -- Felslate
-	["Felslate Seam"]                      = 123919, -- Felslate
-	["Rich Felslate Deposit"]              = 123919, -- Felslate
+	[L["Leystone Deposit"]]                   = 123918, -- Leystone Ore
+	[L["Leystone Seam"]]                      = 123918, -- Leystone Ore
+	[L["Rich Leystone Deposit"]]              = 123918, -- Leystone Ore
+	[L["Felslate Deposit"]]                   = 123919, -- Felslate
+	[L["Felslate Seam"]]                      = 123919, -- Felslate
+	[L["Rich Felslate Deposit"]]              = 123919, -- Felslate
 	
-	["Empyrium Deposit"]                   = 151564, -- Empyrium
-	["Empyrium Seam"]                      = 151564, -- Empyrium
-	["Rich Empyrium Deposit"]              = 151564, -- Empyrium
-	["Astral Glory"]     				      = 151565,	
+	[L["Empyrium Deposit"]]                   = 151564, -- Empyrium
+	[L["Empyrium Seam"]]                      = 151564, -- Empyrium
+	[L["Rich Empyrium Deposit"]]              = 151564, -- Empyrium	
 	
 	-- Battle for Azeroth
-	["Monelite Deposit"]				   		= 152512, -- Monelite Ore
-	["Rich Monelite Deposit"]			   	= 152512, -- Monelite Ore
-	["Monelite Seam"]					   		= 152512, -- Monelite Ore
-	["Storm Silver Deposit"]			   	= 152579, -- Storm Silver Ore
-	["Rich Storm Silver Deposit"]		   	= 152579, -- Storm Silver Ore
-	["Storm Silver Seam"]				   	= 152579, -- Storm Silver Ore
-	["Platinum Deposit"]				   		= 152513, -- Platinum Ore
-	["Rich Platinum Deposit"]			   	= 152513, -- Platinum Ore
-    ["Osmenite Ore"] = 168185,
-    ["Osmenite Seam"] = 168185,
-    ["Rich Osmenite Deposit"] = 168185,
+	[L["Monelite Deposit"]]				   		= 152512, -- Monelite Ore
+	[L["Rich Monelite Deposit"]]			   	= 152512, -- Monelite Ore
+	[L["Monelite Seam"]]					   		= 152512, -- Monelite Ore
+	[L["Storm Silver Deposit"]]			   	= 152579, -- Storm Silver Ore
+	[L["Rich Storm Silver Deposit"]]		   	= 152579, -- Storm Silver Ore
+	[L["Storm Silver Seam"]]				   	= 152579, -- Storm Silver Ore
+	[L["Platinum Deposit"]]				   		= 152513, -- Platinum Ore
+	[L["Rich Platinum Deposit"]]			   	= 152513, -- Platinum Ore
+    [L["Osmenite Ore"]] = 168185,
+    [L["Osmenite Seam"]] = 168185,
+    [L["Rich Osmenite Deposit"]] = 168185,
 
 	
 	-- Herbs
@@ -146,7 +145,9 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 	[L["Ragveil"]]              = 22787,
 	[L["Sanguine Hibiscus"]]    = 24246,
 	[L["Terocone"]]             = 22789,
+}
 
+local herbsToAdd = {
 	-- WotLK
 	["Goldclover"]              = 36901,
 	["Adder's Tongue"]          = 36903,
@@ -164,7 +165,6 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 	["Heartblossom"]            = 52986,
 	["Twilight Jasmine"]        = 52987,
 	["Whiptail"]                = 52988,
-	["Deathspore Pod"]          = 52989,
 
 	-- MoP
 	["Green Tea Leaf"]          = 72234,
@@ -186,7 +186,8 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 	["Dreamleaf"]               = 124102,
 	["Foxflower"]               = 124103,
 	["Fjarnskaggl"]             = 124104,
-	["Starlight Rose"]          = 124105,	
+	["Starlight Rose"]          = 124105,
+    ["Astral Glory"]     				      = 151565,	
 	
 	-- Battle for Azeroth
 	["Akunda's Bite"]           = 152507,
@@ -198,6 +199,14 @@ local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, than
 	["Winter's Kiss"]           = 152508,
     ["Zin'anthid"]              = 168487,	
 }
+
+for englishName, itemID in pairs(herbsToAdd) do
+    local item = Item:CreateFromItemID(itemID)
+        item:ContinueOnItemLoad(function()
+        GatheringNodes[item:GetItemName()] = itemID
+    end)
+end
+herbsToAdd = nil
 
 -- *** Utility functions ***
 local function IsGatheringNode(name)
