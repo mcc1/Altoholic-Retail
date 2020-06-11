@@ -84,7 +84,6 @@ local ProfessionSpellID = {
 	["Mining"] = SPELL_ID_MINING,
 	["Herbalism"] = SPELL_ID_HERBALISM,
 	["Smelting"] = SPELL_ID_SMELTING,
-
 	["Cooking"] = SPELL_ID_COOKING,
 	["Fishing"] = SPELL_ID_FISHING,
 }
@@ -167,6 +166,10 @@ local function LocalizeProfessionSpellIDs()
 	for name, id in pairs(localizedSpells) do
 		ProfessionSpellID[name] = id
 	end
+    
+    if GetLocale() == "deDE" then
+        ProfessionSpellID["Kräuterkunde"] = 2366
+    end
 end
 
 local function GetRecipeRank(info)
