@@ -643,16 +643,6 @@ local function AddGlyphOwners(itemID, tooltip)
 	end
 end
 
--- Sequence of events:
--- Mouse over a gathering node
--- Triggers OnShow
--- Keep mousing over it, and OnUpdate repeatedly gets called
--- Mouse away, and theres a window of a few seconds where not much happens, as the tooltip fades
--- Tooltip fades completely, and OnHide is triggered
--- Mouse onto a different object or link or whatever, and OnTooltipCleared is called
--- Plan: during OnShow, set this to true
--- During OnTooltipCleared, set this to false
--- During OnUpdate, call ShowGatheringNodeCounters only if this is false
 local gatheringNodeWasShown
 
 local function ShowGatheringNodeCounters()
@@ -793,7 +783,9 @@ local function OnGameTooltipShow(tooltip, ...)
 	GameTooltip:Show()
 end
 
-local function OnGameTooltipUpdate(tooltip, ...)
+local function OnGameTooltipUpdate(tooltip, elapsed)
+    if not GameTooltip:IsVisible() then return end
+    
     if not gatheringNodeWasShown then
         ShowGatheringNodeCounters()
         GameTooltip:Show()
@@ -826,6 +818,7 @@ local function OnGameTooltipCleared(tooltip, ...)
 	storedLink = nil
     cachedItemID = nil
     gatheringNodeWasShown = nil
+    C_Timer.After(0.2, OnGameTooltipUpdate)
 end
 
 local function Hook_SetCurrencyToken(self,index,...)
@@ -925,7 +918,6 @@ function addon:InitTooltip()
 
 	-- script hooks
 	GameTooltip:HookScript("OnShow", OnGameTooltipShow)
-    GameTooltip:HookScript("OnUpdate", OnGameTooltipUpdate)
 	GameTooltip:HookScript("OnTooltipSetItem", OnGameTooltipSetItem)
 	GameTooltip:HookScript("OnTooltipCleared", OnGameTooltipCleared)
 
