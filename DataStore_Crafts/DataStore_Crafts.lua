@@ -503,6 +503,34 @@ local function OnDataSourceChanged(self)
 	ScanTradeSkills()
 end
 
+-- save the recipeID currently being crafted
+local currentCraftRecipeID
+
+-- hook: C_TradeSkillUI.CraftRecipe
+local function HookCraftRecipe(recipeID, count)
+   currentCraftRecipeID = recipeID
+end
+hooksecurefunc(C_TradeSkillUI, "CraftRecipe", HookCraftRecipe)
+
+local function OnTradeSkillListUpdate(self)
+    -- check if the thing that was just crafted went on cooldown
+    
+    if not currentCraftRecipeID then return end
+    local recipeID = currentCraftRecipeID
+    currentCraftRecipeID = nil
+    
+    local cooldown, isDayCooldown, charges, maxCharges = C_TradeSkillUI.GetRecipeCooldown(recipeID)
+    local info = C_TradeSkillUI.GetRecipeInfo(recipeID)
+    
+	if cooldown then
+    	local tradeskillName = select(7, C_TradeSkillUI.GetTradeSkillLine())
+	    if not tradeskillName or tradeskillName == "UNKNOWN" then return end
+	    local profession = addon.ThisCharacter.Professions[tradeskillName]
+        if not profession then return end
+		table.insert(profession.Cooldowns, format("%s|%d|%d", info.name, cooldown, cooldown + time()))
+	end
+end
+
 
 -- ** Mixins **
 local function _GetProfession(character, name)
@@ -811,7 +839,7 @@ function addon:OnEnable()
 	addon:RegisterEvent("CHAT_MSG_SKILL", OnChatMsgSkill)
 	addon:RegisterEvent("CHAT_MSG_SYSTEM", OnChatMsgSystem)
 	addon:RegisterEvent("TRADE_SKILL_DATA_SOURCE_CHANGED", OnDataSourceChanged)
-    addon:RegisterEvent("TRADE_SKILL_LIST_UPDATE", OnDataSourceChanged)
+    addon:RegisterEvent("TRADE_SKILL_LIST_UPDATE", OnTradeSkillListUpdate)
 		
 	local _, _, arch = GetProfessions()
 
