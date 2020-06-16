@@ -91,14 +91,14 @@ local Dungeons = {
 		},
 		{	-- [2] 10 player raids
 			name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_10P)),
-			{ id = 46 , achID = 4396, difficulty = DIFFICULTY_RAID_10P },	--	Onyxia's Lair
+			{ id = 46 , achID = 4396, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Onyxia's Lair
 			{ id = 159, achID = 576, difficulty = DIFFICULTY_RAID_10P },	--	Naxxramas
 			{ id = 223, achID = 622, difficulty = DIFFICULTY_RAID_10P },	--	The Eye of Eternity
 			{ id = 224, achID = 1876, difficulty = DIFFICULTY_RAID_10P },	--	The Obsidian Sanctum
 			{ id = 239, achID = 4016, difficulty = DIFFICULTY_RAID_10P },	--	Vault of Archavon
 			{ id = 243, achID = 2894, difficulty = DIFFICULTY_RAID_FLEX },	--	Ulduar
 			{ id = 246, achID = 3917, difficulty = DIFFICULTY_RAID_10P },	--	Trial of the Crusader
-			{ id = 279, achID = 4530, difficulty = DIFFICULTY_RAID_10P },	--	Icecrown Citadel
+			{ id = 279, achID = 4530, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Icecrown Citadel
 			{ id = 293, achID = 4817, difficulty = DIFFICULTY_RAID_10P },	--	Ruby Sanctum
 		},
 		{	-- [3] 25 player raids
@@ -108,8 +108,8 @@ local Dungeons = {
 			{ id = 238, achID = 625, difficulty = DIFFICULTY_RAID_25P },	--	The Obsidian Sanctum
 			{ id = 240, achID = 4017, difficulty = DIFFICULTY_RAID_25P },	--	Vault of Archavon
 			{ id = 248, achID = 3916, difficulty = DIFFICULTY_RAID_25P },	--	Trial of the Crusader
-			{ id = 257, achID = 4397, difficulty = DIFFICULTY_RAID_25P },	--	Onyxia's Lair
-			{ id = 280, achID = 4597, difficulty = DIFFICULTY_RAID_25P },	--	Icecrown Citadel
+			{ id = 257, achID = 4397, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Onyxia's Lair
+			{ id = 280, achID = 4597, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Icecrown Citadel
 			{ id = 294, achID = 4815, difficulty = DIFFICULTY_RAID_25P },	--	Ruby Sanctum
 		},		
 		{	-- [4] 10 player heroic raids
@@ -147,21 +147,21 @@ local Dungeons = {
 		},
 		{	-- [3] 10 player raids
 			name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_10P)),
-			{ id = 313, achID = 4842, difficulty = DIFFICULTY_RAID_10P },	--	Blackwing Descent
-			{ id = 315, achID = 4850, difficulty = DIFFICULTY_RAID_10P },	--	The Bastion of Twilight
-			{ id = 317, achID = 4851, difficulty = DIFFICULTY_RAID_10P },	--	Throne of the Four Winds
-			{ id = 328, achID = 5425, difficulty = DIFFICULTY_RAID_10P },	--	Baradin Hold
-			{ id = 361, achID = 5802, difficulty = DIFFICULTY_RAID_10P },	--	Firelands
-			{ id = 447, achID = 6177, difficulty = DIFFICULTY_RAID_10P },	--	Dragon Soul
+			{ id = 313, achID = 4842, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Blackwing Descent
+			{ id = 315, achID = 4850, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	The Bastion of Twilight
+			{ id = 317, achID = 4851, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Throne of the Four Winds
+			{ id = 328, achID = 5425, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Baradin Hold
+			{ id = 361, achID = 5802, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Firelands
+			{ id = 447, achID = 6177, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Dragon Soul
 		},
 		{	-- [4] 25 player raids
 			name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_25P)),
-			{ id = 314, achID = 4842, difficulty = DIFFICULTY_RAID_25P },	--	Blackwing Descent
-			{ id = 316, achID = 4850, difficulty = DIFFICULTY_RAID_25P },	--	The Bastion of Twilight
-			{ id = 318, achID = 4851, difficulty = DIFFICULTY_RAID_25P },	--	Throne of the Four Winds
-			{ id = 329, achID = 5425, difficulty = DIFFICULTY_RAID_25P },	--	Baradin Hold
-			{ id = 362, achID = 5802, difficulty = DIFFICULTY_RAID_25P },	--	Firelands
-			{ id = 448, achID = 6177, difficulty = DIFFICULTY_RAID_25P },	--	Dragon Soul
+			{ id = 314, achID = 4842, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Blackwing Descent
+			{ id = 316, achID = 4850, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	The Bastion of Twilight
+			{ id = 318, achID = 4851, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Throne of the Four Winds
+			{ id = 329, achID = 5425, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Baradin Hold
+			{ id = 362, achID = 5802, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Firelands
+			{ id = 448, achID = 6177, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Dragon Soul
 		},		
 	},
 	{	-- [5]
@@ -209,17 +209,17 @@ local Dungeons = {
         -- Flex raids removed
 		{	-- [4] 10 player raids
 			name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_10P)),
-			{ id = 531, achID = 6844, difficulty = DIFFICULTY_RAID_10P },	--	Mogu'shan Vaults
-			{ id = 533, achID = 6845, difficulty = DIFFICULTY_RAID_10P },	--	Heart of Fear
-			{ id = 535, achID = 6689, bosses = 4, difficulty = DIFFICULTY_RAID_10P },	--	Terrace of Endless Spring
-			{ id = 633, achID = 8072, difficulty = DIFFICULTY_RAID_10P },	--	Throne of Thunder
+			{ id = 531, achID = 6844, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Mogu'shan Vaults
+			{ id = 533, achID = 6845, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Heart of Fear
+			{ id = 535, achID = 6689, bosses = 4, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Terrace of Endless Spring
+			{ id = 633, achID = 8072, difficulty = DIFFICULTY_RAID_10P, difficulty2 = DIFFICULTY_RAID_10PH },	--	Throne of Thunder
 		},
 		{	-- [5] 25 player raids
 			name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_25P)),
-			{ id = 532, achID = 6844, difficulty = DIFFICULTY_RAID_25P },	--	Mogu'shan Vaults
-			{ id = 534, achID = 6845, difficulty = DIFFICULTY_RAID_25P },	--	Heart of Fear
-			{ id = 536, achID = 6689, difficulty = DIFFICULTY_RAID_25P },	--	Terrace of Endless Spring
-			{ id = 634, achID = 8072, difficulty = DIFFICULTY_RAID_25P },	--	Throne of Thunder
+			{ id = 532, achID = 6844, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Mogu'shan Vaults
+			{ id = 534, achID = 6845, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Heart of Fear
+			{ id = 536, achID = 6689, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Terrace of Endless Spring
+			{ id = 634, achID = 8072, difficulty = DIFFICULTY_RAID_25P, difficulty2 = DIFFICULTY_RAID_25PH },	--	Throne of Thunder
 			{ id = 767, achID = 8533, difficulty = DIFFICULTY_RAID_25P },	--	Ordos
 			{ id = 768, achID = 8535, difficulty = DIFFICULTY_RAID_25P },	--	Celestials
 		},
@@ -471,9 +471,14 @@ local callbacks = {
                 for dungeonKey, _ in pairs(DataStore:GetSavedInstances(character)) do
                     local savedDungeonName, savedDungeonID = strsplit("|", dungeonKey)
                     local name, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, name2, _ = GetLFGDungeonInfo(dungeonID)
+                    local name3, name4 = "", ""
+                    if view[dataRowID].difficulty2 then
+                        name3 = name.." "..GetDifficultyInfo(view[dataRowID].difficulty2)
+                        name4 = name2.." "..GetDifficultyInfo(view[dataRowID].difficulty2)
+                    end
                     name = name.." "..GetDifficultyInfo(view[dataRowID].difficulty)
                     name2 = name2.." "..GetDifficultyInfo(view[dataRowID].difficulty)
-                    if (savedDungeonName == name) or (savedDungeonName == name2) then
+                    if (savedDungeonName == name) or (savedDungeonName == name2) or (savedDungeonName == name3) or (savedDungeonName == name4) then
                         _, _, _, _, _, count = DataStore:GetSavedInstanceInfo(character, dungeonKey) 
                     end
                 end
