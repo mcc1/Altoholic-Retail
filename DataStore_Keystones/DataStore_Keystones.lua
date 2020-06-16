@@ -1,3 +1,8 @@
+if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+    print("DataStore_Keystones does not support Classic WoW")
+    return
+end
+
 --[[	*** DataStore_Keystones ***
 Written by : Teelo, US-Jubei'thos
 https://www.patreon.com/teelojubeithos

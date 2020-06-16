@@ -1,3 +1,8 @@
+if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+    print("DataStore_Currencies does not support Classic WoW")
+    return
+end
+
 --[[	*** DataStore_Currencies ***
 Written by : Thaoky, EU-Marécages de Zangar
 July 6th, 2009
