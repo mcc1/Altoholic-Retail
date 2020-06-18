@@ -170,6 +170,7 @@ function ns:SetSearchedItem(itemID, itemLink, isBattlePet)
 	-- dirty hack, this should go somewhere else
 	if isBattlePet then
 		_, _, s.itemRarity, _, _, _, s.itemName = DataStore:GetBattlePetInfoFromLink(itemLink)
+        s.itemLink = itemLink
 	else
 		s.itemID = itemID
 		s.itemName, s.itemLink, s.itemRarity, s.itemLevel,	s.itemMinLevel, s.itemType, s.itemSubType, _, s.itemEquipLoc = GetItemInfo(itemLink or itemID)
