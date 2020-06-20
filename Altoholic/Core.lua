@@ -105,6 +105,7 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Search.IncludeMailboxItems"] = true,
 			["UI.Tabs.Search.IncludeGuildBankItems"] = true,
 			["UI.Tabs.Search.IncludeKnownRecipes"] = true,
+            ["UI.Tabs.Search.IncludeAuctionHouseListings"] = true,
 			["UI.Tabs.Search.SortAscending"] = true,							-- ascending or descending sort order
 			TotalLoots = 0,					-- make at least one search in the loot tables to initialize these values
 			UnknownLoots = 0,
@@ -237,6 +238,9 @@ LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(addonName, {
 	end,
 	text = (Broker2FuBar) and addonName or nil,		-- only for fubar,  not for ldb
 	label = addonName,
+    OnTooltipShow = function(GameTooltip)
+        GameTooltip:SetText("Altoholic")
+    end,
 })
 
 
