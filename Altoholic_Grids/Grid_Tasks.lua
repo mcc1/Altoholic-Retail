@@ -5,15 +5,6 @@ local icons = addon.Icons
 
 local ICON_QUESTIONMARK = "Interface\\RaidFrame\\ReadyCheck-Waiting"
 
-local xPacks = {
-	EXPANSION_NAME0,	-- "Classic"
-	EXPANSION_NAME1,	-- "The Burning Crusade"
-	EXPANSION_NAME2,	-- "Wrath of the Lich King"
-	EXPANSION_NAME3,	-- "Cataclysm"
-	EXPANSION_NAME4,	-- "Mists of Pandaria"
-	EXPANSION_NAME5,	-- "Warlords of Draenor"
-}
-
 -- Get the array of saved tasks
 if not Altoholic.db.global.Tasks then
     Altoholic.db.global.Tasks = {}
@@ -32,45 +23,135 @@ local function isTaskComplete(taskID, character)
         local completed = false
         for _, daily in pairs(DataStore:GetDailiesHistory(character)) do
             if daily.id == task.Target then
-                completed = true
-                break
+                return true
             end 
         end
-        if completed then
-            return true
-        else
-            return false
-        end
+        return false
     end
     
     if task.Category == "Dungeon" then
         if (task.Expansion == nil) then return false end
         if (task.Difficulty == nil) then return false end
         
-        local completed = false
         for dungeonKey, _ in pairs(DataStore:GetSavedInstances(character)) do
             local instanceName, instanceID = strsplit("|", dungeonKey)
             local taskTargetName = EJ_GetInstanceInfo(task.Target)
             if task.Difficulty == "heroic" then
                 if instanceName == (taskTargetName.." Heroic") then
-                    completed = true
-                    break
+                    return true
                 end
             end
             if task.Difficulty == "mythic" then
                 if instanceName == (taskTargetName.." Mythic") then
-                    completed = true
-                    break
+                    return true
                 end
             end
 		end
-        if completed then
-            return true
-        else
-            return false
-        end
+        return false
     end
     
+    if task.Category == "Raid" then
+        if (task.Expansion == nil) then return false end
+        if (task.Difficulty == nil) then return false end
+        
+        local taskTargetName = EJ_GetInstanceInfo(task.Target)
+        
+        for dungeonKey, _ in pairs(DataStore:GetSavedInstances(character)) do
+            local instanceName, instanceID = strsplit("|", dungeonKey)
+                        
+            if task.Difficulty == "classic" then
+                if instanceName == "Ahn'Qiraj Temple 40 Player" then
+                    if taskTargetName == "Temple of Ahn'Qiraj" then
+                        return true
+                    end
+                elseif instanceName == "Ahn'Qiraj Ruins 20 Player" then
+                    if taskTargetName == "Ruins of Ahn'Qiraj" then
+                        return true
+                    end
+                else
+                    instanceName = instanceName.." 40 Player"
+                    if taskTargetName == instanceName then
+                        return true
+                    end
+                end
+            else
+                if instanceName == (taskTargetName.." "..task.Difficulty) then
+                    return true
+                end
+            end
+		end
+        return false    
+    end
+    
+    if task.Category == "Dungeon Boss" then
+        if not task.Expansion then return false end
+        if not task.Difficulty then return false end
+        
+        if type(task.Target) ~= "table" then return false end
+        if not task.Target["instanceID"] then return false end
+        if not task.Target["creatureName"] then return false end
+        
+        local taskTargetName = EJ_GetInstanceInfo(task.Target["instanceID"])
+        
+        for dungeonKey, _ in pairs(DataStore:GetSavedInstances(character)) do
+            local instanceName, instanceID = strsplit("|", dungeonKey)
+            if task.Difficulty == "heroic" then
+                if instanceName == (taskTargetName.." Heroic") then
+                    local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
+                    return dungeonBosses[creatureName]
+                end
+            end
+            if task.Difficulty == "mythic" then
+                if instanceName == (taskTargetName.." Mythic") then
+                    local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
+                    return dungeonBosses[creatureName]
+                end
+            end
+		end
+        return false        
+    end
+    
+    if task.Category == "Raid Boss" then
+        if not task.Expansion then return false end
+        if not task.Difficulty then return false end
+        
+        if type(task.Target) ~= "table" then return false end
+        if not task.Target["instanceID"] then return false end
+        if not task.Target["creatureName"] then return false end
+        
+        local taskTargetName = EJ_GetInstanceInfo(task.Target["instanceID"])
+        
+        for dungeonKey, _ in pairs(DataStore:GetSavedInstances(character)) do
+            local instanceName, instanceID = strsplit("|", dungeonKey)
+                        
+            if task.Difficulty == "classic" then
+                if instanceName == "Ahn'Qiraj Temple 40 Player" then
+                    if taskTargetName == "Temple of Ahn'Qiraj" then
+                        local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
+                        return dungeonBosses[task.Target["creatureName"]]
+                    end
+                elseif instanceName == "Ahn'Qiraj Ruins 20 Player" then
+                    if taskTargetName == "Ruins of Ahn'Qiraj" then
+                        local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
+                        return dungeonBosses[task.Target["creatureName"]]
+                    end
+                else
+                    instanceName = instanceName.." 40 Player"
+                    if taskTargetName == instanceName then
+                        local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
+                        return dungeonBosses[task.Target["creatureName"]]
+                    end
+                end
+            else             
+                if instanceName == (taskTargetName.." "..task.Difficulty) then
+                    local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
+                    return dungeonBosses[task.Target["creatureName"]]
+                end
+            end                
+		end
+        return false        
+    end
+        
     if task.Category == "Profession Cooldown" then
         for _ , profession in pairs(DataStore:GetProfessions(character)) do
             if DataStore:GetNumActiveCooldowns(profession) > 0 then

@@ -85,6 +85,14 @@ local function TaskTargetDropdown_SetSelectedDungeon(self, instanceID, difficult
     currentTask.Difficulty = difficulty
 end
 
+local function TaskTargetDropdown_SetSelectedDungeonBoss(self, arg1, difficulty)     
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, arg1["creatureName"].." "..difficulty)
+    
+    currentTask.Target = arg1
+    currentTask.Difficulty = difficulty
+    CloseDropDownMenus()
+end
+
 local function TaskTargetDropdown_SetSelectedDailyQuest(self, dailyQuestID, dailyQuestName)
     -- Make the dropdown have the name of the selected target
     UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, dailyQuestName)
@@ -101,6 +109,18 @@ local function TaskTargetDropdown_SetSelectedProfessionCooldown(self, cooldownNa
     -- Save the selected target
     currentTask.Target = cooldownName
 end
+
+local raidDifficultyIDs = {
+    3, -- 10p normal
+    4, -- 25p normal
+    5, -- 10p heroic
+    6, -- 25p heroic
+    9, -- 40p
+    14, -- flex normal
+    15, -- flex heroic
+    16, -- 20p mythic
+    148, -- 20p
+}
 
 local function TaskTargetDropdown_Opened(frame, level, menuList)
     -- Populate targets with different items depending on the category
@@ -139,6 +159,162 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
         end
     end
     
+    if category == "Raid" then
+        local expansionID = 1
+        for k,v in pairs(expansions) do
+            if (expansion == v) then
+                expansionID = k
+            end
+        end
+
+        -- Set the Encounter Journal to be checking that expansion                                             
+        EJ_SelectTier(expansionID)
+        
+        -- Pull all the raid names for that expansion out of the Encounter Journal
+        local index = 1
+        local instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, true)
+        while instanceID do
+            EJ_SelectInstance(instanceID)
+            local info = UIDropDownMenu_CreateInfo()
+            info.arg1 = instanceID
+            info.func = TaskTargetDropdown_SetSelectedDungeon
+            if expansionID == 1 then
+                -- Classic doesn't handle difficultyIDs properly, making a special case for them
+                info.text = name
+                info.arg2 = "classic"
+                UIDropDownMenu_AddButton(info)
+            else
+                for _, difficultyID in pairs(raidDifficultyIDs) do
+                    if EJ_IsValidInstanceDifficulty(difficultyID) then
+                        local difficultyName = GetDifficultyInfo(difficultyID)
+                        info.text = name.." "..difficultyName
+                        info.arg2 = difficultyName
+                        UIDropDownMenu_AddButton(info)
+                    end
+                end
+            end
+            index = index + 1
+            instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, true)
+        end
+    end
+    
+    if category == "Dungeon Boss" then      
+        -- convert the expansion name to an expansion ID
+        local expansionID = 1
+        for k,v in pairs(expansions) do
+            if (expansion == v) then
+                expansionID = k
+            end
+        end
+        
+        -- Set the Encounter Journal to be checking that expansion                                             
+        EJ_SelectTier(expansionID)
+
+        if level == 1 then    
+            -- Pull all the dungeon names for that expansion out of the Encounter Journal
+            local index = 1
+            local instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, false)
+            while instanceID do
+                local info = UIDropDownMenu_CreateInfo()
+                info.hasArrow = true
+                info.text = name.." (Heroic)"
+                info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = "heroic" }
+                UIDropDownMenu_AddButton(info)
+                info.text = name.." (Mythic)"
+                info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = "mythic" }
+                UIDropDownMenu_AddButton(info)
+                index = index + 1
+                instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, false)
+            end
+        else
+            -- menuList is the instanceID selected and difficulty
+            local instanceID = menuList["instanceID"]
+            EJ_SelectInstance(instanceID)
+            local difficulty = menuList["difficulty"]
+            -- Pull all the boss names for the selected instanceID out of the Encounter Journal
+            local index = 1
+            local name, description, bossID, rootSectionID, link, journalInstanceID, dungeonEncounterID, _ = EJ_GetEncounterInfoByIndex(index, instanceID)
+            while (name) do
+                local info = UIDropDownMenu_CreateInfo()
+                info.func = TaskTargetDropdown_SetSelectedDungeonBoss
+                info.arg1 = { ["instanceID"] = instanceID, ["creatureName"] = name }
+                info.arg2 = difficulty  
+                if difficulty == "heroic" then
+                    info.text = name.." (Heroic)"
+                elseif difficulty == "mythic" then
+                    info.text = name.." (Mythic)"
+                end
+                UIDropDownMenu_AddButton(info, level)
+                
+                index = index + 1
+                name, description, bossID, rootSectionID, link, journalInstanceID, dungeonEncounterID, _ = EJ_GetEncounterInfoByIndex(index, instanceID)
+            end
+        end        
+    end
+
+    if category == "Raid Boss" then      
+        -- convert the expansion name to an expansion ID
+        local expansionID = 1
+        for k,v in pairs(expansions) do
+            if (expansion == v) then
+                expansionID = k
+            end
+        end
+        
+        -- Set the Encounter Journal to be checking that expansion                                             
+        EJ_SelectTier(expansionID)
+
+        if level == 1 then    
+            -- Pull all the raid names for that expansion out of the Encounter Journal
+            local index = 1
+            local instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, true)
+            while instanceID do
+                EJ_SelectInstance(instanceID)
+                local info = UIDropDownMenu_CreateInfo()
+                info.hasArrow = true
+                if expansionID == 1 then
+                    info.text = name
+                    info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = "classic" }
+                    UIDropDownMenu_AddButton(info)
+                else
+                    for _, difficultyID in pairs(raidDifficultyIDs) do
+                        if EJ_IsValidInstanceDifficulty(difficultyID) then
+                            local difficultyName = GetDifficultyInfo(difficultyID)
+                            info.text = name.." "..difficultyName
+                            info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = difficultyName }
+                            UIDropDownMenu_AddButton(info)
+                        end
+                    end
+                end
+                index = index + 1
+                instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, true)
+            end
+        else
+            -- menuList is the instanceID selected and difficulty
+            local instanceID = menuList["instanceID"]
+            EJ_SelectInstance(instanceID)
+            local difficulty = menuList["difficulty"]
+            -- Pull all the boss names for the selected instanceID out of the Encounter Journal
+            local index = 1
+            local name, description, bossID, rootSectionID, link, journalInstanceID, dungeonEncounterID, _ = EJ_GetEncounterInfoByIndex(index, instanceID)
+            while (name) do
+                local info = UIDropDownMenu_CreateInfo()
+                info.func = TaskTargetDropdown_SetSelectedDungeonBoss
+                info.arg1 = { ["instanceID"] = instanceID, ["creatureName"] = name }
+                info.arg2 = difficulty
+                if expansionID == 1 then
+                    info.text = name
+                else
+                    info.text = name.." "..difficulty
+                end
+                UIDropDownMenu_AddButton(info, level)
+                
+                index = index + 1
+                name, description, bossID, rootSectionID, link, journalInstanceID, dungeonEncounterID, _ = EJ_GetEncounterInfoByIndex(index, instanceID)
+            end
+        end        
+    end
+        
     if category == "Daily Quest" then
         
         local a = false
@@ -189,7 +365,7 @@ local function getCurrentTargetName()
     
     if not targetID then return nil end
         
-    if category == "Dungeon" then
+    if (category == "Dungeon") or (category == "Raid") then
         -- trim out all the extra parameters returned, we just want the name here
         local name = EJ_GetInstanceInfo(targetID)
         return name
@@ -202,6 +378,10 @@ local function getCurrentTargetName()
     
     if category == "Profession Cooldown" then
         return targetID
+    end
+    
+    if (category == "Dungeon Boss") or (category == "Raid Boss") then
+        return targetID["creatureName"]
     end
     
     AltoholicTabGrids:Update()        
@@ -259,7 +439,7 @@ local function TaskTypeDropdown_SetSelected(self, categoryName)
         currentTask.Expansion = nil
         UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)        
     
-    -- For Dungeons, an expansion is required
+    -- For Dungeons and Raids, an expansion is required
     else
         UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskExpansionDropdown)
         if currentTask.Expansion then
