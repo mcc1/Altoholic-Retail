@@ -204,7 +204,10 @@ local function _GetCurrencyInfo(character, index)
 	local ref = addon.db.global.Reference
 	local currency = character.Currencies[index]
 	
-	local isHeader = currency.isHeader
+    if not currency then return false, "", 0, "" end
+    if type(currency) ~= "table" then return false, "", 0, "" end -- backward compatibility workaround
+	
+    local isHeader = currency.isHeader
 	local refIndex = currency.index
 	local count = currency.count
 
