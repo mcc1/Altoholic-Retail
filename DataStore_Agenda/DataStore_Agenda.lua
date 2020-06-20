@@ -1,3 +1,8 @@
+if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+    print("DataStore_Agenda does not support Classic WoW")
+    return
+end
+
 --[[	*** DataStore_Agenda ***
 Written by : Thaoky, EU-Marécages de Zangar
 April 2nd, 2011
@@ -26,6 +31,7 @@ local AddonDB_Defaults = {
 				Calendar = {},
 				Contacts = {},
 				DungeonIDs = {},		-- raid timers
+                DungeonBosses = {},     -- raid timers for individual bosses
 				ItemCooldowns = {},	-- mysterious egg, disgusting jar, etc..
 				LFGDungeons = {},		-- info about LFG dungeons/raids
 				ChallengeMode = {},	-- info about mythic+
@@ -88,7 +94,9 @@ end
 
 local function ScanDungeonIDs()
 	local dungeons = addon.ThisCharacter.DungeonIDs
+    local dungeonBosses = addon.ThisCharacter.DungeonBosses
 	wipe(dungeons)
+    wipe(dungeonBosses)
 
 	for i = 1, GetNumSavedInstances() do
         -- Update 2020/06/03: adding tracking of numEncounters and encounterProgress.
@@ -105,6 +113,13 @@ local function ScanDungeonIDs()
 
 			local key = instanceName.. "|" .. instanceID
 			dungeons[key] = format("%s|%s|%s|%s|%s|%s", instanceReset, time(), extended, isRaid, numEncounters, encounterProgress )
+            
+            -- track all the bosses killed / left alive
+            dungeonBosses[key] = {}
+            for j = 1, numEncounters do
+                local bossName, _, isKilled = GetSavedInstanceEncounterInfo(i, j)
+                dungeonBosses[key][bossName] = isKilled
+            end
 		end
 	end
 end
@@ -245,6 +260,17 @@ local function OnUpdateInstanceInfo()
 	ScanDungeonIDs()
 end
 
+local pendingBossKillScan = false
+local function OnBossKill()
+    if not pendingBossKillScan then
+        pendingBossKillScan = true
+        C_Timer.After(5, function()
+            pendingBossKillScan = false
+            RequestRaidInfo()
+        end)
+    end
+end
+
 local function OnRaidInstanceWelcome()
 	RequestRaidInfo()
 end
@@ -366,7 +392,7 @@ local function _GetSavedInstanceInfo(character, key)
 	local hasExpired
 	local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress = strsplit("|", instanceInfo)
 
-	return tonumber(reset), tonumber(lastCheck), (isExtended == "1") and true or nil, (isRaid == "1") and true or nil, numEncounters or 0, encounterProgress or 0
+	return tonumber(reset), tonumber(lastCheck), (isExtended == "1") and true or nil, (isRaid == "1") and true or nil, numEncounters or 0, encounterProgress or 0, character.DungeonBosses[key]
 end
 
 local function _HasSavedInstanceExpired(character, key)
@@ -639,6 +665,7 @@ function addon:OnEnable()
 
 	-- Dungeon IDs
 	addon:RegisterEvent("UPDATE_INSTANCE_INFO", OnUpdateInstanceInfo)
+    addon:RegisterEvent("BOSS_KILL", OnBossKill)
 	addon:RegisterEvent("RAID_INSTANCE_WELCOME", OnRaidInstanceWelcome)
 	addon:RegisterEvent("LFG_UPDATE_RANDOM_INFO", OnLFGUpdateRandomInfo)
 	-- addon:RegisterEvent("LFG_LOCK_INFO_RECEIVED", OnLFGLockInfoReceived)
@@ -666,6 +693,7 @@ function addon:OnDisable()
 	addon:UnregisterEvent("PLAYER_ALIVE")
 	addon:UnregisterEvent("FRIENDLIST_UPDATE")
 	addon:UnregisterEvent("UPDATE_INSTANCE_INFO")
+    addon:UnregisterEvent("BOSS_KILL")
 	addon:UnregisterEvent("RAID_INSTANCE_WELCOME")
 	addon:UnregisterEvent("CHAT_MSG_SYSTEM")
 	addon:UnregisterEvent("CALENDAR_UPDATE_EVENT_LIST")
