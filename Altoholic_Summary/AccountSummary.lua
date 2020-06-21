@@ -231,7 +231,6 @@ local function CurrencyHeader_OnEnter(frame, currencyID)
 	
 	tt:ClearLines()
 	tt:SetOwner(frame, "ANCHOR_BOTTOM")
-	-- tt:AddLine(select(1, GetCurrencyInfo(currencyID)), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 	tt:SetHyperlink(GetCurrencyLink(currencyID,0))
 	tt:Show()
 end
@@ -1481,318 +1480,93 @@ columns["MissionTableLastVisit"] = {
 		end,
 }
 
+local defaultCurrencies = {
+    CURRENCY_ID_BFA_WAR_RES,
+    CURRENCY_ID_BFA_SOWF,
+    CURRENCY_ID_BFA_DUBLOONS,
+    CURRENCY_ID_BFA_COAL_VISIONS,
+    CURRENCY_ID_BFA_TITAN_RESIDUUM
+}
 
 -- ** Currencies **
-columns["CurrencyGarrison"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = format("  %s  6.0", format(TEXTURE_FONT, "Interface\\Icons\\inv_garrison_resource", 18, 18)),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_GARRISON)
-		end,
-	headerOnClick = function() SortView("CurrencyGarrison") end,
-	headerSort = DataStore.GetGarrisonResources,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local uncollected = DataStore:GetUncollectedResources(character) or 0
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_GARRISON) or 0
-			local color = (amount == 0) and colors.grey or colors.white
-			local colorUncollected
-			
-			if uncollected <= 300 then
-				colorUncollected = colors.green
-			elseif uncollected < 450 then
-				colorUncollected = colors.yellow
-			else
-				colorUncollected = colors.red
-			end
+for currencyIndex = 1, 5 do
+    local currencyID = addon:GetOption("UI.Tabs.Summary.Currency"..currencyIndex) or defaultCurrencies[currencyIndex]
+    
+    local function CurrencySelected(self, newCurrencyID)
+        addon:SetOption("UI.Tabs.Summary.Currency"..currencyIndex, newCurrencyID)
+        currencyID = newCurrencyID
+        self:GetParent():Close()
+        columns["Currency"..currencyIndex]["headerLabel"] = "         " .. format(TEXTURE_FONT, C_CurrencyInfo.GetBasicCurrencyInfo(currencyID).icon, 18, 18)
+        addon.Summary:Update()
+        ns:SetMode(addon:GetOption("UI.Tabs.Summary.CurrentMode"))
+    end
+    
+    local function CurrencyRightClickMenu_Initialize(frame, level)
+                        -- C_CurrencyInfo.GetCurrencyIDFromLink(currencyLink)
+                    -- currencyLink = GetCurrencyListLink(index)
+                    -- 1 to GetCurrencyListSize()
+    	if level == 1 then
+            frame:AddTitle("Select Currency:")
+            frame:AddTitle()
+            for currencyListIndex = 1, GetCurrencyListSize() do
+                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+                if isHeader then
+                    frame:AddCategoryButton(name, currencyListIndex, level)
+                end
+            end
+            frame:AddCloseMenu()
+        elseif level == 2 then
+            for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), GetCurrencyListSize() do
+                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+                if not isHeader then
+                --	AddButtonWithArgs = function(frame, text, value, func, arg1, arg2, isChecked)
+                    frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(GetCurrencyListLink(currencyListIndex)), nil, false, level)
+                else
+                    break
+                end
+            end
+        end
+    end
 
-			return format("%s%s/%s+%s", color, amount, colorUncollected , uncollected)
-		end,
-	OnEnter = function(frame)
-			local character = frame:GetParent().character
-			if not character or not DataStore:GetModuleLastUpdateByKey("DataStore_Garrisons", character) then
-				return
-			end
-			
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_GARRISON) or 0
-			local uncollected = DataStore:GetUncollectedResources(character) or 0
-			
-			local tt = AltoTooltip
-			tt:ClearLines()
-			tt:SetOwner(frame, "ANCHOR_RIGHT")
-			tt:AddDoubleLine(DataStore:GetColoredCharacterName(character), L["Garrison resources"])
-			tt:AddLine(" ")
-			tt:AddLine(format("%s: %s%s", L["Garrison resources"], colors.green, amount),1,1,1)
-			tt:AddLine(format("%s: %s%s", L["Uncollected resources"], colors.green, uncollected),1,1,1)
-			
-			local lastVisit = DataStore:GetLastResourceCollectionTime(character)
-			if lastVisit then
-				tt:AddLine(format("%s: %s", L["Last collected"], SecondsToTime(time() - lastVisit)),1,1,1)
-			end
-			
-			if uncollected < 500 then
-				tt:AddLine(" ")
-				
-				-- (resources not yet obtained * 600 seconds)
-				tt:AddLine(format("%s: %s", L["Max. uncollected resources in"], SecondsToTime((500 - uncollected) * 600)),1,1,1)
-			end
-			tt:Show()
-		end,
-}
-
-columns["CurrencyNethershard"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = "        " .. format(TEXTURE_FONT, "Interface\\Icons\\inv_datacrystal01", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_NETHERSHARD)
-		end,
-	headerOnClick = function() SortView("CurrencyNethershard") end,
-	headerSort = DataStore.GetNethershards,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_NETHERSHARD) or 0
-			local color = (amount == 0) and colors.grey or colors.white
-				
-			return format("%s%s", color, amount)
-		end,
-}
-
-columns["CurrencyLegionWarSupplies"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = "      " .. format(TEXTURE_FONT, "Interface\\Icons\\inv_misc_summonable_boss_token", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_LFWS)
-		end,
-	headerOnClick = function() SortView("CurrencyLegionWarSupplies") end,
-	headerSort = DataStore.GetWarSupplies,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_LFWS)
-			local color = (amount == 0) and colors.grey or colors.white
-			
-			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
-		end,
-}
-
-columns["CurrencySOBF"] = {
-	-- Header
-	headerWidth = 60,
-	headerLabel = "   " .. format(TEXTURE_FONT, "Interface\\Icons\\inv_misc_elvencoins", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_SOBF)
-		end,
-	headerOnClick = function() SortView("CurrencySOBF") end,
-	headerSort = DataStore.GetSealsOfBrokenFate,
-	
-	-- Content
-	Width = 60,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_SOBF)
-			local color = (amount == 0) and colors.grey or colors.white
-			
-			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
-		end,
-}
-
-columns["CurrencyOrderHall"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = format("  %s  7.0", format(TEXTURE_FONT, "Interface\\Icons\\inv_garrison_resource", 18, 18)),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_ORDER_HALL)
-		end,
-	headerOnClick = function() SortView("CurrencyOrderHall") end,
-	headerSort = DataStore.GetOrderHallResources,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_ORDER_HALL) or 0
-			local color = (amount == 0) and colors.grey or colors.white
-
-			return format("%s%s", color, amount)
-		end,
-	OnEnter = function(frame)
-			local character = frame:GetParent().character
-			if not character then return end
-			
-			local tt = AltoTooltip
-			tt:ClearLines()
-			tt:SetOwner(frame, "ANCHOR_RIGHT")
-			
-			tt:AddDoubleLine(
-				DataStore:GetColoredCharacterName(character),
-				DataStore:GetColoredCharacterFaction(character)
-			)
-			
-			tt:AddLine(format("%s %s%s |r%s %s", L["Level"], colors.green, 
-				DataStore:GetCharacterLevel(character), 
-				DataStore:GetCharacterRace(character),	
-				DataStore:GetCharacterClass(character))
-			,1,1,1)
-
-			local zone, subZone = DataStore:GetLocation(character)
-			tt:AddLine(format("%s: %s%s |r(%s%s|r)", L["Zone"], colors.gold, zone, colors.gold, subZone),1,1,1)
-			
-			tt:AddLine(format("%s %s%s%s/%s%s%s (%s%s%%%s)", EXPERIENCE_COLON,
-				colors.green, DataStore:GetXP(character), colors.white,
-				colors.green, DataStore:GetXPMax(character), colors.white,
-				colors.green, DataStore:GetXPRate(character), colors.white),1,1,1)
-			
-			local restXP = DataStore:GetRestXP(character)
-			if restXP and restXP > 0 then
-				tt:AddLine(format("%s: %s%s", L["Rest XP"], colors.green, restXP),1,1,1)
-			end
-
-			tt:AddLine(" ")
-			tt:AddLine(colors.gold..CURRENCY..":",1,1,1)
-			
-			local num = DataStore:GetNumCurrencies(character) or 0
-			for i = 1, num do
-				local isHeader, name, count = DataStore:GetCurrencyInfo(character, i)
-				name = name or ""
-				
-				if isHeader then
-					tt:AddLine(colors.yellow..name)
-				else
-					tt:AddLine(format("  %s: %s%s", name, colors.green, count),1,1,1)
-				end
-			end
-			
-			if num == 0 then
-				tt:AddLine(colors.white..NONE,1,1,1)
-			end
-			
-			tt:Show()
-		end,
-}
-
-
-columns["CurrencyBfAWarResources"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = "      " .. format(TEXTURE_FONT, "Interface\\Icons\\inv__faction_warresources", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_BFA_WAR_RES)
-		end,
-	headerOnClick = function() SortView("CurrencySOBF") end,
-	headerSort = DataStore.GetBfAWarResources,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_WAR_RES)
-			if not amount then amount = 0 end
-            local color = (amount == 0) and colors.grey or colors.white
-            
-			return format("%s%s", color, amount)
-		end,
-}
-
-columns["CurrencyBfASOWF"] = {
-	-- Header
-	headerWidth = 60,
-	headerLabel = "   " .. format(TEXTURE_FONT, "Interface\\Icons\\timelesscoin_yellow", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_BFA_SOWF)
-		end,
-	headerOnClick = function() SortView("CurrencySOBF") end,
-	headerSort = DataStore.GetBfASealsOfWartornFate,
-	
-	-- Content
-	Width = 60,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_SOWF)            
-            if not amount then amount = 0 end
-            if not totalMax then totalMax = 0 end
-			local color = (amount == 0) and colors.grey or colors.white
-			
-			return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
-		end,
-}
-
-columns["CurrencyBfADubloons"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = "      " .. format(TEXTURE_FONT, "Interface\\Icons\\inv_misc_azsharacoin", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_BFA_DUBLOONS)
-		end,
-	headerOnClick = function() SortView("CurrencySOBF") end,
-	headerSort = DataStore.GetBfADubloons,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_DUBLOONS)
-			if not amount then amount = 0 end
-			local color = (amount == 0) and colors.grey or colors.white
-			
-			return format("%s%s", color, amount)
-		end,
-}
-
-columns["CurrencyBfACoalVisions"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = "      " .. format(TEXTURE_FONT, "Interface\\Icons\\inv_enchanting_wod_essence2", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_BFA_COAL_VISIONS)
-		end,
-	headerOnClick = function() SortView("CurrencySOBF") end,
-	headerSort = DataStore.GetBfACoalVisions,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_COAL_VISIONS)
-			if not amount then amount = 0 end
-			local color = (amount == 0) and colors.grey or colors.white
-			
-			return format("%s%s%s", color, amount, colors.white)
-		end,
-}
-
-columns["CurrencyBfATitanResiduum"] = {
-	-- Header
-	headerWidth = 80,
-	headerLabel = "      " .. format(TEXTURE_FONT, "Interface\\Icons\\inv_azeritedebuff", 18, 18),
-	headerOnEnter = function(frame, tooltip)
-			CurrencyHeader_OnEnter(frame, CURRENCY_ID_BFA_TITAN_RESIDUUM)
-		end,
-	headerOnClick = function() SortView("CurrencySOBF") end,
-	headerSort = DataStore.GetBfATitanResiduum,
-	
-	-- Content
-	Width = 80,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local amount  = DataStore:GetCurrencyTotals(character, CURRENCY_ID_BFA_TITAN_RESIDUUM)
-			if not amount then amount = 0 end                
-			local color = (amount == 0) and colors.grey or colors.white
-			
-			return format("%s%s%s", color, amount, colors.white)
-		end,
-}
-
+    columns["Currency"..currencyIndex] = {
+    	-- Header
+    	headerWidth = 80,
+    	headerLabel = "         " .. format(TEXTURE_FONT, C_CurrencyInfo.GetBasicCurrencyInfo(currencyID).icon, 18, 18),
+    	headerOnEnter = function(frame, tooltip)
+    			CurrencyHeader_OnEnter(frame, currencyID)
+    		end,
+    	headerOnClick = function() SortView("Currency"..currencyIndex) end,
+    	headerSort = function(character) return DataStore.GetCurrencyTotals(character, currencyID) end,
+    	
+    	-- Content
+    	Width = 80,
+    	JustifyH = "CENTER",
+    	GetText = function(character)
+    			local amount, _, _, totalMax = DataStore:GetCurrencyTotals(character, currencyID)
+    			if not amount then amount = 0 end
+                if totalMax and totalMax > 0 then
+                    local color = (amount == 0) and colors.grey or colors.white
+			        return format("%s%s%s/%s%s", color, amount, colors.white, colors.yellow, totalMax)
+                else
+                    local color = (amount == 0) and colors.grey or colors.white
+    			    return format("%s%s", color, amount)                
+                end
+            end,
+        OnClick = function(frame, button)
+                if button == "RightButton" then            		
+            		local scrollFrame = frame:GetParent():GetParent().ScrollFrame
+            		local menu = scrollFrame:GetParent():GetParent().ContextualMenu
+            		local offset = scrollFrame:GetOffset()
+            		
+            		menu:Initialize(CurrencyRightClickMenu_Initialize, "MENU_WITH_BORDERS", 1)
+            		menu:Close()
+            		menu:Toggle(frame, frame:GetWidth() - 20, 10)
+            			
+            		return
+	           end
+            end,
+    }
+end
 
 -- ** Garrison Followers **
 columns["FollowersLV100"] = {
@@ -2107,9 +1881,7 @@ local modes = {
 	[MODE_SKILLS] = { "Name", "Level", "Prof1", "Prof2", "ProfCooking", "ProfFishing", "ProfArchaeology" },
 	-- [MODE_SKILLS] = { "Name", "Level", "ProfCooking", "ProfFishing", "ProfArchaeology" },
 	[MODE_ACTIVITY] = { "Name", "Level", "Mails", "LastMailCheck", "Auctions", "Bids", "AHLastVisit", "MissionTableLastVisit" },
-	-- [MODE_CURRENCIES] = { "Name", "Level", "CurrencyGarrison", "CurrencyNethershard", "CurrencyLegionWarSupplies", "CurrencySOBF", "CurrencyOrderHall" },
-	-- [MODE_CURRENCIES] = { "Name", "Level", "CurrencyBfAWarResources", "CurrencyBfASOWF", "CurrencyBfADubloons", "CurrencyBfAWarSupplies", "CurrencyBfARichAzerite" },
-    [MODE_CURRENCIES] = { "Name", "Level", "CurrencyBfAWarResources", "CurrencyBfASOWF", "CurrencyBfADubloons", "CurrencyBfACoalVisions", "CurrencyBfATitanResiduum" },
+    [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "Level", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
     [MODE_HEARTHSTONE] = { "Name", "BindLocation" },
