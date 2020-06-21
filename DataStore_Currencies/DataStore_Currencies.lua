@@ -102,20 +102,7 @@ local function ScanCurrencyTotals(id, divWeekly, divTotal)
 end
 
 local function ScanTotals()
-	ScanCurrencyTotals(CURRENCY_ID_JUSTICE, nil, 100)
-	ScanCurrencyTotals(CURRENCY_ID_VALOR, 100)
-	ScanCurrencyTotals(CURRENCY_ID_APEXIS)
-	ScanCurrencyTotals(CURRENCY_ID_GARRISON)
-	ScanCurrencyTotals(CURRENCY_ID_SOTF)
-	ScanCurrencyTotals(CURRENCY_ID_ORDER_HALL)
-	ScanCurrencyTotals(CURRENCY_ID_SOBF)
-	ScanCurrencyTotals(CURRENCY_ID_NETHERSHARD)
-	ScanCurrencyTotals(CURRENCY_ID_LFWS)
-	ScanCurrencyTotals(CURRENCY_ID_BFA_WAR_RES)
-	ScanCurrencyTotals(CURRENCY_ID_BFA_SOWF)
-	ScanCurrencyTotals(CURRENCY_ID_BFA_DUBLOONS)
-	ScanCurrencyTotals(CURRENCY_ID_BFA_COAL_VISIONS)
-	ScanCurrencyTotals(CURRENCY_ID_BFA_TITAN_RESIDUUM)
+-- deprecated
 end
 
 local function ScanCurrencies()
@@ -147,13 +134,17 @@ local function ScanCurrencies()
 		
 		if isHeader then
 			count = 0
+        else
+            local currencyLink = GetCurrencyListLink(i)
+            if currencyLink then
+                ScanCurrencyTotals(C_CurrencyInfo.GetCurrencyIDFromLink(currencyLink))
+            end        
 		end
 
 		currencies[i] = { ["isHeader"] = isHeader, ["index"] = ref.CurrencyTextRev[name], ["count"] = count }
 	end
 	
 	RestoreHeaders()
-	ScanTotals()
 	
 	addon.ThisCharacter.lastUpdate = time()
 end
