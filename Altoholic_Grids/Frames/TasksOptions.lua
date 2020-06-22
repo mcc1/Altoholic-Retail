@@ -122,6 +122,11 @@ local raidDifficultyIDs = {
     148, -- 20p
 }
 
+local dungeonDifficultyIDs = {
+    2,  -- Heroic dungeon
+    23, -- Mythic dungeon
+}
+
 local function TaskTargetDropdown_Opened(frame, level, menuList)
     -- Populate targets with different items depending on the category
     local category = currentTask.Category
@@ -129,7 +134,7 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
     
     if category == "Dungeon" then
         -- Lets populate it with a list of Dungeons pulled from the Encounter Journal
-        
+                
         -- convert the expansion name to an expansion ID
         local expansionID = 1
         for k,v in pairs(expansions) do
@@ -138,6 +143,9 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             end
         end
 
+        -- Skip Classic, no raid lockouts for vanilla dungeons
+        if expansionID == 1 then return end
+
         -- Set the Encounter Journal to be checking that expansion                                             
         EJ_SelectTier(expansionID)
         
@@ -145,15 +153,20 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
         local index = 1
         local instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, false)
         while instanceID do
+            EJ_SelectInstance(instanceID)
             local info = UIDropDownMenu_CreateInfo()
-            info.text = name.." (Heroic)"
             info.func = TaskTargetDropdown_SetSelectedDungeon
             info.arg1 = instanceID
-            info.arg2 = "heroic"
-            UIDropDownMenu_AddButton(info)
-            info.text = name.." (Mythic)"
-            info.arg2 = "mythic"
-            UIDropDownMenu_AddButton(info)
+            
+            for _, difficultyID in pairs(dungeonDifficultyIDs) do
+                if EJ_IsValidInstanceDifficulty(difficultyID) then
+                    local difficultyName = GetDifficultyInfo(difficultyID)
+                    info.text = name.." "..difficultyName
+                    info.arg2 = difficultyName
+                    UIDropDownMenu_AddButton(info)
+                end
+            end
+
             index = index + 1
             instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, false)
         end
@@ -207,6 +220,9 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             end
         end
         
+        -- Skip Classic, no raid lockouts for vanilla dungeons
+        if expansionID == 1 then return end
+        
         -- Set the Encounter Journal to be checking that expansion                                             
         EJ_SelectTier(expansionID)
 
@@ -215,14 +231,19 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             local index = 1
             local instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, false)
             while instanceID do
+                EJ_SelectInstance(instanceID)
                 local info = UIDropDownMenu_CreateInfo()
                 info.hasArrow = true
-                info.text = name.." (Heroic)"
-                info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = "heroic" }
-                UIDropDownMenu_AddButton(info)
-                info.text = name.." (Mythic)"
-                info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = "mythic" }
-                UIDropDownMenu_AddButton(info)
+                
+                for _, difficultyID in pairs(dungeonDifficultyIDs) do
+                    if EJ_IsValidInstanceDifficulty(difficultyID) then
+                        local difficultyName = GetDifficultyInfo(difficultyID)
+                        info.text = name.." "..difficultyName
+                        info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = difficultyName }
+                        UIDropDownMenu_AddButton(info)
+                    end
+                end
+
                 index = index + 1
                 instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, false)
             end
@@ -239,11 +260,7 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
                 info.func = TaskTargetDropdown_SetSelectedDungeonBoss
                 info.arg1 = { ["instanceID"] = instanceID, ["creatureName"] = name }
                 info.arg2 = difficulty  
-                if difficulty == "heroic" then
-                    info.text = name.." (Heroic)"
-                elseif difficulty == "mythic" then
-                    info.text = name.." (Mythic)"
-                end
+                info.text = name.." "..difficulty
                 UIDropDownMenu_AddButton(info, level)
                 
                 index = index + 1

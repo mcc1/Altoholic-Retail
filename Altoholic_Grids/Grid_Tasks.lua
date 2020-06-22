@@ -36,15 +36,8 @@ local function isTaskComplete(taskID, character)
         for dungeonKey, _ in pairs(DataStore:GetSavedInstances(character)) do
             local instanceName, instanceID = strsplit("|", dungeonKey)
             local taskTargetName = EJ_GetInstanceInfo(task.Target)
-            if task.Difficulty == "heroic" then
-                if instanceName == (taskTargetName.." Heroic") then
-                    return true
-                end
-            end
-            if task.Difficulty == "mythic" then
-                if instanceName == (taskTargetName.." Mythic") then
-                    return true
-                end
+            if instanceName == (taskTargetName.." "..task.Difficulty) then
+                return true
             end
 		end
         return false
@@ -95,17 +88,9 @@ local function isTaskComplete(taskID, character)
         
         for dungeonKey, _ in pairs(DataStore:GetSavedInstances(character)) do
             local instanceName, instanceID = strsplit("|", dungeonKey)
-            if task.Difficulty == "heroic" then
-                if instanceName == (taskTargetName.." Heroic") then
-                    local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
-                    return dungeonBosses[creatureName]
-                end
-            end
-            if task.Difficulty == "mythic" then
-                if instanceName == (taskTargetName.." Mythic") then
-                    local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
-                    return dungeonBosses[creatureName]
-                end
+            if instanceName == (taskTargetName.." "..task.Difficulty) then
+                local reset, lastCheck, isExtended, isRaid, numEncounters, encounterProgress, dungeonBosses = DataStore:GetSavedInstanceInfo(character, dungeonKey)
+                return dungeonBosses[task.Target["creatureName"]]
             end
 		end
         return false        
