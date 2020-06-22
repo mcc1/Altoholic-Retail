@@ -1027,117 +1027,63 @@ local function ProfessionRightClickMenu_Initialize(frame)
     frame:AddCloseMenu()
 end
 
-columns["Prof1"] = {
-	-- Header
-	headerWidth = 70,
-	headerLabel = L["COLUMN_PROFESSION_1_TITLE_SHORT"],
-	tooltipTitle = L["COLUMN_PROFESSION_1_TITLE"],
-	tooltipSubTitle = nil,
-	headerOnEnter = TradeskillHeader_OnEnter,
-	headerOnClick = function() SortView("Prof1") end,
-	headerSort = DataStore.GetProfession1,
-	
-	-- Content
-	Width = 70,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local rank, maxRank, _, name = DataStore:GetProfession1(character)
-            
-            if professionExpansion > 0 then
-                local profession = DataStore:GetProfession(character, name)
-                if profession and (DataStore:GetNumRecipeCategories(profession) == EJ_GetNumTiers()) then
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + 1)
-                elseif profession and (DataStore:GetNumRecipeCategories(profession) > EJ_GetNumTiers()) then
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + 2)                
+for profIndex = 1, 2 do
+    columns["Prof"..profIndex] = {
+    	-- Header
+    	headerWidth = 70,
+    	headerLabel = L["COLUMN_PROFESSION_"..profIndex.."_TITLE_SHORT"],
+    	tooltipTitle = L["COLUMN_PROFESSION_"..profIndex.."_TITLE"],
+    	tooltipSubTitle = nil,
+    	headerOnEnter = TradeskillHeader_OnEnter,
+    	headerOnClick = function() SortView("Prof"..profIndex) end,
+    	headerSort = DataStore["GetProfession"..profIndex],
+    	
+    	-- Content
+    	Width = 70,
+    	JustifyH = "CENTER",
+    	GetText = function(character)
+    			local rank, maxRank, _, name = DataStore["GetProfession"..profIndex](DataStore, character)
+                
+                if professionExpansion > 0 then
+                    local profession = DataStore:GetProfession(character, name)
+                    if profession and (DataStore:GetNumRecipeCategories(profession) >= EJ_GetNumTiers()) then
+                        -- For whatever reason, there are "padding" categories at the start of the list that we need to skip past
+                        local difference = (DataStore:GetNumRecipeCategories(profession) - EJ_GetNumTiers())
+                        _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + difference + 1)
+                    end
                 end
-            end
-            
-            local rankColor = GetSkillRankColor(rank, maxRank) 
-			local spellID = DataStore:GetProfessionSpellID(name)
-			local icon = spellID and format(TEXTURE_FONT, addon:GetSpellIcon(spellID), 18, 18) .. " " or ""
-            rank = rank or 0
-			
-			return format("%s%s%s", icon, rankColor, rank)
-		end,
-	OnEnter = function(frame)
-			local character = frame:GetParent().character
-			local _, _, _, skillName = DataStore:GetProfession1(character)
-			Tradeskill_OnEnter(frame, skillName, true)
-		end,
-	OnClick = function(frame, button)
-			if button == "LeftButton" then
-                local character = frame:GetParent().character
-			    local _, _, _, skillName = DataStore:GetProfession1(character)
-			    Tradeskill_OnClick(frame, skillName)
-            elseif button == "RightButton" then
-            	local scrollFrame = frame:GetParent():GetParent().ScrollFrame
-            	local menu = scrollFrame:GetParent():GetParent().ContextualMenu
-            	local offset = scrollFrame:GetOffset()
-            		
-            	menu:Initialize(ProfessionRightClickMenu_Initialize, "MENU_WITH_BORDERS", 1)
-            	menu:Close()
-            	menu:Toggle(frame, frame:GetWidth() - 20, 10)
-            			
-            	return                
-            end
-		end,
-}
-
-columns["Prof2"] = {
-	-- Header
-	headerWidth = 70,
-	headerLabel = L["COLUMN_PROFESSION_2_TITLE_SHORT"],
-	tooltipTitle = L["COLUMN_PROFESSION_2_TITLE"],
-	tooltipSubTitle = nil,
-	headerOnEnter = TradeskillHeader_OnEnter,
-	headerOnClick = function() SortView("Prof2") end,
-	headerSort = DataStore.GetProfession2,
-	
-	-- Content
-	Width = 70,
-	JustifyH = "CENTER",
-	GetText = function(character)
-			local rank, maxRank, _, name = DataStore:GetProfession2(character)
-            
-            if professionExpansion > 0 then
-                local profession = DataStore:GetProfession(character, name)
-                if profession and (DataStore:GetNumRecipeCategories(profession) == EJ_GetNumTiers()) then
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + 1)
-                elseif profession and (DataStore:GetNumRecipeCategories(profession) > EJ_GetNumTiers()) then
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + 2)                
+                
+                local rankColor = GetSkillRankColor(rank, maxRank) 
+    			local spellID = DataStore:GetProfessionSpellID(name)
+    			local icon = spellID and format(TEXTURE_FONT, addon:GetSpellIcon(spellID), 18, 18) .. " " or ""
+                rank = rank or 0
+    			
+    			return format("%s%s%s", icon, rankColor, rank)
+    		end,
+    	OnEnter = function(frame)
+    			local character = frame:GetParent().character
+    			local _, _, _, skillName = DataStore["GetProfession"..profIndex](DataStore, character)
+    			Tradeskill_OnEnter(frame, skillName, true)
+    		end,
+    	OnClick = function(frame, button)
+    			if button == "LeftButton" then
+                    local character = frame:GetParent().character
+    			    local _, _, _, skillName = DataStore["GetProfession"..profIndex](DataStore, character)
+    			    Tradeskill_OnClick(frame, skillName)
+                elseif button == "RightButton" then
+                	local scrollFrame = frame:GetParent():GetParent().ScrollFrame
+                	local menu = scrollFrame:GetParent():GetParent().ContextualMenu
+                	local offset = scrollFrame:GetOffset()
+                		
+                	menu:Initialize(ProfessionRightClickMenu_Initialize, "MENU_WITH_BORDERS", 1)
+                	menu:Close()
+                	menu:Toggle(frame, frame:GetWidth() - 20, 10)
+                			
+                	return                
                 end
-            end
-            
-            local rankColor = GetSkillRankColor(rank, maxRank) 
-			local spellID = DataStore:GetProfessionSpellID(name)
-			local icon = spellID and format(TEXTURE_FONT, addon:GetSpellIcon(spellID), 18, 18) .. " " or ""
-            rank = rank or 0
-			
-			return format("%s%s%s", icon, rankColor, rank)
-		end,
-	OnEnter = function(frame)
-			local character = frame:GetParent().character
-			local _, _, _, skillName = DataStore:GetProfession2(character)
-			Tradeskill_OnEnter(frame, skillName, true)
-		end,
-	OnClick = function(frame, button)
-			if button == "LeftButton" then
-                local character = frame:GetParent().character
-			    local _, _, _, skillName = DataStore:GetProfession2(character)
-			    Tradeskill_OnClick(frame, skillName)
-            elseif button == "RightButton" then
-            	local scrollFrame = frame:GetParent():GetParent().ScrollFrame
-            	local menu = scrollFrame:GetParent():GetParent().ContextualMenu
-            	local offset = scrollFrame:GetOffset()
-            		
-            	menu:Initialize(ProfessionRightClickMenu_Initialize, "MENU_WITH_BORDERS", 1)
-            	menu:Close()
-            	menu:Toggle(frame, frame:GetWidth() - 20, 10)
-            			
-            	return                
-            end
-		end,
-}
+    		end,
+    }
+end
 
 columns["ProfCooking"] = {
 	-- Header
@@ -1158,10 +1104,10 @@ columns["ProfCooking"] = {
             
             if professionExpansion > 0 then
                 local profession = DataStore:GetProfession(character, name)
-                if profession and (DataStore:GetNumRecipeCategories(profession) == EJ_GetNumTiers()) then
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + 1)
-                elseif profession and (DataStore:GetNumRecipeCategories(profession) > EJ_GetNumTiers()) then
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + 2)                
+                if profession and (DataStore:GetNumRecipeCategories(profession) >= EJ_GetNumTiers()) then
+                    -- For whatever reason, there are "padding" categories at the start of the list that we need to skip past
+                    local difference = (DataStore:GetNumRecipeCategories(profession) - EJ_GetNumTiers())
+                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + difference + 1)
                 end
             end
             
@@ -1176,7 +1122,19 @@ columns["ProfCooking"] = {
 			Tradeskill_OnEnter(frame, GetSpellInfo(2550), true)
 		end,
 	OnClick = function(frame, button)
-			Tradeskill_OnClick(frame, GetSpellInfo(2550))
+      		if button == "LeftButton" then
+		        Tradeskill_OnClick(frame, GetSpellInfo(2550))
+              elseif button == "RightButton" then
+              	local scrollFrame = frame:GetParent():GetParent().ScrollFrame
+              	local menu = scrollFrame:GetParent():GetParent().ContextualMenu
+              	local offset = scrollFrame:GetOffset()
+              		
+              	menu:Initialize(ProfessionRightClickMenu_Initialize, "MENU_WITH_BORDERS", 1)
+              	menu:Close()
+              	menu:Toggle(frame, frame:GetWidth() - 20, 10)
+              			
+              	return                
+              end
 		end,
 }
 
@@ -1194,12 +1152,41 @@ columns["ProfFishing"] = {
 	Width = 60,
 	JustifyH = "CENTER",
 	GetText = function(character)
-			local rank = DataStore:GetFishingRank(character)
-			return format("%s%s", GetSkillRankColor(rank), rank)
+        	local rank, maxRank = DataStore:GetFishingRank(character)
+            local name = GetSpellInfo(131474)
+            
+            if professionExpansion > 0 then
+                local profession = DataStore:GetProfession(character, name)
+                if profession and (DataStore:GetNumRecipeCategories(profession) >= EJ_GetNumTiers()) then
+                    -- For whatever reason, there are "padding" categories at the start of the list that we need to skip past
+                    local difference = (DataStore:GetNumRecipeCategories(profession) - EJ_GetNumTiers())
+                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + difference + 1)
+                end
+            end
+            
+            local rankColor = GetSkillRankColor(rank, maxRank) 
+			local spellID = DataStore:GetProfessionSpellID(name)
+			local icon = spellID and format(TEXTURE_FONT, addon:GetSpellIcon(spellID), 18, 18) .. " " or ""
+            rank = rank or 0
+			
+			return format("%s%s", rankColor, rank)
 		end,
 	OnEnter = function(frame)
 			Tradeskill_OnEnter(frame, GetSpellInfo(131474), true)
 		end,
+    OnClick = function(frame, button)
+          	if button == "RightButton" then
+              	local scrollFrame = frame:GetParent():GetParent().ScrollFrame
+              	local menu = scrollFrame:GetParent():GetParent().ContextualMenu
+              	local offset = scrollFrame:GetOffset()
+              		
+              	menu:Initialize(ProfessionRightClickMenu_Initialize, "MENU_WITH_BORDERS", 1)
+              	menu:Close()
+              	menu:Toggle(frame, frame:GetWidth() - 20, 10)
+              			
+              	return                
+            end
+        end,
 }
 
 columns["ProfArchaeology"] = {
