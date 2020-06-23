@@ -9,7 +9,7 @@ local THIS_REALM = GetRealmName()
 
 local storedLink = nil
 
-local GatheringNodes = {			-- Add herb/ore possession info to Plants/Mines, thanks to Tempus on wowace for gathering this.
+local GatheringNodes = {
 
 	-- Mining nodes
 	-- Classic
@@ -212,7 +212,7 @@ herbsToAdd = nil
 local function IsGatheringNode(name)
 	if name then
 		for k, v in pairs(GatheringNodes) do
-			if string.find(name, k) then				-- returns the itemID if "name" is a known type of gathering node (mines & herbs)
+			if name == k then				-- returns the itemID if "name" is a known type of gathering node (mines & herbs)
 				return v
 			end
 		end
