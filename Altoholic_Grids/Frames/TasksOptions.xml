@@ -110,7 +110,6 @@
 					</OnEnterPressed>
 					<OnEscapePressed>
 						self:GetParent():Hide()
-						Altoholic:ToggleUI()
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
@@ -151,7 +150,6 @@
 					</OnLoad>
 					<OnEscapePressed>
 						self:GetParent():Hide()
-						Altoholic:ToggleUI()
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
@@ -163,11 +161,7 @@
 				<Scripts>
 					<OnLoad>
 						_G[self:GetName().."Text"]:SetText("Horde");
-						self:SetChecked(true)
 					</OnLoad>
-					<OnClick>
-						self:SetChecked(not self:GetChecked())
-					</OnClick>
 				</Scripts>
 			</CheckButton>
 
@@ -178,11 +172,7 @@
 				<Scripts>
 					<OnLoad>
 						_G[self:GetName().."Text"]:SetText("Alliance");
-						self:SetChecked(true)
 					</OnLoad>
-					<OnClick>
-						self:SetChecked(not self:GetChecked())
-					</OnClick>
 				</Scripts>
 			</CheckButton>
 		</Frames>

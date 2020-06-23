@@ -37,6 +37,9 @@ local currentTask = nil
 -- > Expansion = ENUM {Classic / TBC / WOTLK / Cataclysm / MOP / WOD / Legion / BFA / Shadowlands}
 -- > Target = NUMBER variable {instanceID / questID / bossID / recipeID}
 -- > (INTERNAL) Difficulty = ENUM {heroic / mythic} - for dungeons only
+-- > MinimumLevel = NUMBER 1 to MaxLevel (computed based on expansion level)
+-- > HordeAllowed = BOOLEAN
+-- > AllianceAllowed = BOOLEAN
 
 local expansions = {"Classic", "TBC", "WOTLK", "Cataclysm", "MOP", "WOD", "Legion", "BFA"}
 
@@ -473,7 +476,7 @@ end
 local function TaskTypeDropdown_Opened(frame, level, menuList)
     local currentTaskType = currentTask.Category
     
-    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "Rare Spawn"}
+    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown"}
     
     for _, category in pairs(categories) do
         local info = UIDropDownMenu_CreateInfo()
@@ -509,6 +512,24 @@ local function TaskNameDropdown_SetSelected(self, id)
     UIDropDownMenu_SetText(AltoTasksOptions_TaskExpansionDropdown, currentTask.Expansion)
     addon:DDM_Initialize(AltoTasksOptions_TaskTargetDropdown, TaskTargetDropdown_Opened)
     UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, getCurrentTargetName())
+    
+    if currentTask.MinimumLevel then
+        AltoTasksOptions_TaskMinimumLevelEditBox:SetText(currentTask.MinimumLevel)
+    else
+        AltoTasksOptions_TaskMinimumLevelEditBox:SetText("")
+    end
+    
+    if currentTask.HordeAllowed then
+        AltoTasksOptions_TaskHordeCheckbox:SetChecked(true)
+    else 
+        AltoTasksOptions_TaskHordeCheckbox:SetChecked(false)
+    end
+    
+    if currentTask.AllianceAllowed then
+        AltoTasksOptions_TaskAllianceCheckbox:SetChecked(true)
+    else
+        AltoTasksOptions_TaskAllianceCheckbox:SetChecked(false)
+    end
 
     -- Target Dropdown should only be enabled if there is a category and expansion selected
     -- OR the selected category is a category that doesn't require an expansion
@@ -583,7 +604,7 @@ local function AddClicked()
     local id = GetNextPrimaryKey()
     
     -- Add new task name to saved variables
-    table.insert(tasks, {["Name"] = taskName, ["ID"] = id,})
+    table.insert(tasks, {["Name"] = taskName, ["ID"] = id, ["HordeAllowed"] = true, ["AllianceAllowed"] = true,})
     
     -- If this was the first task name, initialize the dropdown
     if #tasks == 1 then
@@ -628,8 +649,45 @@ AltoTasksOptions_DeleteButton:SetScript("OnClick", DeleteClicked)
 
 -- ==============================
 -- ==============================
+-- Minimum level editbox functions
+-- ==============================
+-- ==============================
+local function MinimumLevelChanged(editBox, isUserInput)
+    if not currentTask then return end
+    
+    local text = editBox:GetText()
+    
+    -- check if its empty
+    if (not text) or (text == "") then
+        currentTask.MinimumLevel = 0
+        return
+    end
+        
+    -- convert it to a number
+    local level = tonumber(text)
+    
+    -- check its between 1 and max level
+    if (level < 1) or (level > GetMaxLevelForExpansionLevel(GetMaximumExpansionLevel())) then return end
+    
+    currentTask.MinimumLevel = level 
+end
+AltoTasksOptions_TaskMinimumLevelEditBox:SetScript("OnTextChanged", MinimumLevelChanged)
+AltoTasksOptions_TaskMinimumLevelEditBox:SetNumeric(true)
 
 -- ==============================
 -- ==============================
+-- Faction filter checkbox functions
+-- ==============================
+-- ==============================
+local function HordeFilterChanged(self, button, down)
+    currentTask.HordeAllowed = self:GetChecked()
+    if currentTask.AllianceAllowed == nil then currentTask.AllianceAllowed = false end
+end
+AltoTasksOptions_TaskHordeCheckbox:SetScript("PostClick", HordeFilterChanged)
 
--- function to handle a task being selected 
+local function AllianceFilterChanged(self, button, down)
+    currentTask.AllianceAllowed = self:GetChecked()
+    if currentTask.HordeAllowed == nil then currentTask.HordeAllowed = false end
+end
+AltoTasksOptions_TaskAllianceCheckbox:SetScript("PostClick", AllianceFilterChanged)
+ 

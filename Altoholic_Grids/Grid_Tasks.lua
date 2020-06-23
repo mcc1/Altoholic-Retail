@@ -11,6 +11,41 @@ if not Altoholic.db.global.Tasks then
 end
 local tasks = Altoholic.db.global.Tasks
 
+local function taskPassesLevelFilter(task, character)    
+    if not task.MinimumLevel then return true end
+    if not DataStore:GetCharacterLevel(character) then return false end
+    
+    if task.MinimumLevel <= DataStore:GetCharacterLevel(character) then
+        return true
+    else
+        return false
+    end
+end
+
+local function taskPassesFactionFilter(task, character)
+    local characterFaction = DataStore:GetCharacterFaction(character)
+    
+    if characterFaction == "Neutral" then return false end
+    
+    if characterFaction == "Horde" then
+        if (task.HordeAllowed == false) then return false end
+    elseif characterFaction == "Alliance" then
+        if (task.AllianceAllowed == false) then return false end
+    else
+        print("Error 37")
+    end
+    return true
+end
+
+local function taskPassesFilters(taskID, character)
+    if taskID == nil then return true end
+    
+    local task = tasks[taskID]
+    if task == nil then return true end
+    
+    return (taskPassesLevelFilter(task, character) and taskPassesFactionFilter(task, character))
+end
+
 local function isTaskComplete(taskID, character)
     if taskID == nil then return false end
 
@@ -157,12 +192,6 @@ local function OnDropDownClicked(self)
 	AltoTasksOptions:Show()
 end
 
-local function OnTradeSkillChange(self)
-	dropDownFrame:Close()
-	addon:SetOption(OPTION_TRADESKILL, self.value)
-	AltoholicTabGrids:Update()
-end
-
 local function DropDown_Initialize(frame, level)
 	frame:AddButton("Manage", 1, OnDropDownClicked)
 end
@@ -191,17 +220,18 @@ local callbacks = {
 
 			local text = icons.notReady
 			local vc = 0.25	-- vertex color
-			local tradeskills = addon.TradeSkills.spellIDs
-			local profession = DataStore:GetProfession(character, GetSpellInfo(tradeskills[addon:GetOption(OPTION_TRADESKILL)]))			
 
-			if #tasks ~= 0 then
-		
-				if isTaskComplete(dataRowID, character) then
-					vc = 1.0
-					text = icons.ready
-				else
-					vc = 0.4
-				end
+			if #tasks ~= 0 then		
+				if taskPassesFilters(dataRowID, character) then
+                    if isTaskComplete(dataRowID, character) then
+					   vc = 1.0
+					   text = icons.ready
+				    else
+					   vc = 0.4
+				    end
+                else
+                    button:Hide()
+                end
 			end
 
 			button.Background:SetVertexColor(vc, vc, vc)
