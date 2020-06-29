@@ -8,6 +8,7 @@ Altoholic.Sharing = {}
 Altoholic.Sharing.Clients = {}		-- authorized clients
 Altoholic.Sharing.Content = {}		-- shared content
 Altoholic.Sharing.AvailableContent = {}		-- available content
+Altoholic.Sharing.Ongoing = {}
 
 local THIS_ACCOUNT = "Default"
 
@@ -900,4 +901,146 @@ function Altoholic.Sharing.AvailableContent:Clear()
 	
 	self:BuildView()
 	self:Update()
+end
+
+--====================================
+-- Begin code for Ongoing Sharing tab
+--====================================
+-- handles receiving an alert from DataStore
+local function OnContainerChangesSingleReceived(self, changes)
+    local serializedData = Altoholic:Serialize("OnContainerChangeSingle", changes)
+    
+    for entry = 1, addon:GetOption("UI.Sharing.Ongoing.NumTargets") do
+        if _G["AltoholicFrameOngoingAltListEntry"..entry.."Check"]:GetChecked() then
+            local targetName = addon:GetOption("UI.Sharing.Ongoing.Target"..entry..".Character")
+            local realmName = addon:GetOption("UI.Sharing.Ongoing.Target"..entry..".Realm")
+    	    Altoholic:SendCommMessage("AltoOngoing", serializedData, "WHISPER", targetName.."-"..realmName)
+        end
+    end
+end
+
+-- handles receiving an addon message communication from another player
+local function OngoingCommHandler(prefix, message, distribution, sender)
+	local success, msgType, arg1, arg2, arg3 = addon:Deserialize(message)
+
+	if success and msgType then
+        if msgType == "OnContainerChangeSingle" then
+            sender = Ambiguate(sender, "mail")
+            local senderName, senderRealm = strsplit("-", sender)
+            
+            for entry = 1, addon:GetOption("UI.Sharing.Ongoing.NumTargets") do
+
+                if string.lower(senderName) == string.lower(addon:GetOption("UI.Sharing.Ongoing.Target"..entry..".Character")) then
+
+                    -- find what account the character is saved as
+                    for accountName in pairs(DataStore:GetAccounts()) do
+                        for characterName, character in pairs(DataStore:GetCharacters(senderRealm, accountName)) do
+                            if characterName and (string.lower(characterName) == string.lower(senderName)) then
+                                DataStore:ImportBagChanges(character, arg1)
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+        end
+	end
+end
+
+local function updateOngoingScrollFrame()
+    local numTargets = addon:GetOption("UI.Sharing.Ongoing.NumTargets")
+    if not numTargets then numTargets = 0 end
+    
+    for i = 1, 10 do
+        if i <= numTargets then    
+            _G["AltoholicFrameOngoingAltListEntry"..i]:Show()
+            _G["AltoholicFrameOngoingAltListEntry"..i.."CharacterName"]:SetText(addon:GetOption("UI.Sharing.Ongoing.Target"..i..".Character"))
+            _G["AltoholicFrameOngoingAltListEntry"..i.."RealmName"]:SetText(addon:GetOption("UI.Sharing.Ongoing.Target"..i..".Realm"))
+            _G["AltoholicFrameOngoingAltListEntry"..i.."DeleteButton"]:Show()
+        else
+            _G["AltoholicFrameOngoingAltListEntry"..i]:Hide()
+        end
+    end
+end
+
+local function ongoingAddButtonClicked()
+    local numTargets = addon:GetOption("UI.Sharing.Ongoing.NumTargets")
+    if not numTargets then numTargets = 0 end
+    
+    local characterName = AltoAccountSharingTab2_CharacterNameEditBox:GetText()
+    local realmName = AltoAccountSharingTab2_RealmNameEditBox:GetText()
+    
+    if (not characterName) or (characterName == "") then return end
+    if (not realmName) or (realmName == "") then return end
+    
+    numTargets = numTargets + 1
+    addon:SetOption("UI.Sharing.Ongoing.NumTargets", numTargets)
+    addon:SetOption("UI.Sharing.Ongoing.Target"..numTargets..".Character", characterName)
+    addon:SetOption("UI.Sharing.Ongoing.Target"..numTargets..".Realm", realmName)
+    
+    updateOngoingScrollFrame()
+end
+
+local function initialization()
+    AltoAccountSharingOngoingDisclaimer:SetText("Share the entire database using the other tab FIRST.\nActivate this on ALL characters, pointing at each other.\nThe scroll bar isn't implemented yet.\nOnly works for players on connected realms.")
+    AltoAccountSharingOngoingText1:SetText("Character name to share to.")
+    AltoAccountSharing_AddOngoingButton:SetText("Add character")
+    AltoAccountSharing_AddOngoingButton:SetScript("OnClick", ongoingAddButtonClicked)
+    AltoAccountSharingOngoingText2:SetText("Character Name")
+    AltoAccountSharingOngoingText3:SetText("Realm")
+    AltoAccountSharingOngoingText4:SetText("Delete")
+    AltoAccountSharingOngoingText5:SetText("Realm (no spaces)")
+    AltoAccountSharingTab2_RealmNameEditBox:SetText(GetNormalizedRealmName())
+    
+    addon:RegisterMessage("DATASTORE_CONTAINER_CHANGES_SINGLE", OnContainerChangesSingleReceived)
+    addon:RegisterComm("AltoOngoing", OngoingCommHandler)
+    
+    updateOngoingScrollFrame()    
+end
+hooksecurefunc(Altoholic, "OnEnable", initialization)
+
+function Altoholic.Sharing.Ongoing:CheckAll(self, button)
+    local numTargets = addon:GetOption("UI.Sharing.Ongoing.NumTargets")
+    if not numTargets then numTargets = 0 end
+    
+    for i = 1, numTargets do
+        _G["AltoholicFrameOngoingAltListEntry"..i.."Check"]:SetChecked(true)
+    end
+end
+
+function Altoholic.Sharing.Ongoing:DeleteClicked(self, button)
+    local entry = self:GetParent():GetID()
+    
+    local numTargets = addon:GetOption("UI.Sharing.Ongoing.NumTargets")
+    
+    if entry > numTargets then return end
+    
+    for i = 1, numTargets do
+        if i == numTargets then
+            -- the last item in the list, nil it
+            addon:SetOption("UI.Sharing.Ongoing.Target"..i..".Character", nil)
+            addon:SetOption("UI.Sharing.Ongoing.Target"..i..".Realm", nil)
+        elseif i >= entry then
+            -- bump everything up in the list
+            addon:SetOption("UI.Sharing.Ongoing.Target"..i..".Character", addon:GetOption("UI.Sharing.Ongoing.Target"..(i+1)..".Character"))
+            addon:SetOption("UI.Sharing.Ongoing.Target"..i..".Realm", addon:GetOption("UI.Sharing.Ongoing.Target"..(i+1)..".Realm"))
+        end
+    end                
+    
+    numTargets = numTargets - 1
+    addon:SetOption("UI.Sharing.Ongoing.NumTargets", numTargets)
+    
+    updateOngoingScrollFrame()    
+end
+
+function Altoholic.Sharing.Ongoing:ShareCheckButtonClicked(self, button)
+    local entry = self:GetParent():GetID()
+    
+    local characterName = addon:GetOption("UI.Sharing.Ongoing.Target"..entry..".Character")
+    local realmName = addon:GetOption("UI.Sharing.Ongoing.Target"..entry..".Realm") 
+
+    if (not characterName) or (characterName == "") then return end
+    if (not realmName) or (realmName == "") then return end
+    
+    _G["AltoholicFrameOngoingAltListEntry"..entry.."Check"]:SetChecked(not _G["AltoholicFrameOngoingAltListEntry"..entry.."Check"]:GetChecked())
 end
