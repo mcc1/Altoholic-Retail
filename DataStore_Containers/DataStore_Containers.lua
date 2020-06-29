@@ -272,7 +272,7 @@ local function detectBagChanges(originalBag, newBag)
             -- slot was originally empty
             if newBag.ids[slotID] ~= nil then
                 -- an item has been moved into this slot
-                table.insert(changes, {["changeType"] = "insert", ["slotID"] = slotID, ["itemID"] = newBag.ids[slotID] })
+                table.insert(changes, {["changeType"] = "insert", ["slotID"] = slotID, ["itemID"] = newBag.ids[slotID], ["count"] = newBag.counts[slotID] })
             end
         else
             -- slot originally had an item
@@ -280,9 +280,16 @@ local function detectBagChanges(originalBag, newBag)
                 -- an item has been removed from this slot
                 table.insert(changes, {["changeType"] = "delete", ["slotID"] = slotID, ["itemID"] = itemID})
             else
-                if itemID ~= newBag.ids[slotID] then
-                    -- a different item is now in this slot
-                    table.insert(changes, { ["changeType"] = "changed", ["slotID"] = slotID, ["originalItemID"] = itemID, ["newItemID"] = newBag.ids[slotID] })
+                if (itemID ~= newBag.ids[slotID]) or (originalBag.counts[slotID] ~= newBag.counts[slotID]) then
+                    -- a different item is now in this slot OR its count changed
+                    table.insert(changes, { 
+                        ["changeType"] = "changed", 
+                        ["slotID"] = slotID, 
+                        ["originalItemID"] = itemID, 
+                        ["newItemID"] = newBag.ids[slotID], 
+                        ["originalCount"] = originalBag.counts[slotID], 
+                        ["newCount"] = newBag.counts[slotID], 
+                    } )
                 end
             end
         end
@@ -362,9 +369,15 @@ local function ScanContainer(bagID, containerType)
 	addon:SendMessage("DATASTORE_CONTAINER_UPDATED", bagID, containerType)
     
     local changes = detectBagChanges(originalBag, newBag)
-    changes.bagID = bagID
-
-    return changes
+    
+    -- detect if the table is empty
+    local next = next
+    if next(changes) == nil then
+        return nil
+    else
+        changes.bagID = bagID
+        return changes
+    end
 end
 
 local function ScanBagSlotsInfo()
@@ -488,7 +501,9 @@ local function OnBagUpdateDelayed(event)
 
     for _, v in ipairs(bagUpdateQueue) do
         local changes = ScanBag(v)
-        addon:SendMessage("DATASTORE_CONTAINER_CHANGES_SINGLE", changes)        
+        if changes then
+            addon:SendMessage("DATASTORE_CONTAINER_CHANGES_SINGLE", changes)
+        end        
     end
 
     wipe(bagUpdateQueue)
@@ -647,12 +662,14 @@ local function _ImportBagChanges(character, changes)
                     item:ContinueOnItemLoad(function()
 	                    container.links[change.slotID] = item:GetItemLink()
                     end)
+                    container.counts[change.slotID] = change.count 
                 end
             elseif change.changeType == "delete" then
                 if change.slotID and change.itemID then
                     local existingItem = container.ids[change.slotID]
                     container.ids[change.slotID] = nil
                     container.links[change.slotID] = nil
+                    container.counts[change.slotID] = nil
                 end
             elseif change.changeType == "changed" then
                 if change.slotID and change.originalItemID and change.newItemID then
@@ -662,6 +679,7 @@ local function _ImportBagChanges(character, changes)
                     item:ContinueOnItemLoad(function()
 	                    container.links[change.slotID] = item:GetItemLink()
                     end)
+                    container.counts[change.slotID] = change.newCount 
                 end
             end
         end
