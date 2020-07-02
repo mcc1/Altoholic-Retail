@@ -234,13 +234,14 @@ local Factions = {
 		},		
 		{ -- [2]
 			name = L["Fishing Masters"],
-			{ name = DataStore:GetFactionName(1975), icon = "inv_elemental_primal_water" }, -- Conjurer Margoss
+			{ name = DataStore:GetFactionName(1975), icon = "inv_elemental_primal_water" },                     -- Conjurer Margoss
 			{ name = DataStore:GetFactionName(2097), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Ilyssia of the Waters
 			{ name = DataStore:GetFactionName(2099), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Akule Riverhorn
 			{ name = DataStore:GetFactionName(2101), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Sha'leth
 			{ name = DataStore:GetFactionName(2100), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Corbyn
 			{ name = DataStore:GetFactionName(2102), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Impus
 			{ name = DataStore:GetFactionName(2098), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Keeper Raynae
+            { name = DataStore:GetFactionName(2135), icon = "achievement_reputation_wyrmresttemple" },          -- Chromie
 		},
 	},
 	{	-- [8]
