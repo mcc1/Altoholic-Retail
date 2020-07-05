@@ -526,7 +526,10 @@ local function OnPlayerBankSlotsChanged(event, slotID)
 	if (slotID >= 29) and (slotID <= 35) then
 		ScanBag(slotID - 24)		-- bagID for bank bags goes from 5 to 11, so slotID - 24
 	else
-		ScanContainer(MAIN_BANK_SLOTS, BANK)
+        local changes = ScanContainer(MAIN_BANK_SLOTS, BANK) 
+        if changes then
+            addon:SendMessage("DATASTORE_CONTAINER_CHANGES_SINGLE", changes)
+        end
 		ScanBankSlotsInfo()
 	end
 end
@@ -540,8 +543,10 @@ local function OnBankFrameOpened()
 	for bagID = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do		-- 5 to 11
 		ScanBag(bagID)
 	end
-	ScanContainer(MAIN_BANK_SLOTS, BANK)
+	
+    ScanContainer(MAIN_BANK_SLOTS, BANK)
 	ScanBankSlotsInfo()
+    
 	addon:RegisterEvent("BANKFRAME_CLOSED", OnBankFrameClosed)
 	addon:RegisterEvent("PLAYERBANKSLOTS_CHANGED", OnPlayerBankSlotsChanged)
 end
