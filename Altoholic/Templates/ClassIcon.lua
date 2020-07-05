@@ -138,7 +138,9 @@ addon:Controller("AltoholicUI.ClassIcon", {
 		tt:AddLine(format("%s: %s%s |r(%s%s|r)", L["Zone"], colors.gold, zone, colors.gold, subZone),1,1,1)
 		
         local name = DataStore:GetGuildInfo(character)
-        tt:AddLine(format("%s: %s", L["Guild"], name),1,1,1)
+        if name then
+            tt:AddLine(format("%s: %s", "Guild", name),1,1,1)
+        end
         
 		local restXP = DataStore:GetRestXP(character)
 		if restXP and restXP > 0 then
