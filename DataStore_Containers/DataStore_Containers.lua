@@ -368,7 +368,13 @@ local function ScanContainer(bagID, containerType)
 	addon.ThisCharacter.lastUpdate = time()
 	addon:SendMessage("DATASTORE_CONTAINER_UPDATED", bagID, containerType)
     
-    local changes = detectBagChanges(originalBag, newBag)
+    local changes
+    
+    if containerType ~= GUILDBANK then 
+        changes = detectBagChanges(originalBag, newBag)
+    else
+        return nil
+    end
     
     -- detect if the table is empty
     local next = next
@@ -689,6 +695,8 @@ end
 local function _GetContainerInfo(character, containerID)
 	local bag = _GetContainer(character, containerID)
 	
+    if not bag then return nil end
+    
 	local icon = bag.icon
 	local size = bag.size
 	
@@ -747,7 +755,12 @@ end
 local function _GetContainerCooldownInfo(bag, slotID)
 	assert(type(bag) == "table")		-- this is the pointer to a bag table, obtained through addon:GetContainer()
 	assert(type(slotID) == "number")
-
+    
+    if not bag.cooldowns then
+        bag.cooldowns = {}
+        return nil
+    end
+    
 	local cd = bag.cooldowns[slotID]
 	if cd then
 		local startTime, duration, isEnabled = strsplit("|", bag.cooldowns[slotID])
@@ -816,6 +829,7 @@ local function _GetNumFreeBankSlots(character)
 	return character.numFreeBankSlots
 end
 
+-- Seems like this should be updated to include tab1 / tab2.
 local function _GetVoidStorageItem(character, index)
 	return character.Containers["VoidStorage"].ids[index]
 end
