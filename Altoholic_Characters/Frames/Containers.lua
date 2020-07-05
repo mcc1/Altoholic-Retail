@@ -64,85 +64,87 @@ local function UpdateSpread()
 		
 			local containerID = bagIndices[line].bagID
 			local container = DS:GetContainer(character, containerID)
-			local containerIcon, _, containerSize = DS:GetContainerInfo(character, containerID)
-			
-			-- Column 1 : the bag
-			itemButton = rowFrame.Item1
-			
-			if bagIndices[line].from == 1 then		-- if this is the first line for this bag .. draw bag icon
-				itemButton.Icon:SetDesaturated(false)
-				
-				-- 15/10/2014: note, find a better way for this than this ugly hack
-				if containerID == "VoidStorage.Tab1" then
-					itemButton:SetID(201)	-- use id 201 for void storage, only required a few lines below
-				elseif containerID == "VoidStorage.Tab2" then
-					itemButton:SetID(202)	-- use id 202 for void storage, only required a few lines below
-				elseif containerID == REAGENTBANK_CONTAINER then
-					itemButton:SetID(300)
-				else
-					itemButton:SetID(containerID)
-				end
-				
-				itemButton.Icon:SetTexture(containerIcon)
-				itemButton:SetScript("OnEnter", function(self)
-					local id = self:GetID()
-					GameTooltip:SetOwner(self, "ANCHOR_LEFT");
-					if id == 0 then
-						GameTooltip:AddLine(BACKPACK_TOOLTIP,1,1,1);
-						GameTooltip:AddLine(format(CONTAINER_SLOTS, 16, BAGSLOT),1,1,1);
-						
-					elseif id == 100 then
-						GameTooltip:AddLine(L["Bank"],0.5,0.5,1);
-						GameTooltip:AddLine(L["28 Slot"],1,1,1);
-					elseif id >= 201 and id <= 202 then
-						GameTooltip:AddLine(VOID_STORAGE,0.5,0.5,1);
-					elseif id == 300 then
-						GameTooltip:AddLine(REAGENT_BANK,0.5,0.5,1);
-					else
-						local character = Altoholic.Tabs.Characters:GetAltKey()
-						local _, link = DS:GetContainerInfo(character, id)
-						GameTooltip:SetHyperlink(link);
-						if (id >= 5) and (id <= 11) then
-							GameTooltip:AddLine(L["Bank bag"],0,1,0);
-						end
-					end
-					GameTooltip:Show();
-				end)
-				itemButton.Count:Hide()
-				itemButton:Show()
-			else
-				itemButton:Hide()
-			end
-			
-			-- Column 2 : empty
-			itemButton = rowFrame.Item2
-			itemButton:Hide()
-			itemButton:SetInfo(nil, nil)
-			
-			-- Columns 3 to 14 : bag content
-			for j=3, 14 do
-				itemButton = rowFrame["Item"..j]
-				
-				local slotID = bagIndices[line].from - 3 + j
-				local itemID, itemLink, itemCount, isBattlePet = DS:GetSlotInfo(container, slotID)
-				
-				if (slotID <= containerSize) then 
-					itemButton:SetItem(itemID, itemLink, rarity)
-					itemButton:SetCount(itemCount)
-					if isBattlePet then
-						itemButton:SetIcon(itemID)	-- override the icon if one is returned by datastore
-					end
-					
-					local startTime, duration, isEnabled = DS:GetContainerCooldownInfo(container, slotID)
-					itemButton:SetCooldown(startTime, duration, isEnabled)
-					itemButton:Show()
-				else
-					itemButton:Hide()
-					itemButton:SetInfo(nil, nil)
-					itemButton.startTime = nil
-					itemButton.duration = nil
-				end
-			end
+            if container then
+    			local containerIcon, _, containerSize = DS:GetContainerInfo(character, containerID)
+    			
+    			-- Column 1 : the bag
+    			itemButton = rowFrame.Item1
+    			
+    			if bagIndices[line].from == 1 then		-- if this is the first line for this bag .. draw bag icon
+    				itemButton.Icon:SetDesaturated(false)
+    				
+    				-- 15/10/2014: note, find a better way for this than this ugly hack
+    				if containerID == "VoidStorage.Tab1" then
+    					itemButton:SetID(201)	-- use id 201 for void storage, only required a few lines below
+    				elseif containerID == "VoidStorage.Tab2" then
+    					itemButton:SetID(202)	-- use id 202 for void storage, only required a few lines below
+    				elseif containerID == REAGENTBANK_CONTAINER then
+    					itemButton:SetID(300)
+    				else
+    					itemButton:SetID(containerID)
+    				end
+    				
+    				itemButton.Icon:SetTexture(containerIcon)
+    				itemButton:SetScript("OnEnter", function(self)
+    					local id = self:GetID()
+    					GameTooltip:SetOwner(self, "ANCHOR_LEFT");
+    					if id == 0 then
+    						GameTooltip:AddLine(BACKPACK_TOOLTIP,1,1,1);
+    						GameTooltip:AddLine(format(CONTAINER_SLOTS, 16, BAGSLOT),1,1,1);
+    						
+    					elseif id == 100 then
+    						GameTooltip:AddLine(L["Bank"],0.5,0.5,1);
+    						GameTooltip:AddLine(L["28 Slot"],1,1,1);
+    					elseif id >= 201 and id <= 202 then
+    						GameTooltip:AddLine(VOID_STORAGE,0.5,0.5,1);
+    					elseif id == 300 then
+    						GameTooltip:AddLine(REAGENT_BANK,0.5,0.5,1);
+    					else
+    						local character = Altoholic.Tabs.Characters:GetAltKey()
+    						local _, link = DS:GetContainerInfo(character, id)
+    						GameTooltip:SetHyperlink(link);
+    						if (id >= 5) and (id <= 11) then
+    							GameTooltip:AddLine(L["Bank bag"],0,1,0);
+    						end
+    					end
+    					GameTooltip:Show();
+    				end)
+    				itemButton.Count:Hide()
+    				itemButton:Show()
+    			else
+    				itemButton:Hide()
+    			end
+    			
+    			-- Column 2 : empty
+    			itemButton = rowFrame.Item2
+    			itemButton:Hide()
+    			itemButton:SetInfo(nil, nil)
+    			
+    			-- Columns 3 to 14 : bag content
+    			for j=3, 14 do
+    				itemButton = rowFrame["Item"..j]
+    				
+    				local slotID = bagIndices[line].from - 3 + j
+    				local itemID, itemLink, itemCount, isBattlePet = DS:GetSlotInfo(container, slotID)
+    				
+    				if (slotID <= containerSize) then 
+    					itemButton:SetItem(itemID, itemLink, rarity)
+    					itemButton:SetCount(itemCount)
+    					if isBattlePet then
+    						itemButton:SetIcon(itemID)	-- override the icon if one is returned by datastore
+    					end
+    					
+    					local startTime, duration, isEnabled = DS:GetContainerCooldownInfo(container, slotID)
+    					itemButton:SetCooldown(startTime, duration, isEnabled)
+    					itemButton:Show()
+    				else
+    					itemButton:Hide()
+    					itemButton:SetInfo(nil, nil)
+    					itemButton.startTime = nil
+    					itemButton.duration = nil
+    				end
+    			end
+            end
 			rowFrame:Show()
 		else
 			rowFrame:Hide()
