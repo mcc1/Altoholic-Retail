@@ -557,6 +557,7 @@ end
 -- *** Available Content ***
 local AvailableContentCollapsedHeaders			-- a table containing the collapsed headers (character keys)
 local AvailableContentCheckedItems				-- a table containing the items checked in the TOC (index = true)
+local AvailableContentIsHeader                  -- a table indicating whether the item at each index is a header
 
 local AvailableContentScrollFrame_Desc = {
 	NumLines = 10,
@@ -658,6 +659,7 @@ local AvailableContentScrollFrame_Desc = {
 					else
 						item:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-Up");
 					end
+                    AvailableContentIsHeader[line.parentID] = true
 					item:Show()
 				end,
 			GetDate = function(self, line)
@@ -713,6 +715,7 @@ local AvailableContentScrollFrame_Desc = {
 function Altoholic.Sharing.AvailableContent:BuildView()
 	AvailableContentCollapsedHeaders = AvailableContentCollapsedHeaders or {}
 	AvailableContentCheckedItems = AvailableContentCheckedItems or {}
+    AvailableContentIsHeader = AvailableContentIsHeader or {}
 	self.view = self.view or {}
 	wipe(self.view)
 	
@@ -802,27 +805,31 @@ function Altoholic.Sharing.AvailableContent:Check_OnClick(self, button)
     
 	if not AvailableContentCheckedItems[id] then
 		AvailableContentCheckedItems[id] = true
-        
-        -- Code added 2020/03/12: purpose is to check the parent header when a child option is checked
-        -- Since I can't find a clean way to do this, using content visible to this function, I'll do it mathematically using the id instead
-        -- If the ID is between 3 and 14, check 2
-        -- If the ID is between 17 and 28, check 16
-        -- and so on
-        -- so... remainder: x mod 14 : math.fmod(id, 14)
-        -- multiple, the padding to add: id/14 round down
-        
-        local idMultiple = math.floor(id/14)
-        local idRemainder = math.fmod(id, 14)
-        
-        if (idRemainder > 2) and (idRemainder < 15) then 
-            AvailableContentCheckedItems[(idMultiple * 14) + 2] = true
-            local content = Altoholic.Sharing.AvailableContent
-            content:BuildView()
-	        content:Update()
-        end
 	else
 		AvailableContentCheckedItems[id] = nil
+        return
 	end
+
+    if not AvailableContentIsHeader[id] then
+        for i = id, 1, -1 do
+            if AvailableContentIsHeader[i] then
+                AvailableContentCheckedItems[i] = true
+                break
+            end
+        end
+    else
+        for i = (id + 1), (id + 12) do
+            if AvailableContentIsHeader[i] then
+                break
+            else
+                AvailableContentCheckedItems[i] = true
+            end
+        end 
+    end
+    
+	local content = Altoholic.Sharing.AvailableContent
+	content:BuildView()
+	content:Update()
 end
 
 function Altoholic.Sharing.AvailableContent:ToggleAll(self, button)
@@ -994,6 +1001,10 @@ local function initialization()
     
     addon:RegisterMessage("DATASTORE_CONTAINER_CHANGES_SINGLE", OnContainerChangesSingleReceived)
     addon:RegisterComm("AltoOngoing", OngoingCommHandler)
+    
+    if not addon:GetOption("UI.Sharing.Ongoing.NumTargets") then
+        addon:SetOption("UI.Sharing.Ongoing.NumTargets", 0)
+    end
     
     updateOngoingScrollFrame()    
 end
