@@ -557,7 +557,6 @@ end
 -- *** Available Content ***
 local AvailableContentCollapsedHeaders			-- a table containing the collapsed headers (character keys)
 local AvailableContentCheckedItems				-- a table containing the items checked in the TOC (index = true)
-local AvailableContentIsHeader                  -- a table indicating whether the item at each index is a header
 
 local AvailableContentScrollFrame_Desc = {
 	NumLines = 10,
@@ -659,7 +658,6 @@ local AvailableContentScrollFrame_Desc = {
 					else
 						item:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-Up");
 					end
-                    AvailableContentIsHeader[line.parentID] = true
 					item:Show()
 				end,
 			GetDate = function(self, line)
@@ -715,7 +713,6 @@ local AvailableContentScrollFrame_Desc = {
 function Altoholic.Sharing.AvailableContent:BuildView()
 	AvailableContentCollapsedHeaders = AvailableContentCollapsedHeaders or {}
 	AvailableContentCheckedItems = AvailableContentCheckedItems or {}
-    AvailableContentIsHeader = AvailableContentIsHeader or {}
 	self.view = self.view or {}
 	wipe(self.view)
 	
@@ -954,6 +951,7 @@ local function OngoingCommHandler(prefix, message, distribution, sender)
                         for characterName, character in pairs(DataStore:GetCharacters(senderRealm, accountName)) do
                             if characterName and (string.lower(characterName) == string.lower(senderName)) then
                                 DataStore:ImportBagChanges(character, arg1)
+                                addon:SendMessage("ALTOHOLIC_CONTAINER_CHANGES_COMPLETE")
                                 return
                             end
                         end
@@ -1025,7 +1023,7 @@ function Altoholic.Sharing.Ongoing:CheckAll(self, button)
     if not numTargets then numTargets = 0 end
     
     for i = 1, numTargets do
-        _G["AltoholicFrameOngoingAltListEntry"..i.."Check"]:SetChecked(true)
+        _G["AltoholicFrameOngoingAltListEntry"..i.."Check"]:SetChecked(self:GetChecked())
     end
 end
 
@@ -1062,6 +1060,4 @@ function Altoholic.Sharing.Ongoing:ShareCheckButtonClicked(self, button)
 
     if (not characterName) or (characterName == "") then return end
     if (not realmName) or (realmName == "") then return end
-    
-    _G["AltoholicFrameOngoingAltListEntry"..entry.."Check"]:SetChecked(not _G["AltoholicFrameOngoingAltListEntry"..entry.."Check"]:GetChecked())
 end
