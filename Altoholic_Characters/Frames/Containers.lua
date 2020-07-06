@@ -318,4 +318,12 @@ local function OnBagUpdate(bag)
 	end
 end
 
+local function OnContainerChangesMessage()
+   if AltoholicFrameContainers:IsVisible() then
+      ns:UpdateCache()
+      ns:Update()
+   end
+end
+
 addon:RegisterEvent("BAG_UPDATE", OnBagUpdate)
+addon:RegisterMessage("ALTOHOLIC_CONTAINER_CHANGES_COMPLETE", OnContainerChangesMessage)
