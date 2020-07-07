@@ -310,12 +310,13 @@ local function ScanContainer(bagID, containerType)
 		if not thisGuild then return end
 	
 		originalBag = thisGuild.Tabs[bagID]	-- bag is actually the current tab
+        thisGuild.Tabs[bagID] = newBag
 	else
 		originalBag = addon.ThisCharacter.Containers["Bag" .. bagID]
         newBag.cooldowns = {}
+        addon.ThisCharacter.Containers["Bag"..bagID] = newBag
 	end
         
-    addon.ThisCharacter.Containers["Bag"..bagID] = newBag
     newBag.ids = {}
     newBag.counts = {}
     newBag.links = {}
