@@ -173,7 +173,7 @@ local callbacks = {
 			button.Background:SetDesaturated(false)
 			button.Background:SetTexCoord(0, 1, 0, 1)
 			
-			button.Background:SetTexture(GetItemIcon(currentItemID) or ICON_QUESTIONMARK)
+			button.Background:SetTexture(GetItemIcon(currentItemID) or select(3, GetSpellInfo(currentList[dataRowID])) or ICON_QUESTIONMARK)
 
 			local text = icons.notReady
 			local vc = 0.25	-- vertex color
@@ -205,10 +205,18 @@ local callbacks = {
 			button.Background:SetVertexColor(vc, vc, vc)
 			button.Name:SetText(text)
 			button.id = currentItemID
+            button.spellID = currentList[dataRowID]
 		end,
 	OnEnter = function(self) 
 			self.link = nil
-			addon:Item_OnEnter(self) 
+            if self.id then
+			    addon:Item_OnEnter(self)
+            else
+	            GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+                GameTooltip:ClearLines()
+	            GameTooltip:SetSpellByID(self.spellID)
+	            GameTooltip:Show()                
+            end 
 		end,
 	OnClick = function(self, button)
 			self.link = nil
