@@ -128,10 +128,10 @@ local function AddRealm(AccountName, RealmName)
         if (characterLevel) then
     		if (characterLevel < minLevel) then shouldAddCharacter = false end
     		if (characterLevel > maxLevel) then shouldAddCharacter = false end
-    		
-    		if (factions == 1) and (characterFaction ~= FACTION_ALLIANCE) then
+
+    		if (factions == 1) and (characterFaction ~= "Alliance") then
     			shouldAddCharacter = false
-    		elseif (factions == 2) and (characterFaction ~= FACTION_HORDE) then
+    		elseif (factions == 2) and (characterFaction ~= "Horde") then
     			shouldAddCharacter = false
     		end
     		if (class ~= 0) and CLASS_SORT_ORDER[class] ~= characterClass then shouldAddCharacter = false end
