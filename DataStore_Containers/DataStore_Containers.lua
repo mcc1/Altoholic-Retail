@@ -395,6 +395,7 @@ local function ScanBagSlotsInfo()
 	for bagID = 0, NUM_BAG_SLOTS do
 		local bag = char.Containers["Bag" .. bagID]
 		numBagSlots = numBagSlots + bag.size
+        if not bag.freeslots then bag.freeslots = 0 end
 		numFreeBagSlots = numFreeBagSlots + bag.freeslots
 	end
 	
