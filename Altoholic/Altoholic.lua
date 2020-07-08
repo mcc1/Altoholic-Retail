@@ -8,7 +8,7 @@ local addon = _G[addonName]
 local colors = addon.Colors
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
-local LCI = LibStub("LibCraftInfo-1.0")
+local LR = LibStub("LibRecipes-2.0")
 
 local THIS_ACCOUNT = "Default"
 
@@ -533,7 +533,8 @@ end
 function addon:GetSpellIDFromRecipeLink(link)
 	-- returns nil if recipe id is not in the DB, returns the spellID otherwise
 	local recipeID = addon:GetIDFromLink(link)
-	return LCI:GetRecipeLearnedSpell(recipeID)
+	local spellID = LR:GetRecipeInfo(recipeID)
+    return spellID
 end
 
 -- copied to formatter service
