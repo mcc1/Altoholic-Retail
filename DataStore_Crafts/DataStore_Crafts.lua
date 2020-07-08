@@ -560,7 +560,7 @@ local function _GetProfessionInfo(profession)
 	
 	if link and type(link) ~= "number" then
 		-- _, spellID, rank, maxRank = link:match("trade:(%w+):(%d+):(%d+):(%d+):")
-		_, spellID = link:match("trade:(%w+):(%d+)")		-- Fix 5.4, rank no longer in the profession link
+		_, spellID = link:match("trade:(.+):(%d+):")		-- Fix 5.4, rank no longer in the profession link
 	end
 	
 	return tonumber(rank) or 0, tonumber(maxRank) or 0, tonumber(spellID)
@@ -781,6 +781,35 @@ local function _GetCraftResultItem(recipeID)
 	return itemID, maxMade
 end
 
+local function _GetProfessionCraftList(professionSpellID, expansionID)
+    -- Pick the first character that has the profession, then get its crafting list including unlearned crafts
+    -- expansionID of 2 would be TBC, which is the second category from the bottom
+    local recipeIDs = {}
+    for accountName in pairs(DataStore:GetAccounts()) do
+        for realmName in pairs(DataStore:GetRealms(accountName)) do
+            for characterName, character in pairs(DataStore:GetCharacters(realm, account)) do
+                local professions = DataStore:GetProfessions(character)
+                if professions then
+                    for professionName, profession in pairs(professions) do
+                        local _,_, spellID = DataStore:GetProfessionInfo(profession)
+                        if (GetSpellInfo(spellID)) == (GetSpellInfo(professionSpellID)) then
+                            if _GetNumRecipeCategories(profession) >= EJ_GetNumTiers() then
+                                local difference = (DataStore:GetNumRecipeCategories(profession) - EJ_GetNumTiers())
+                                local categoryID = ((EJ_GetNumTiers() - expansionID) + difference + 1)
+                                _IterateRecipes(profession, categoryID, 0, function(recipeData)
+                                    local color, recipeID = DataStore:GetRecipeInfo(recipeData)
+                                    table.insert(recipeIDs, recipeID)
+                                end)
+                                return recipeIDs
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return recipeIDs
+end
 
 local PublicMethods = {
 	GetProfession = _GetProfession,
@@ -811,6 +840,7 @@ local PublicMethods = {
 	IsArtifactKnown = _IsArtifactKnown,
 	GetCraftReagents = _GetCraftReagents,
 	GetCraftResultItem = _GetCraftResultItem,
+    GetProfessionCraftList = _GetProfessionCraftList,
 }
 
 function addon:OnInitialize()
