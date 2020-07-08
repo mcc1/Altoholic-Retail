@@ -125,7 +125,7 @@ local callbacks = {
 			local currentXPack = addon:GetOption(OPTION_XPACK)
 			local currentTradeSkill = addon:GetOption(OPTION_TRADESKILL)
 			
-			currentList = LCI:GetProfessionCraftList(tradeskills[currentTradeSkill], currentXPack)
+			currentList = DataStore:GetProfessionCraftList(tradeskills[currentTradeSkill], currentXPack)
 			if not currentList.isSorted then
 				table.sort(currentList, SortByCraftLevel)
 				currentList.isSorted = true
@@ -184,7 +184,7 @@ local callbacks = {
             if tradeSkillID == 2656 then tradeSkillID = 2575 end
             local profession = DataStore:GetProfession(character, GetSpellInfo(tradeSkillID))			
             
-			if profession.Crafts then
+			if profession and profession.Crafts then
             	-- do not enable this yet .. working fine, but better if more filtering allowed. ==> filtering on rarity
 				
 				-- local _, _, itemRarity, itemLevel = GetItemInfo(currentItemID)
