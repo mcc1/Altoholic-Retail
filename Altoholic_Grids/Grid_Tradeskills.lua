@@ -3,7 +3,6 @@ local addon = _G[addonName]
 local colors = addon.Colors
 local icons = addon.Icons
 
-local LCI = LibStub("LibCraftInfo-1.0")
 local LCL = LibStub("LibCraftLevels-1.0")
 
 local ICON_QUESTIONMARK = "Interface\\RaidFrame\\ReadyCheck-Waiting"
