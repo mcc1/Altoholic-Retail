@@ -673,13 +673,14 @@ local function _GetNumRecipesByColor(profession)
 	return counts[3], counts[2], counts[1], counts[0]		-- orange, yellow, green, grey
 end
 
-local function _IsCraftKnown(profession, spellID)
+local function _IsCraftKnown(profession, spellID, rank)
+    rank = rank or 1
 	-- returns true if a given spell ID is known in the profession passed as first argument
 	local isKnown
 
 	_IterateRecipes(profession, 0, 0, function(recipeData) 
-		local _, recipeID, isLearned = _GetRecipeInfo(recipeData)
-		if recipeID == spellID and isLearned then
+		local _, recipeID, isLearned, recipeRank = _GetRecipeInfo(recipeData)
+		if (GetSpellInfo(recipeID) == GetSpellInfo(spellID)) and (tonumber(rank) <= tonumber(recipeRank)) and isLearned then
 			isKnown = true
 			return true	-- stop iteration
 		end

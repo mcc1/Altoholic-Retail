@@ -240,7 +240,7 @@ local function GetCraftNameFromRecipeLink(link)
 end
 
 local function GetRequirementsFromRecipeLink(link)
-    local expansionRequirement, specializationRequirement
+    local expansionRequirement, specializationRequirement, expansionSkillRequirement
     
     local pattern = ITEM_MIN_SKILL
     -- this pattern is setup for use in string.format, need to change it to a regular expression for use in string.match
@@ -248,12 +248,13 @@ local function GetRequirementsFromRecipeLink(link)
     -- in Deutsch, it is: ITEM_MIN_SKILL = "Benotigi %1$s (%2$d)"
     -- remove any %1s and %2s in the string
     pattern = pattern:gsub("%%%d", "")
-    -- swap the (%d) to a %(%d+%)
-    pattern = pattern:gsub("%(%%d%)", "%%%(%%d+%%%)")
+    -- swap any $s to %s
+    pattern = pattern:gsub("$", "%")
+    -- swap the (%d) to a %((%d+)%)
+    pattern = pattern:gsub("%(%%d%)", "%%%(%(%%d+%)%%%)")
     -- swap the %s to a (.+)
     pattern = pattern:gsub("%%s", "(.+)")
     -- in english, it should now look like: "Requires (.+) %(%d+%)"
-    
     -- yup, I did pattern matching on a pattern. If theres a better way to do that, let me know.
     
     local localizedGoblinEngineering = GetSpellInfo(20222)
@@ -267,7 +268,7 @@ local function GetRequirementsFromRecipeLink(link)
 		local tooltipText = _G[tooltipName .. "TextLeft" .. i]:GetText()
 		if tooltipText then
             if not expansionRequirement then
-                expansionRequirement = string.match(tooltipText, pattern)
+                expansionRequirement, expansionSkillRequirement = string.match(tooltipText, pattern)
             end
             if not specializationRequirement then
                 if string.find(tooltipText, string.format(ITEM_REQ_SKILL, localizedGoblinEngineering)) then
@@ -282,7 +283,7 @@ local function GetRequirementsFromRecipeLink(link)
 		end
 	end
     
-    return expansionRequirement, specializationRequirement
+    return expansionRequirement, specializationRequirement, expansionSkillRequirement
 end
 
 local isTooltipDone, isNodeDone			-- for informant
@@ -486,7 +487,7 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
 		return know, couldLearn, willLearn
 	end
     
-    local expansionRequirement, specializationRequirement = GetRequirementsFromRecipeLink(link)
+    local expansionRequirement, specializationRequirement, expansionSkillRequirement = GetRequirementsFromRecipeLink(link)
 
 	local profession, isKnownByChar
 	for characterName, character in pairs(DataStore:GetCharacters()) do
@@ -495,7 +496,7 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
 		isKnownByChar = nil
 		if profession then
 			if spellID then			-- if spell id is known, just find its equivalent in the professions
-				isKnownByChar = DataStore:IsCraftKnown(profession, spellID)
+				isKnownByChar = DataStore:IsCraftKnown(profession, spellID, recipeRank)
 			else
 				DataStore:IterateRecipes(profession, 0, 0, function(recipeData)
 					local _, recipeID, isLearned, knownRecipeRank, totalRanks = DataStore:GetRecipeInfo(recipeData)
@@ -525,7 +526,7 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                         -- remove the profession name from the string
                         expansionRequirement = string.gsub(expansionRequirement, professionName, "")
                         -- and trim it
-                        expansionRequirement = string.gsub(expansionRequirement, "^%s*(.-)%s*$", "%1") 
+                        expansionRequirement = strtrim(expansionRequirement) 
                         
                         -- iterate through each professions category
                         local numCategories = DataStore:GetNumRecipeCategories(charactersProfession)
