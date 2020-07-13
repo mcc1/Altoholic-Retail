@@ -17,7 +17,10 @@ local AUTH_ASK		= 2
 local AUTH_NEVER	= 3
 
 local function FirstCap(s)
-	return strupper(s:sub(1,1)) .. strlower(s:sub(2))	-- first letter in cap, the rest lowercase
+	-- return strupper(s:sub(1,1)) .. strlower(s:sub(2))	-- first letter in cap, the rest lowercase
+    -- did not work with korean characters
+    local output = s:gsub("[A-Z]", string.lower)
+    return output:gsub("^[a-z]", string.upper)
 end
 
 local function GetNumClients()
