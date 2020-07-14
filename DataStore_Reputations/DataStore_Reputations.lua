@@ -218,6 +218,7 @@ local factions = {
 	{ id = 2100, name = GetFactionInfoByID(2100) }, 	-- Corbyn
 	{ id = 2102, name = GetFactionInfoByID(2102) }, 	-- Impus
 	{ id = 2098, name = GetFactionInfoByID(2098) }, 	-- Keeper Raynae
+    { id = 2135, name = GetFactionInfoByID(2135) },     -- Chromie
 	
 	-- Battle for Azeroth
 	{ id = 2159, name = GetFactionInfoByID(2159) },		-- A  - 7th Legion
