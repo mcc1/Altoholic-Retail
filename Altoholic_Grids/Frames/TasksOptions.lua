@@ -192,26 +192,31 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
         -- Set the Encounter Journal to be checking that expansion                                             
         EJ_SelectTier(expansionID)
         
+        -- Ignore the world boss categories
+        local instanceIDsToIgnore = {["322"] = true, ["557"] = true, ["822"] = true, ["1028"] = true}
+        
         -- Pull all the raid names for that expansion out of the Encounter Journal
         local index = 1
         local instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, true)
         while instanceID do
-            EJ_SelectInstance(instanceID)
-            local info = UIDropDownMenu_CreateInfo()
-            info.arg1 = instanceID
-            info.func = TaskTargetDropdown_SetSelectedDungeon
-            if expansionID == 1 then
-                -- Classic doesn't handle difficultyIDs properly, making a special case for them
-                info.text = name
-                info.arg2 = "classic"
-                UIDropDownMenu_AddButton(info)
-            else
-                for _, difficultyID in pairs(raidDifficultyIDs) do
-                    if EJ_IsValidInstanceDifficulty(difficultyID) then
-                        local difficultyName = GetDifficultyInfo(difficultyID)
-                        info.text = name.." "..difficultyName
-                        info.arg2 = difficultyName
-                        UIDropDownMenu_AddButton(info)
+            if not instanceIDsToIgnore[tostring(instanceID)] then
+                EJ_SelectInstance(instanceID)
+                local info = UIDropDownMenu_CreateInfo()
+                info.arg1 = instanceID
+                info.func = TaskTargetDropdown_SetSelectedDungeon
+                if expansionID == 1 then
+                    -- Classic doesn't handle difficultyIDs properly, making a special case for them
+                    info.text = name
+                    info.arg2 = "classic"
+                    UIDropDownMenu_AddButton(info)
+                else
+                    for _, difficultyID in pairs(raidDifficultyIDs) do
+                        if EJ_IsValidInstanceDifficulty(difficultyID) then
+                            local difficultyName = GetDifficultyInfo(difficultyID)
+                            info.text = name.." "..difficultyName
+                            info.arg2 = difficultyName
+                            UIDropDownMenu_AddButton(info)
+                        end
                     end
                 end
             end
@@ -290,25 +295,30 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
         -- Set the Encounter Journal to be checking that expansion                                             
         EJ_SelectTier(expansionID)
 
+        -- Ignore the world boss categories
+        local instanceIDsToIgnore = {["322"] = true, ["557"] = true, ["822"] = true, ["1028"] = true}
+
         if level == 1 then    
             -- Pull all the raid names for that expansion out of the Encounter Journal
             local index = 1
             local instanceID, name, description, bgImage, buttonImage1, loreImage, buttonImage2, dungeonAreaMapID, link, shouldDisplayDifficulty = EJ_GetInstanceByIndex(index, true)
             while instanceID do
-                EJ_SelectInstance(instanceID)
-                local info = UIDropDownMenu_CreateInfo()
-                info.hasArrow = true
-                if expansionID == 1 then
-                    info.text = name
-                    info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = "classic" }
-                    UIDropDownMenu_AddButton(info)
-                else
-                    for _, difficultyID in pairs(raidDifficultyIDs) do
-                        if EJ_IsValidInstanceDifficulty(difficultyID) then
-                            local difficultyName = GetDifficultyInfo(difficultyID)
-                            info.text = name.." "..difficultyName
-                            info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = difficultyName }
-                            UIDropDownMenu_AddButton(info)
+                if not instanceIDsToIgnore[tostring(instanceID)] then
+                    EJ_SelectInstance(instanceID)
+                    local info = UIDropDownMenu_CreateInfo()
+                    info.hasArrow = true
+                    if expansionID == 1 then
+                        info.text = name
+                        info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = "classic" }
+                        UIDropDownMenu_AddButton(info)
+                    else
+                        for _, difficultyID in pairs(raidDifficultyIDs) do
+                            if EJ_IsValidInstanceDifficulty(difficultyID) then
+                                local difficultyName = GetDifficultyInfo(difficultyID)
+                                info.text = name.." "..difficultyName
+                                info.menuList = { ["instanceID"] = instanceID, ["difficulty"] = difficultyName }
+                                UIDropDownMenu_AddButton(info)
+                            end
                         end
                     end
                 end
