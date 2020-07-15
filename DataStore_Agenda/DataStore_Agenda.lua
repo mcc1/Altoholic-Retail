@@ -35,6 +35,7 @@ local AddonDB_Defaults = {
 				ItemCooldowns = {},	-- mysterious egg, disgusting jar, etc..
 				LFGDungeons = {},		-- info about LFG dungeons/raids
 				ChallengeMode = {},	-- info about mythic+
+                WorldBosses = {},
 								
 				Notes = {},
 				Tasks = {},
@@ -120,6 +121,25 @@ local function ScanDungeonIDs()
                 local bossName, _, isKilled = GetSavedInstanceEncounterInfo(i, j)
                 dungeonBosses[key][bossName] = isKilled
             end
+		end
+	end
+    
+    local worldBosses = addon.ThisCharacter.WorldBosses
+    wipe(worldBosses)
+    for i = 1, GetNumSavedWorldBosses() do
+        local instanceName, instanceID, instanceReset = GetSavedWorldBossInfo(i)
+
+		if instanceReset > 0 then
+			local extended = 0
+			local isRaid = 1
+
+			local key = instanceName.. "|" .. instanceID
+			dungeons[key] = format("%s|%s|%s|%s|%s|%s", instanceReset, time(), extended, isRaid, 1, 1 )
+            
+            dungeonBosses[key] = {}
+            dungeonBosses[key][instanceName] = isKilled
+            
+            worldBosses[key] = instanceReset
 		end
 	end
 end
@@ -413,6 +433,13 @@ local function _DeleteSavedInstance(character, key)
 	character.DungeonIDs[key] = nil
 end
 
+-- allows iterations like:
+-- for bossKey, resetTime in pairs(DataStore:GetSavedWorldBosses(character)) do
+-- local bossName, bossID = strsplit("|", bossKey)
+local function _GetSavedWorldBosses(character)
+    return character.WorldBosses
+end
+
 -- * LFG Dungeons *
 local function _IsBossAlreadyLooted(character, dungeonID, boss)
 	local key = format("%s.%s", dungeonID, boss)
@@ -603,6 +630,7 @@ local function ClearExpiredDungeons()
 	-- at this point, we may reset
 	for key, character in pairs(addon.db.global.Characters) do
 		wipe(character.LFGDungeons)
+        wipe(character.WorldBosses)
 	end
 	
 	-- finally, set the next reset day
@@ -618,6 +646,7 @@ local PublicMethods = {
 	GetSavedInstanceInfo = _GetSavedInstanceInfo,
 	HasSavedInstanceExpired = _HasSavedInstanceExpired,
 	DeleteSavedInstance = _DeleteSavedInstance,
+    GetSavedWorldBosses = _GetSavedWorldBosses,
 
 	IsBossAlreadyLooted = _IsBossAlreadyLooted,
 	GetLFGDungeonKillCount = _GetLFGDungeonKillCount,
@@ -646,6 +675,7 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("DeleteSavedInstance")
 	DataStore:SetCharacterBasedMethod("IsBossAlreadyLooted")
 	DataStore:SetCharacterBasedMethod("GetLFGDungeonKillCount")
+    DataStore:SetCharacterBasedMethod("GetSavedWorldBosses")
 
 	DataStore:SetCharacterBasedMethod("GetNumCalendarEvents")
 	DataStore:SetCharacterBasedMethod("GetCalendarEventInfo")
