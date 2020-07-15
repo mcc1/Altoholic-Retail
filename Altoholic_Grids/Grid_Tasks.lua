@@ -185,6 +185,16 @@ local function isTaskComplete(taskID, character)
         end
         return false
     end
+    
+    if task.Category == "World Boss" then
+        for bossKey, bossReset in pairs(DataStore:GetSavedWorldBosses(character)) do
+            local bossName, bossID = strsplit("|", bossKey)
+            if bossName == task.Target then
+                return true
+            end
+        end
+        return false
+    end
 end
 
 local function OnDropDownClicked(self)

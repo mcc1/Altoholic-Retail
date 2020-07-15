@@ -113,6 +113,12 @@ local function TaskTargetDropdown_SetSelectedProfessionCooldown(self, cooldownNa
     currentTask.Target = cooldownName
 end
 
+local function TaskTargetDropdown_SetSelectedWorldBoss(self, bossID, bossName)
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, bossName)
+    
+    currentTask.Target = bossName
+end
+
 local raidDifficultyIDs = {
     3, -- 10p normal
     4, -- 25p normal
@@ -375,6 +381,24 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             print("Altoholic: The Profession Cooldown dropdown will only list cooldowns you actually have on cooldown on the character you are currently playing.")
         end
     end
+    
+    if category == "World Boss" then
+        local a = false
+        for bossKey, bossReset in pairs(DataStore:GetSavedWorldBosses(DataStore:GetCharacter())) do
+            local bossName, bossID = strsplit("|", bossKey)
+            a = true
+            local info = UIDropDownMenu_CreateInfo()
+            info.text = bossName
+            info.func = TaskTargetDropdown_SetSelectedWorldBoss
+            info.arg1 = bossID
+            info.arg2 = bossName
+            UIDropDownMenu_AddButton(info)
+        end
+        
+        if not a then
+            print("Altoholic: The World Bosses dropdown will only list bosses you have actually killed this week on the character you are currently playing.")
+        end
+    end
 end
 
 -- Converts the targetID to its associated string, based on the category
@@ -404,7 +428,9 @@ local function getCurrentTargetName()
         return targetID["creatureName"]
     end
     
-    AltoholicTabGrids:Update()        
+    if category == "World Boss" then
+        return targetID
+    end        
 end
 
 -- ==============================
@@ -451,9 +477,9 @@ local function TaskTypeDropdown_SetSelected(self, categoryName)
     -- Save the selected category
     currentTask.Category = categoryName
     
-    -- Daily Quests and Profession Cooldowns don't need an expansion. 
+    -- Daily Quests, Profession Cooldowns, and World Bosses don't need an expansion. 
     -- So, clear the expansion, disable it, and enable the target dropdown
-    if (categoryName == "Daily Quest") or (categoryName == "Profession Cooldown") then
+    if (categoryName == "Daily Quest") or (categoryName == "Profession Cooldown") or (categoryName == "World Boss") then
         UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
         UIDropDownMenu_SetText(AltoTasksOptions_TaskExpansionDropdown, "")
         currentTask.Expansion = nil
@@ -476,7 +502,7 @@ end
 local function TaskTypeDropdown_Opened(frame, level, menuList)
     local currentTaskType = currentTask.Category
     
-    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown"}
+    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "World Boss"}
     
     for _, category in pairs(categories) do
         local info = UIDropDownMenu_CreateInfo()
@@ -533,7 +559,7 @@ local function TaskNameDropdown_SetSelected(self, id)
 
     -- Target Dropdown should only be enabled if there is a category and expansion selected
     -- OR the selected category is a category that doesn't require an expansion
-    if currentTask.Category and ((currentTask.Category == "Daily Quest") or (currentTask.Category == "Profession Cooldown")) then 
+    if currentTask.Category and ((currentTask.Category == "Daily Quest") or (currentTask.Category == "Profession Cooldown") or currentTask.Category == "World Boss") then 
         UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
         UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)
     elseif currentTask.Category and currentTask.Expansion then
