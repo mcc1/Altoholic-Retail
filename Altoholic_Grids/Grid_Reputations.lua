@@ -231,6 +231,7 @@ local Factions = {
 			{ name = DataStore:GetFactionName(2045), icon = "achievement_faction_legionfall" },			-- Armies of Legionfall
 			{ name = DataStore:GetFactionName(2165), icon = "achievement_admiral_of_the_light" },			-- Army of the Light
 			{ name = DataStore:GetFactionName(2170), icon = "achievement_master_of_argussian_reach" },			-- Argussian Reach
+            { name = DataStore:GetFactionName(2135), icon = "achievement_reputation_wyrmresttemple" },          -- Chromie
 		},		
 		{ -- [2]
 			name = L["Fishing Masters"],
@@ -241,7 +242,6 @@ local Factions = {
 			{ name = DataStore:GetFactionName(2100), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Corbyn
 			{ name = DataStore:GetFactionName(2102), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Impus
 			{ name = DataStore:GetFactionName(2098), icon = "achievement_profession_fishing_oldmanbarlowned" }, -- Keeper Raynae
-            { name = DataStore:GetFactionName(2135), icon = "achievement_reputation_wyrmresttemple" },          -- Chromie
 		},
 	},
 	{	-- [8]
