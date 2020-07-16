@@ -28,7 +28,7 @@
 				<FontString parentKey="TextView" inherits="GameFontNormalSmall" justifyH="LEFT" text="GUILD_ROSTER_VIEW" hidden="true">
 					<Size x="60" y="18" />
 					<Anchors>
-						<Anchor point="LEFT" relativeTo="AltoholicFrameSearchLabel" relativePoint="RIGHT" x="60" y="-5" />
+						<Anchor point="LEFT" relativeTo="AltoholicFrameSearchLabel" relativePoint="RIGHT" x="0" y="-5" />
 					</Anchors>
 					<Color r="255" g="255" b="255" />
 				</FontString>
@@ -48,8 +48,9 @@
 				</Anchors>
 			</Frame>
 			<Frame parentKey="SelectRealm" inherits="AltoRealmPickerTemplate">
+            	<Size x="100" y="32" />
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.Label1" relativePoint="BOTTOMLEFT" x="-25" y="-2" />
+					<Anchor point="TOPLEFT" relativeKey="$parent.Label1" relativePoint="BOTTOMLEFT" x="-30" y="-2" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="menuWidth" value="120" type="number" />

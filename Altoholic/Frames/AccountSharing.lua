@@ -1028,7 +1028,7 @@ local function initialization()
     AltoAccountSharingOngoingText3:SetText("Realm")
     AltoAccountSharingOngoingText4:SetText("Delete")
     AltoAccountSharingOngoingText5:SetText("Realm (no spaces)")
-    AltoAccountSharingTab2_RealmNameEditBox:SetText(GetNormalizedRealmName())
+    AltoAccountSharingOngoingTab_RealmNameEditBox:SetText(GetNormalizedRealmName())
     
     addon:RegisterMessage("DATASTORE_CONTAINER_CHANGES_SINGLE", OnContainerChangesSingleReceived)
     addon:RegisterComm("AltoOngoing", OngoingCommHandler)

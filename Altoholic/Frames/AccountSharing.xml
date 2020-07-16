@@ -524,13 +524,13 @@
 	</Frame>
     
     <!-- moved from Altoholic.xml, the account sharing frame -->     
-<Frame name="AltoAccountSharing" toplevel="true" parent="UIParent" hidden="true">
+    <Frame name="AltoAccountSharing" toplevel="true" parent="UIParent" hidden="true">
 		<Size x="800" y="300" />
 		<Anchors>
 			<Anchor point="CENTER" x="0" y="20" />
 		</Anchors>
         <Frames>
-            <Frame name="AltoAccountSharingTab1" parent="AltoAccountSharing">
+            <Frame name="AltoAccountSharingEntireDatabaseTab" parent="AltoAccountSharing">
             	<Size x="800" y="300" />
 		        <Anchors>
 			         <Anchor point="TOPLEFT"/>
@@ -729,7 +729,7 @@
                 </Frames>
             </Frame> <!-- end of tab1 -->
 
-            <Frame name="AltoAccountSharingTab2" parent="AltoAccountSharing" hidden="true">
+            <Frame name="AltoAccountSharingOngoingTab" parent="AltoAccountSharing" hidden="true">
             	<Size x="800" y="300" />
 		        <Anchors>
 			         <Anchor point="TOPLEFT"/>
@@ -842,7 +842,7 @@
                 </Frames>
             </Frame>
 
-            <Button name="$parentTab1Button" inherits="AltoTabTemplate" id="1">
+            <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" id="1">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="15" y="11" />
 				</Anchors>
@@ -854,14 +854,15 @@
                         self:SetText(self.context)
                     </OnLoad>
                     <OnClick>
-                        AltoAccountSharingTab2:Hide()
-                        AltoAccountSharingTab1:Show()
+                        PanelTemplates_SetTab(AltoAccountSharing, 1);
+                        AltoAccountSharingOngoingTab:Hide()
+                        AltoAccountSharingEntireDatabaseTab:Show()
                     </OnClick>
                 </Scripts>
 			</Button>
-			<Button name="$parentTab2Button" inherits="AltoTabTemplate" id="2">
+			<Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" id="2">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentTab1Button" relativePoint="TOPRIGHT" x="-8" y="0" />
+					<Anchor point="TOPLEFT" relativeTo="$parentTab1" relativePoint="TOPRIGHT" x="-8" y="0" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="context" value="Ongoing" />
@@ -871,12 +872,19 @@
                         self:SetText(self.context)
                     </OnLoad>
                     <OnClick>
-                        AltoAccountSharingTab1:Hide()
-                        AltoAccountSharingTab2:Show()
+                        PanelTemplates_SetTab(AltoAccountSharing, 2);
+                        AltoAccountSharingEntireDatabaseTab:Hide()
+                        AltoAccountSharingOngoingTab:Show()
                     </OnClick>
                 </Scripts>                
 			</Button>
 		</Frames>
+        <Scripts>
+            <OnLoad>
+                PanelTemplates_SetNumTabs(AltoAccountSharing, 2);
+                PanelTemplates_SetTab(AltoAccountSharing, 1);
+            </OnLoad>
+        </Scripts>
 	</Frame>
         
 	<!--	Account Sharing / Available content	-->
@@ -1024,7 +1032,7 @@
 		</Frames>
 	</Button>
 
-	<Frame name="AltoholicFrameAvailableContent" parent="AltoAccountSharingTab1">
+	<Frame name="AltoholicFrameAvailableContent" parent="AltoAccountSharingEntireDatabaseTab">
 		<Size>
 			<AbsDimension x="450" y="240"/>
 		</Size>
@@ -1193,7 +1201,7 @@
 		</Frames>
 	</Frame>
 	
-	<Frame name="AltoholicFrameOngoingAltList" parent="AltoAccountSharingTab2">
+	<Frame name="AltoholicFrameOngoingAltList" parent="AltoAccountSharingOngoingTab">
 		<Size>
 			<AbsDimension x="450" y="240"/>
 		</Size>

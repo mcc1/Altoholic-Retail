@@ -48,46 +48,7 @@ end
 					<KeyValue key="context" value="Characters" />
 				</KeyValues>
 			</Button>
-            <Button name="$parentTab3" inherits="AltoTabTemplate" id="3" text="SEARCH">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentTab2" relativePoint="TOPRIGHT" x="-8" y="0" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="context" value="Search" />
-				</KeyValues>
-			</Button>
-			<Button name="$parentTab4" inherits="AltoTabTemplate" id="4" text="GUILD">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentTab3" relativePoint="TOPRIGHT" x="-8" y="0" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="context" value="Guild" />
-				</KeyValues>
-			</Button>
-			<Button name="$parentTab5" inherits="AltoTabTemplate" id="5" text="ACHIEVEMENT_BUTTON">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentTab4" relativePoint="TOPRIGHT" x="-8" y="0" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="context" value="Achievements" />
-				</KeyValues>
-			</Button>
-			<Button name="$parentTab6" inherits="AltoTabTemplate" id="6">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentTab5" relativePoint="TOPRIGHT" x="-8" y="0" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="context" value="Agenda" />
-				</KeyValues>
-			</Button>
-			<Button name="$parentTab7" inherits="AltoTabTemplate" id="7">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentTab6" relativePoint="TOPRIGHT" x="-8" y="0" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="context" value="Grids" />
-				</KeyValues>
-			</Button>
+    (and so on)
 --]]
 
 local function applyDefaultTabNameSorting()
