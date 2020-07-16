@@ -236,6 +236,7 @@ local factions = {
 	{ id = 2391, name = GetFactionInfoByID(2391) },		-- Rustbolt Resistance
 	{ id = 2415, name = GetFactionInfoByID(2415) },		-- 8.3 Rajani
 	{ id = 2417, name = GetFactionInfoByID(2417) },		-- 8.3 Uldum Accord
+    { id = 2395, name = GetFactionInfoByID(2395) },
  
 }
 

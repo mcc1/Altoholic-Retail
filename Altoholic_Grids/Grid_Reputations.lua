@@ -253,6 +253,7 @@ local Factions = {
 			{ name = DataStore:GetFactionName(2161), icon = "Inv_tabard_orderoftheembers" },
 			{ name = DataStore:GetFactionName(2162), icon = "Inv_tabard_stormswake" },
             { name = DataStore:GetFactionName(2400), icon = "inv_faction_akoan" },
+            { name = DataStore:GetFactionName(2395) or "Honeyback Hive", icon = "inv_bee_default"}
 		},
 		{	-- [2]
 			name = FACTION_HORDE,
