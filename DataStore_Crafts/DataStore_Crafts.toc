@@ -7,6 +7,7 @@
 ## OptionalDeps: Ace3
 ## SavedVariables: DataStore_CraftsDB, DataStore_CraftsRefDB
 ## X-Category: Interface Enhancements
+## X-Curse-Project-ID: 384785
 
 locale.xml
 

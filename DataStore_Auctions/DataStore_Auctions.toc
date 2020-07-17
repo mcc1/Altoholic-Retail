@@ -8,6 +8,7 @@
 ## SavedVariables: DataStore_AuctionsDB
 ## X-Category: Interface Enhancements
 ## X-Embeds: Ace3
+## X-Curse-Project-ID: 384785
 
 locale.xml
 

@@ -8,5 +8,6 @@
 ## SavedVariables: DataStore_TalentsDB, DataStore_TalentsRefDB
 ## X-Category: Interface Enhancements
 ## X-Embeds: Ace3
+## X-Curse-Project-ID: 384785
 
 DataStore_Talents.lua

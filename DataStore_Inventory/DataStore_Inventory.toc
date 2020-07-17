@@ -8,6 +8,7 @@
 ## SavedVariables: DataStore_InventoryDB
 ## X-Category: Interface Enhancements
 ## X-Embeds: Ace3
+## X-Curse-Project-ID: 384785
 
 embeds.xml
 locale.xml

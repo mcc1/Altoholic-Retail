@@ -8,6 +8,7 @@
 ## SavedVariables: DataStore_PetsDB
 ## X-Category: Interface Enhancements
 ## X-Embeds: Ace3
+## X-Curse-Project-ID: 384785
 
 DataStore_Pets.lua
 Data\CompanionList.lua

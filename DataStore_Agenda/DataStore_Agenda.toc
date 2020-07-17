@@ -8,5 +8,6 @@
 ## SavedVariables: DataStore_AgendaDB
 ## X-Category: Interface Enhancements
 ## X-Embeds: Ace3
+## X-Curse-Project-ID: 384785
 
 DataStore_Agenda.lua
