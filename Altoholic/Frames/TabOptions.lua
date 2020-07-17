@@ -338,6 +338,7 @@ function addon:SetupOptions()
 	f.ShowGuildBankCount.Text:SetText(L["Show guild bank count"])
 	f.IncludeGuildBankInTotal.Text:SetText(L["Include guild bank count in the total count"])
 	f.ShowGuildBankCountPerTab.Text:SetText(L["Detailed guild bank count"])
+    f.HideHearthstoneCounters.Text:SetText("Hide counters for Hearthstones")
 	L["Show item source"] = nil
 	L["Show item count per character"] = nil
 	L["Show item count without details"] = nil
@@ -431,6 +432,7 @@ function addon:RestoreOptionsToUI()
 	f.ShowGuildBankCount:SetChecked(O["UI.Tooltip.ShowGuildBankCount"])
 	f.IncludeGuildBankInTotal:SetChecked(O["UI.Tooltip.IncludeGuildBankInTotal"])
 	f.ShowGuildBankCountPerTab:SetChecked(O["UI.Tooltip.ShowGuildBankCountPerTab"])
+    f.HideHearthstoneCounters:SetChecked(O["UI.Tooltip.HideHearthstoneCounters"])
 	
 	f = AltoholicCalendarOptions
 	f.WeekStartsOnMonday:SetChecked(O["UI.Calendar.WeekStartsOnMonday"])

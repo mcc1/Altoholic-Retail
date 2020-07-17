@@ -500,7 +500,8 @@ local callbacks = {
 	RowSetup = function(self, rowFrame, dataRowID)
 			currentFaction = view[dataRowID]
 
-			rowFrame.Name.Text:SetText(colors.white .. currentFaction.name)
+			if not currentFaction.name then return end
+            rowFrame.Name.Text:SetText(colors.white .. currentFaction.name)
 			rowFrame.Name.Text:SetJustifyH("LEFT")
 		end,
 	RowOnEnter = function()	end,

@@ -9,6 +9,13 @@ local THIS_REALM = GetRealmName()
 
 local storedLink = nil
 
+local HearthstoneBlacklist = {
+    [71634] = true, -- Darkmoon Adventurer's Guide
+    [6948] = true, -- Hearthstone
+    [110560] = true, -- Garrison Hearthstone
+    [140192] = true, -- Dalaran Hearthstone
+}
+
 local GatheringNodes = {
 
 	-- Mining nodes
@@ -716,6 +723,8 @@ local function ProcessTooltip(tooltip, link)
 			end
 		end
 	end
+    
+    if HearthstoneBlacklist[itemID] then return end
 	 
 	if (itemID == 0) then return end
 	-- if there's no cached item id OR if it's different from the previous one ..
