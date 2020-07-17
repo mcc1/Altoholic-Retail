@@ -4,8 +4,8 @@ _G[addonName] = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "A
 
 local addon = _G[addonName]
 
-addon.Version = "v8.3.018"
-addon.VersionNum = 803018
+addon.Version = "v8.3.020"
+addon.VersionNum = 803020
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local commPrefix = addonName
@@ -148,6 +148,7 @@ local AddonDB_Defaults = {
 			["UI.Tooltip.ShowGuildBankCount"] = true,				-- display guild bank counters
 			["UI.Tooltip.IncludeGuildBankInTotal"] = true,		-- total count = alts + guildbank (1) or alts only (0)
 			["UI.Tooltip.ShowGuildBankCountPerTab"] = false,	-- guild count = guild:count or guild (tab 1: x, tab2: y ..)
+            ["UI.Tooltip.HideHearthstoneCounters"] = false,
 			
 			-- ** Mail options **
 			["UI.Mail.GuildMailWarning"] = true,					-- be informed when a guildie sends a mail to one of my alts
