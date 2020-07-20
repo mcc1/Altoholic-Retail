@@ -1,4 +1,4 @@
-## Interface: 80300
+## Interface: 90000
 ## Title: DataStore_Keystones
 ## Notes: Stores information about Mythic+ Keystones
 ## Author: Teelo (US-Jubei'thos)
