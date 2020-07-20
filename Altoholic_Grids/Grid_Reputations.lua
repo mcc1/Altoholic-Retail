@@ -314,9 +314,17 @@ local function BuildView()
 	local currentFactionGroup = addon:GetOption(OPTION_FACTION)
 
 	if (currentXPack ~= CAT_ALLINONE) then
-		for index, faction in ipairs(Factions[currentXPack][currentFactionGroup]) do
-			table.insert(view, faction)	-- insert the table pointer
-		end
+        if currentFactionGroup then
+		    for index, faction in ipairs(Factions[currentXPack][currentFactionGroup]) do
+			    table.insert(view, faction)	-- insert the table pointer
+		    end
+        else
+            for k, v in ipairs(Factions[currentXPack]) do
+                for index, faction in ipairs(v) do
+                    table.insert(view, faction)
+                end
+            end
+        end
 	else	-- all in one, add all factions
 		for xPackIndex, xpack in ipairs(Factions) do		-- all xpacks
 			for factionGroupIndex, factionGroup in ipairs(xpack) do 	-- all faction groups
@@ -370,7 +378,12 @@ local function OnFactionChange(self, xpackIndex, factionGroupIndex)
 	addon:SetOption(OPTION_XPACK, xpackIndex)
 	addon:SetOption(OPTION_FACTION, factionGroupIndex)
 		
-	local factionGroup = Factions[xpackIndex][factionGroupIndex]
+	local factionGroup
+    if factionGroupIndex then
+        factionGroup = Factions[xpackIndex][factionGroupIndex]
+    else
+        factionGroup = Factions[xpackIndex]
+    end
 	currentDDMText = factionGroup.name
 	AltoholicTabGrids:SetViewDDMText(currentDDMText)
 	
@@ -426,6 +439,9 @@ local function DropDown_Initialize(frame, level)
 			info.hasArrow = 1
 			info.checked = (currentXPack == xpackIndex)
 			info.value = xpackIndex
+            info.arg1 = xpackIndex
+            info.arg2 = nil
+            info.func = OnFactionChange
 			frame:AddButtonInfo(info, level)
 		end
 		
@@ -492,8 +508,10 @@ local callbacks = {
 				AltoholicTabGrids:SetStatus(GUILD)
 			elseif (currentXPack == CAT_ALLINONE) then
 				AltoholicTabGrids:SetStatus(L["All-in-one"])
-			else
+			elseif (currentFactionGroup) then
 				AltoholicTabGrids:SetStatus(format("%s / %s", Factions[currentXPack].name, Factions[currentXPack][currentFactionGroup].name))
+            else
+                AltoholicTabGrids:SetStatus(format("%s / %s", Factions[currentXPack].name, Factions[currentXPack].name))
 			end
 		end,
 	GetSize = function() return #view end,
