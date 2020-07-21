@@ -350,7 +350,7 @@ local function ScanQuests()
 			value = value + LShift((info.groupSize == 0) and 1 or 0, 6)		-- bit 6 : isSolo
 			-- bit 7 : unused, reserved
 
-			value = value + LShift(info.groupSize, 8)							-- bits 8-10 : groupSize, 3 bits, shouldn't exceed 5
+			value = value + LShift(info.suggestedGroup, 8)							-- bits 8-10 : groupSize, 3 bits, shouldn't exceed 5
 			value = value + LShift(lastHeaderIndex, 11)					-- bits 11-15 : index of the header (zone) to which this quest belongs
 			value = value + LShift(info.level, 16)								-- bits 16-23 : level
 			-- value = value + LShift(GetQuestLogRewardMoney(), 24)		-- bits 24+ : money
@@ -392,7 +392,7 @@ local function ScanQuests()
         end
         -- if the current character has completed the quest already, then C_TaskQuest.GetQuestTimeLeftMinutes(questID) will return nil, so we can't give an accurate time remaining
         local timeRemaining = C_TaskQuest.GetQuestTimeLeftMinutes(questID)
-        if not IsQuestFlaggedCompleted(questID) then
+        if not C_QuestLog.IsQuestFlaggedCompleted(questID) then
             savedRegularZoneQuests[questID] = format("%d|%d|%s|%d|%s", timeRemaining, numRequired, objective or "", time(), C_TaskQuest.GetQuestInfoByQuestID(questID))
         end
         char.RegularZoneQuests[questID] = {["numFulfilled"] = numFulfilled}    
