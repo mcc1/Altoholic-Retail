@@ -62,7 +62,8 @@ local function SaveHeaders()
 	headerCount = 0		-- use a counter to avoid being bound to header names, which might not be unique.
 	
 	for i = C_CurrencyInfo.GetCurrencyListSize(), 1, -1 do		-- 1st pass, expand all categories
-		local _, isHeader, isExpanded = C_CurrencyInfo.GetCurrencyListInfo(i)
+        local info = C_CurrencyInfo.GetCurrencyListInfo(i)
+		local isHeader, isExpanded = info.isHeader, info.isHeaderExpanded
 		if isHeader then
 			headerCount = headerCount + 1
 			if not isExpanded then
@@ -76,7 +77,7 @@ end
 local function RestoreHeaders()
 	headerCount = 0
 	for i = C_CurrencyInfo.GetCurrencyListSize(), 1, -1 do
-		local _, isHeader = C_CurrencyInfo.GetCurrencyListInfo(i)
+		local isHeader = C_CurrencyInfo.GetCurrencyListInfo(i).isHeader
 		if isHeader then
 			headerCount = headerCount + 1
 			if headersState[headerCount] then
@@ -116,21 +117,13 @@ local function ScanCurrencies()
 	
 	
 	for i = 1, C_CurrencyInfo.GetCurrencyListSize() do
-		local name, isHeader, _, _, _, count, icon = C_CurrencyInfo.GetCurrencyListInfo(i)
+        local info = C_CurrencyInfo.GetCurrencyListInfo(i)
+		local name, isHeader, count, icon = info.name, info.isHeader, info.quantity, info.iconFileID
 		
 		if not ref.CurrencyTextRev[name] then		-- currency does not exist yet in our reference table
 			table.insert(ref.Currencies, format("%s|%s", name, icon or "") )			-- ex; [3] = "PVP"
 			ref.CurrencyTextRev[name] = #ref.Currencies		-- ["PVP"] = 3
 		end
-
-        -- Update 2020/03/28: This is the old system
-        -- It was stored as a number directly under: Currencies[index] = number
-        -- bit 0 : isHeader
-		-- bits 1-6 : index in the reference table (up to 64 values, should leave room for some time)
-		-- bits 7- : count
-        --
-        -- Now, this is the new system:
-        -- Currencies[index] = { isHeader = false, index = 1, count = 400 }
 		
 		if isHeader then
 			count = 0
