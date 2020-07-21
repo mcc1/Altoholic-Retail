@@ -224,7 +224,7 @@ end
 
 local function RestoreHeaders()
 	local headerCount = 0
-	for i = GetNumQuestLogEntries(), 1, -1 do
+	for i = C_QuestLog.GetNumQuestLogEntries(), 1, -1 do
 		local isHeader = C_QuestLog.GetInfo(i).isHeader
 		if isHeader then
 			headerCount = headerCount + 1
