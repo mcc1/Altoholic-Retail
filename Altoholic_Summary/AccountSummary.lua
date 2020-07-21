@@ -4,6 +4,7 @@ local colors = addon.Colors
 local icons = addon.Icons
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
+local LCC = LibStub("LibCraftCategories-1.0")
 
 local MODE_SUMMARY = 1
 local MODE_BAGS = 2
@@ -1045,11 +1046,21 @@ for profIndex = 1, 2 do
     			local rank, maxRank, _, name = DataStore["GetProfession"..profIndex](DataStore, character)
                 
                 if professionExpansion > 0 then
+                    local found = false
                     local profession = DataStore:GetProfession(character, name)
-                    if profession and (DataStore:GetNumRecipeCategories(profession) >= EJ_GetNumTiers()) then
-                        -- For whatever reason, there are "padding" categories at the start of the list that we need to skip past
-                        local difference = (DataStore:GetNumRecipeCategories(profession) - EJ_GetNumTiers())
-                        _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + difference + 1)
+                    if profession then
+                        for i = 1, DataStore:GetNumRecipeCategories(profession) do
+                            _, categoryName, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, i)
+                            if LCC.categoryNameToExpansionID(categoryName) == professionExpansion then
+                                found = true
+                                break
+                            end
+                        end
+                    end
+                    -- player hasn't learned this category yet
+                    if not found then
+                        rank = 0
+                        maxRank = 0
                     end
                 end
                 
@@ -1103,11 +1114,21 @@ columns["ProfCooking"] = {
             local name = GetSpellInfo(2550)
             
             if professionExpansion > 0 then
+                local found = false
                 local profession = DataStore:GetProfession(character, name)
-                if profession and (DataStore:GetNumRecipeCategories(profession) >= EJ_GetNumTiers()) then
-                    -- For whatever reason, there are "padding" categories at the start of the list that we need to skip past
-                    local difference = (DataStore:GetNumRecipeCategories(profession) - EJ_GetNumTiers())
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + difference + 1)
+                if profession then
+                    for i = 1, DataStore:GetNumRecipeCategories(profession) do
+                        _, categoryName, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, i)
+                        if LCC.categoryNameToExpansionID(categoryName) == professionExpansion then
+                            found = true
+                            break
+                        end
+                    end
+                end
+                -- player hasn't learned this category yet
+                if not found then
+                    rank = 0
+                    maxRank = 0
                 end
             end
             
@@ -1156,11 +1177,21 @@ columns["ProfFishing"] = {
             local name = GetSpellInfo(131474)
             
             if professionExpansion > 0 then
+                local found = false
                 local profession = DataStore:GetProfession(character, name)
-                if profession and (DataStore:GetNumRecipeCategories(profession) >= EJ_GetNumTiers()) then
-                    -- For whatever reason, there are "padding" categories at the start of the list that we need to skip past
-                    local difference = (DataStore:GetNumRecipeCategories(profession) - EJ_GetNumTiers())
-                    _, _, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, (EJ_GetNumTiers() - professionExpansion) + difference + 1)
+                if profession then
+                    for i = 1, DataStore:GetNumRecipeCategories(profession) do
+                        _, categoryName, rank, maxRank = DataStore:GetRecipeCategoryInfo(profession, i)
+                        if LCC.categoryNameToExpansionID(categoryName) == professionExpansion then
+                            found = true
+                            break
+                        end
+                    end
+                end
+                -- player hasn't learned this category yet
+                if not found then
+                    rank = 0
+                    maxRank = 0
                 end
             end
             
