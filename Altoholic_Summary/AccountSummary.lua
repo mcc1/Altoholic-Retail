@@ -1477,12 +1477,12 @@ columns["MissionTableLastVisit"] = {
 	Width = 65,
 	JustifyH = "RIGHT",
 	GetText = function(character)
-			local numAvail = 	(DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-									(DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
-			local numActive = (DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-									(DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
-			local numCompleted = (DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-										(DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
+			local numAvail = 	(DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+									(DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
+			local numActive = (DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+									(DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
+			local numCompleted = (DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+										(DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
 			local text = ""
 			
 			if numCompleted > 0 then		-- add a '*' to show that there are some completed missions
@@ -1516,9 +1516,9 @@ columns["MissionTableLastVisit"] = {
 			
 			-- ** Garrison Missions **
 			
-			local numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
-			local numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
-			local numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
+			local numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
+			local numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
+			local numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
 			local color = colors.green
 			
 			tt:AddLine(GARRISON_MISSIONS_TITLE)
@@ -1535,9 +1535,9 @@ columns["MissionTableLastVisit"] = {
 			
 			-- ** Order Hall Missions **
 			
-			numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0
-			numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0
-			numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0			
+			numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0
+			numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0
+			numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0			
 			color = colors.green
 			
 			tt:AddLine(ORDER_HALL_MISSIONS)
