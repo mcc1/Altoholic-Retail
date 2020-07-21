@@ -313,7 +313,7 @@ local function ScanBuildings()
 	wipe(buildings)
 	
 	-- Scan Town Hall
-	local level = C_Garrison.GetGarrisonInfo(LE_GARRISON_TYPE_6_0)
+	local level = C_Garrison.GetGarrisonInfo(Enum.GarrisonType.Type_6_0)
 	
 	buildings[BUILDING_TOWN_HALL] = { id = 0, rank = level }
 	
@@ -620,7 +620,7 @@ end
 local function ScanNextArtifactResearch()
 	-- scan the remaining time until the next artifact research notes are complete
 	
-	local shipments = C_Garrison.GetLooseShipments(LE_GARRISON_TYPE_7_0)
+	local shipments = C_Garrison.GetLooseShipments(Enum.GarrisonType.Type_7_0)
 	local char = addon.ThisCharacter
 
 	-- reset values 
