@@ -481,7 +481,7 @@ local function BagsIcon_Initialize(self, level)
 	local rarity = addon:GetOption("UI.Tabs.Characters.ViewBagsRarity")
 	DDM_Add(L["Any"], 0, OnRarityChange, nil, (rarity == 0))
 	
-	for i = LE_ITEM_QUALITY_UNCOMMON, LE_ITEM_QUALITY_HEIRLOOM do		-- Quality: 0 = poor .. 5 = legendary
+	for i = Enum.ItemQuality.Uncommon, Enum.ItemQuality.Heirloom do		-- Quality: 0 = poor .. 5 = legendary
 		DDM_Add(format("|c%s%s", select(4, GetItemQualityColor(i)), _G["ITEM_QUALITY"..i.."_DESC"]), i, OnRarityChange, nil, (rarity == i))
 	end
 	
