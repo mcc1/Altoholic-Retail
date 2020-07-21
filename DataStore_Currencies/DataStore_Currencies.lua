@@ -94,7 +94,8 @@ local function ScanCurrencyTotals(id, divWeekly, divTotal)
 	local denomWeekly = divWeekly or 1
 	local denomTotal = divTotal or 1
 	
-	local _, amount, _, earnedThisWeek, weeklyMax, totalMax = C_CurrencyInfo.GetCurrencyInfo(id)
+    local info = C_CurrencyInfo.GetCurrencyInfo(id) 
+    local amount, earnedThisWeek, weeklyMax, totalMax = info.quantity, info.quantityEarnedThisWeek, info.maxWeeklyQuantity, info.maxQuantity
 	
 	weeklyMax = math.floor(weeklyMax / denomWeekly)
 	totalMax = math.floor(totalMax / denomTotal)
