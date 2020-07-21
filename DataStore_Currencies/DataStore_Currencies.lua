@@ -61,12 +61,12 @@ local function SaveHeaders()
 	headersState = {}
 	headerCount = 0		-- use a counter to avoid being bound to header names, which might not be unique.
 	
-	for i = GetCurrencyListSize(), 1, -1 do		-- 1st pass, expand all categories
-		local _, isHeader, isExpanded = GetCurrencyListInfo(i)
+	for i = C_CurrencyInfo.GetCurrencyListSize(), 1, -1 do		-- 1st pass, expand all categories
+		local _, isHeader, isExpanded = C_CurrencyInfo.GetCurrencyListInfo(i)
 		if isHeader then
 			headerCount = headerCount + 1
 			if not isExpanded then
-				ExpandCurrencyList(i, 1)
+				C_CurrencyInfo.ExpandCurrencyList(i, 1)
 				headersState[headerCount] = true
 			end
 		end
@@ -75,12 +75,12 @@ end
 
 local function RestoreHeaders()
 	headerCount = 0
-	for i = GetCurrencyListSize(), 1, -1 do
-		local _, isHeader = GetCurrencyListInfo(i)
+	for i = C_CurrencyInfo.GetCurrencyListSize(), 1, -1 do
+		local _, isHeader = C_CurrencyInfo.GetCurrencyListInfo(i)
 		if isHeader then
 			headerCount = headerCount + 1
 			if headersState[headerCount] then
-				ExpandCurrencyList(i, 0)		-- collapses the header
+				C_CurrencyInfo.ExpandCurrencyList(i, 0)		-- collapses the header
 			end
 		end
 	end
@@ -93,7 +93,7 @@ local function ScanCurrencyTotals(id, divWeekly, divTotal)
 	local denomWeekly = divWeekly or 1
 	local denomTotal = divTotal or 1
 	
-	local _, amount, _, earnedThisWeek, weeklyMax, totalMax = GetCurrencyInfo(id)
+	local _, amount, _, earnedThisWeek, weeklyMax, totalMax = C_CurrencyInfo.GetCurrencyInfo(id)
 	
 	weeklyMax = math.floor(weeklyMax / denomWeekly)
 	totalMax = math.floor(totalMax / denomTotal)
@@ -115,8 +115,8 @@ local function ScanCurrencies()
 	local refIndex
 	
 	
-	for i = 1, GetCurrencyListSize() do
-		local name, isHeader, _, _, _, count, icon = GetCurrencyListInfo(i)
+	for i = 1, C_CurrencyInfo.GetCurrencyListSize() do
+		local name, isHeader, _, _, _, count, icon = C_CurrencyInfo.GetCurrencyListInfo(i)
 		
 		if not ref.CurrencyTextRev[name] then		-- currency does not exist yet in our reference table
 			table.insert(ref.Currencies, format("%s|%s", name, icon or "") )			-- ex; [3] = "PVP"
@@ -135,7 +135,7 @@ local function ScanCurrencies()
 		if isHeader then
 			count = 0
         else
-            local currencyLink = GetCurrencyListLink(i)
+            local currencyLink = C_CurrencyInfo.GetCurrencyListLink(i)
             if currencyLink then
                 ScanCurrencyTotals(C_CurrencyInfo.GetCurrencyIDFromLink(currencyLink))
             end        
