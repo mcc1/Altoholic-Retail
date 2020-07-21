@@ -365,7 +365,7 @@ local function ScanQuests()
 			-- is the quest an emissary quest ?
 			if emissaryQuests[info.questID] then
 				local objective, _, _, numFulfilled, numRequired = GetQuestObjectiveInfo(info.questID, 1, false)
-				emissaries[questID] = format("%d|%d|%d|%s|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(info.questID), objective or "", time(), info.title)
+				emissaries[info.questID] = format("%d|%d|%d|%s|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(info.questID), objective or "", time(), info.title)
 			end
 
 			wipe(rewardsCache)
