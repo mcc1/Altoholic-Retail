@@ -400,7 +400,7 @@ local function ScanQuests()
     end
 
 	RestoreHeaders()
-	SelectQuestLogEntry(currentSelection)		-- restore the selection to match the cursor, must be properly set if a user abandons a quest
+	C_QuestLog.SetSelectedQuest(currentSelection)		-- restore the selection to match the cursor, must be properly set if a user abandons a quest
 
 	addon.ThisCharacter.lastUpdate = time()
 	
