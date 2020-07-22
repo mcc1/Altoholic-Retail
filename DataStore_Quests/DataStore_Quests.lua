@@ -175,7 +175,8 @@ end
 
 local function GetQuestTagID(questID, isComplete, frequency)
 
-	local tagID = C_QuestLog.GetQuestTagInfo(questID).tagID
+	local info = C_QuestLog.GetQuestTagInfo(questID) or {}
+    local tagID = info.tagID
 	if tagID then	
 		-- if there is a tagID, process it
 		if tagID == QUEST_TAG_ACCOUNT then
