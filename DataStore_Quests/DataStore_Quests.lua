@@ -427,6 +427,7 @@ local function RefreshQuestHistory()
 	local history = thisChar.History
 	wipe(history)
 	local quests = C_QuestLog.GetAllCompletedQuestIDs()
+    -- 9.0: the questIDs were moved from values to keys
 
 	--[[	In order to save memory, we'll save the completion status of 32 quests into one number (by setting bits 0 to 31)
 		Ex:
@@ -439,7 +440,7 @@ local function RefreshQuestHistory()
 
 	local count = 0
 	local index, bitPos
-	for questID in pairs(quests) do
+	for _, questID in pairs(quests) do
 		bitPos = (questID % 32)
 		index = ceil(questID / 32)
 
