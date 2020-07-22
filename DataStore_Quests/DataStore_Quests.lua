@@ -426,8 +426,7 @@ local function RefreshQuestHistory()
 	local thisChar = addon.ThisCharacter
 	local history = thisChar.History
 	wipe(history)
-	local quests = {}
-	--GetQuestsCompleted(quests) -- TODO: 9.0 - find a replacement for this
+	local quests = C_QuestLog.GetAllCompletedQuestIDs()
 
 	--[[	In order to save memory, we'll save the completion status of 32 quests into one number (by setting bits 0 to 31)
 		Ex:
