@@ -103,18 +103,9 @@
 				</KeyValues>
 			</Button>
 
-			<Button parentKey="Pets" inherits="AltoTabGridsMenuIconTemplate" id="5">
-				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="200" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="iconFile" value="Interface\Icons\INV_Box_Birdcage_01" />
-					<KeyValue key="text" value="COMPANIONS" type="global" />
-				</KeyValues>
-			</Button>
 			<Button parentKey="Dungeons" inherits="AltoTabGridsMenuIconTemplate" id="6">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Pets" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="200" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\inv_helmet_189" />
