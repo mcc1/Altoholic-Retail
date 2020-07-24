@@ -147,12 +147,6 @@ addon:Controller("AltoholicUI.TabGrids", {
 		else
 			frame.Tokens:DisableIcon()
 		end
-		
-		if DataStore_Pets then
-			frame.Pets:EnableIcon()
-		else
-			frame.Pets:DisableIcon()
-		end
 
 		if DataStore_Quests then
 			frame.Dailies:EnableIcon()
