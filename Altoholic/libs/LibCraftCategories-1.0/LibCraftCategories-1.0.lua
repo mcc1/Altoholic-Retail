@@ -5,6 +5,7 @@ Author: Teelo
 This library contains a database of profession categories
 
 Database extracted from: https://wow.tools/dbc/?dbc=tradeskillcategory&build=8.3.7.35249&hotfixes=true#page=1
+Converted to Lua using: https://thdoan.github.io/mr-data-converter/
 
 --]]
 
