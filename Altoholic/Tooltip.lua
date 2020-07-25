@@ -874,6 +874,7 @@ local function Hook_SetCurrencyToken(self,index,...)
 			GameTooltip:AddDoubleLine(DataStore:GetColoredCharacterName(character),  colors.teal .. count);
 			total = total + count
 		end
+		
 	end
 	
 	if total > 0 then
