@@ -1,8 +1,7 @@
 package-as: Altoholic
 
 move-folders:
- Altoholic: /
- Altoholic_Achievemnets: ../Altoholic_Achievements
+ Altoholic_Achievements: ../Altoholic_Achievements
  Altoholic_Agenda: ../Altoholic_Agenda
  Altoholic_Characters: ../Altoholic_Characters
  Altoholic_Grids: ../Altoholic_Grids
