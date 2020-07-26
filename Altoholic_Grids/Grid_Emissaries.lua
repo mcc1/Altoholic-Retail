@@ -4,6 +4,9 @@ local colors = addon.Colors
 local icons = addon.Icons
 
 local ICON_VIEW_QUESTS = "Interface\\LFGFrame\\LFGIcon-Quest"
+local OPTION_TOKEN = "UI.Tabs.Grids.Emissaries.CurrentTokenType"
+
+local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 
 local questList
 local view
@@ -32,49 +35,57 @@ local function BuildView()
 	-- parse the emissary quests, but only the ones that have NOT been completed
 	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
 		for questID, _ in pairs(DataStore:GetEmissaryQuests()) do
-			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
-            local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
-			local _, _, timeLeft, objective, emissaryQuestName = DataStore:GetEmissaryQuestInfo(character, questID)
-			
-			if timeLeft and timeLeft > 0 then
-				local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
-                if not questName then questName = emissaryQuestName end
-                if not emissaryQuestName then questName = C_QuestLog.GetQuestInfo(questID) end
-                if not questName then questName = "" end
-
-				if not questList[questID] then
-					questList[questID] = {}
-					questList[questID].title = questName
-					questList[questID].timeLeft = timeLeft
-					questList[questID].completionStatus = {}
-				end				
-
-                if isOnQuest then
-				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
-                elseif isCompleted then
-                    questList[questID].completionStatus[character] = QUEST_COMPLETE
-                end
-			end
+            if (not addon:GetOption(OPTION_TOKEN)) or 
+                    ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME6) and questID < 50000) or
+                    ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7) and questID > 50000) then
+                    -- TODO: In Badowlands, find the questIDs of emissaries there and extend this out  
+    			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
+                local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
+    			local _, _, timeLeft, objective, emissaryQuestName = DataStore:GetEmissaryQuestInfo(character, questID)
+    			
+    			if timeLeft and timeLeft > 0 then
+    				local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
+                    if not questName then questName = emissaryQuestName end
+                    if not emissaryQuestName then questName = C_QuestLog.GetQuestInfo(questID) end
+                    if not questName then questName = "" end
+    
+    				if not questList[questID] then
+    					questList[questID] = {}
+    					questList[questID].title = questName
+    					questList[questID].timeLeft = timeLeft
+    					questList[questID].completionStatus = {}
+    				end				
+    
+                    if isOnQuest then
+    				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                    elseif isCompleted then
+                        questList[questID].completionStatus[character] = QUEST_COMPLETE
+                    end
+    			end
+            end
 		end
-        for questID, _ in pairs(DataStore:GetRegularZoneQuests()) do
-            local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
-            local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
-			local numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetRegularZoneQuestInfo(character, questID)
-			
-			if numRequired and timeLeft and timeLeft > 0 then
-				if not questList[questID] then
-					questList[questID] = {}
-					questList[questID].title = questName
-					questList[questID].timeLeft = timeLeft
-					questList[questID].completionStatus = {}
-				end				
-
-                if isOnQuest then
-				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
-                elseif isCompleted then
-                    questList[questID].completionStatus[character] = QUEST_COMPLETE
-                end
-			end
+        
+        if (not addon:GetOption(OPTION_TOKEN)) or (addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7) then
+            for questID, _ in pairs(DataStore:GetRegularZoneQuests()) do
+                local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
+                local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
+    			local numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetRegularZoneQuestInfo(character, questID)
+    			
+    			if numRequired and timeLeft and timeLeft > 0 then
+    				if not questList[questID] then
+    					questList[questID] = {}
+    					questList[questID].title = questName
+    					questList[questID].timeLeft = timeLeft
+    					questList[questID].completionStatus = {}
+    				end				
+    
+                    if isOnQuest then
+    				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                    elseif isCompleted then
+                        questList[questID].completionStatus[character] = QUEST_COMPLETE
+                    end
+    			end
+            end
         end
 	end
 
@@ -98,6 +109,29 @@ local function BuildView()
 	end)
 end
 
+local function OnTokenChange(self, header)
+	addon:SetOption(OPTION_TOKEN, header)
+	AltoholicTabGrids:SetViewDDMText(header)
+
+	isViewValid = nil
+	AltoholicTabGrids:Update()
+end
+
+local function OnTokensAllInOne(self)
+	addon:SetOption(OPTION_TOKEN, nil)
+	AltoholicTabGrids:SetViewDDMText(L["All-in-one"])
+
+	isViewValid = nil
+	AltoholicTabGrids:Update()
+end
+
+local function DropDown_Initialize(frame)
+	frame:AddButtonWithArgs(EXPANSION_NAME6, nil, OnTokenChange, EXPANSION_NAME6, nil, (addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME6))
+	frame:AddButtonWithArgs(EXPANSION_NAME7, nil, OnTokenChange, EXPANSION_NAME7, nil, (addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7))
+	frame:AddButtonWithArgs(L["All-in-one"], nil, OnTokensAllInOne, nil, nil, (addon:GetOption(OPTION_TOKEN) == nil))
+	frame:AddCloseMenu()
+end
+
 local callbacks = {
 	OnUpdate = function() 
 			BuildView()
@@ -106,7 +140,6 @@ local callbacks = {
 	RowSetup = function(self, rowFrame, dataRowID)
 			local name = questList[ view[dataRowID] ].title
 			if name then
-                --if name == "Argussian Reach" then name = "Australian Reach" end
 				rowFrame.Name.Text:SetText(format("%s%s", colors.white, name))
 				rowFrame.Name.Text:SetJustifyH("LEFT")
 			end
@@ -196,8 +229,13 @@ local callbacks = {
 		end,
 		
 	InitViewDDM = function(frame, title) 
-			frame:Hide()
-			title:Hide()
+			frame:Show()
+			title:Show()
+			
+			frame:SetMenuWidth(100) 
+			frame:SetButtonWidth(20)
+			frame:SetText(addon:GetOption(OPTION_TOKEN) or L["All-in-one"])
+			frame:Initialize(DropDown_Initialize, "MENU_NO_BORDERS")
 		end,
 }
 
