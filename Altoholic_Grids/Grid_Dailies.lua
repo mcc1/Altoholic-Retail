@@ -14,19 +14,20 @@ local function BuildView()
 	
 	local account, realm = AltoholicTabGrids:GetRealm()
 	
-	-- Dailies are actual dailies that have been completed, + emissaries that have been completed
+	-- Dailies are actual dailies that have been completed
 	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
 		local num = DataStore:GetDailiesHistorySize(character) or 0
 		for i = 1, num do
 			local id, title = DataStore:GetDailiesHistoryInfo(character, i)
-			
-			if not questList[id] then
-				questList[id] = {}
-				questList[id].title = title
-				questList[id].completedBy = {}
-			end
-			
-			questList[id].completedBy[character] = true
+			if not DataStore:IsQuestEmissary(id) then
+    			if not questList[id] then
+    				questList[id] = {}
+    				questList[id].title = title
+    				questList[id].completedBy = {}
+    			end
+    			
+    			questList[id].completedBy[character] = true
+            end
 		end
 	end
 	
