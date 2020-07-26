@@ -14,7 +14,6 @@
 ## X-Localizations: enUS, frFR, zhCN, zhTW, deDE, koKR, esES, esMX, ruRU
 ## X-Website: https://www.curseforge.com/wow/addons/altoholic-retail
 ## X-Donate: https://www.patreon.com/teelojubeithos
-## X-Credits: Thaoky's guild (Odysseüs), all translators, the wowace community, the curseforge community, and all users for their invaluable suggestions!
 ## X-Curse-Project-ID: 384785
 ## X-WoWI-ID: 25610
 ## Dependencies: DataStore, DataStore_Characters

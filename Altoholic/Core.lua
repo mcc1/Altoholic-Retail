@@ -444,7 +444,6 @@ function addon:CmdSearchBags(arg1, arg2)
 	if not (AltoholicFrame:IsVisible()) then
 		AltoholicFrame:Show()
 	end
-    
 	AltoholicFrame_SearchEditBox:SetText(strlower(arg2))
 	addon.Tabs:OnClick("Search")
 	addon.Search:FindItem()
