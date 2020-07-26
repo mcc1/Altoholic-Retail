@@ -22,10 +22,7 @@
 ## SavedVariables: AltoholicDB
 ## X-Category: Interface Enhancements
 
-#@no-lib-strip@
-# Libraries
 embeds.xml
-#@end-no-lib-strip@
 
 locale.xml
 
