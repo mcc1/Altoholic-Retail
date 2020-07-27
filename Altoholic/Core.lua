@@ -149,6 +149,13 @@ local AddonDB_Defaults = {
 			["UI.Tooltip.IncludeGuildBankInTotal"] = true,		-- total count = alts + guildbank (1) or alts only (0)
 			["UI.Tooltip.ShowGuildBankCountPerTab"] = false,	-- guild count = guild:count or guild (tab 1: x, tab2: y ..)
             ["UI.Tooltip.HideHearthstoneCounters"] = false,
+            ["UI.Tooltip.HiddenHearthstones"] = {
+                        [6948] = true, -- Hearthstone
+                        [71634] = true, -- Darkmoon Adventurer's Guide
+                        [110560] = true, -- Garrison Hearthstone
+                        [140192] = true, -- Dalaran Hearthstone
+                        [141605] = true, -- Flight Master's Whistle
+                    },
 			
 			-- ** Mail options **
 			["UI.Mail.GuildMailWarning"] = true,					-- be informed when a guildie sends a mail to one of my alts

@@ -15,9 +15,8 @@ local addonList = {
 	"Altoholic_Grids",
 }
 
-local url1 = "https://www.curseforge.com/wow/addons/altoholic/"
+local url1 = "https://www.curseforge.com/wow/addons/altoholic-retail/"
 local url2 = "https://github.com/teelolws/Altoholic-Retail"
-local url3 = "http://wow.curseforge.com/addons/altoholic/localization/"
 
 local help = {
 	{	name = "General",
@@ -81,7 +80,7 @@ local help = {
 			"I found a bad translation, how can I help fixing it?",
 		},
 		answers = {
-			format("Use the CurseForge localization tool, at %s|r.", colors.green..url3),
+			format("Create an issue and say what language you can help with at: %s|r.", colors.green..url2),
 		}
 	},
 }	
@@ -172,6 +171,71 @@ function addon:ToggleOption(frame, option)
     end 
 end
 
+local HearthstoneListScrollFrame_Desc = {
+	NumLines = 6,
+	LineHeight = 18,
+	Frame = "AltoholicTooltipCounterOptions_ItemList",
+	GetSize = function()
+			local items = addon:GetOption("UI.Tooltip.HiddenHearthstones")
+            local size = 0
+            for _ in pairs(items) do
+                size = size + 1
+            end
+            return size 
+		end,
+	Update = function(self, offset, entry, desc)
+            local items = addon:GetOption("UI.Tooltip.HiddenHearthstones")
+            local orderedItems = {}
+            local size = 0
+            for k,v in pairs(items) do
+                size = size + 1
+                orderedItems[size] = k
+            end
+			for i=1, desc.NumLines do
+				local line = i + offset
+				if line <= size then
+					local item = Item:CreateFromItemID(orderedItems[line])
+                    if item:IsItemEmpty() then
+                        print("Altoholic: item ID " .. orderedItems[line] .. " doesn't exist. Removing.")
+                        items[orderedItems[line]] = nil
+                        addon:SetOption("UI.Tooltip.HiddenHearthstones", items)
+                        Altoholic:ScrollFrameUpdate(self)
+                        return
+                    end
+                    item:ContinueOnItemLoad(function()
+					   _G[ entry..i ]:SetText(item:GetItemName())
+                    end)
+					_G[ entry..i ]:Show()
+                    _G[ entry..i ].Left:Hide()
+                    _G[ entry..i ].Middle:Hide()
+                    _G[ entry..i ].Right:Hide()
+				else
+					_G[ entry..i ]:Hide()
+				end
+			end
+		end,
+}
+
+function addon.HiddenHearthstonesUpdate()
+	Altoholic:ScrollFrameUpdate(HearthstoneListScrollFrame_Desc)
+end
+
+function addon.AddItemToHiddenHearthstones(id)
+    id = tonumber(id)
+    local option = addon:GetOption("UI.Tooltip.HiddenHearthstones")
+    option[id] = true
+    addon:SetOption("UI.Tooltip.HiddenHearthstones", option)
+    addon.HiddenHearthstonesUpdate()
+end
+
+function addon.DeleteItemFromHiddenHearthstones(id)
+    id = tonumber(id)
+    local option = addon:GetOption("UI.Tooltip.HiddenHearthstones")
+    option[id] = nil
+    addon:SetOption("UI.Tooltip.HiddenHearthstones", option)
+    addon.HiddenHearthstonesUpdate()
+end
+
 function addon:SetupOptions()
 	-- create categories in Blizzard's options panel
 	
@@ -187,6 +251,7 @@ function addon:SetupOptions()
 	DataStore:AddOptionCategory(AltoholicAccountSharingOptions, L["Account Sharing"], addonName)
 	DataStore:AddOptionCategory(AltoholicSharedContent, "Shared Content", addonName)
 	DataStore:AddOptionCategory(AltoholicTooltipOptions, L["Tooltip"], addonName)
+    DataStore:AddOptionCategory(AltoholicTooltipCounterOptions, "Tooltip Counters", addonName)
 	DataStore:AddOptionCategory(AltoholicCalendarOptions, L["Calendar"], addonName)
 
 	DataStore:SetupInfoPanel(help, AltoholicHelp_Text)
@@ -338,7 +403,6 @@ function addon:SetupOptions()
 	f.ShowGuildBankCount.Text:SetText(L["Show guild bank count"])
 	f.IncludeGuildBankInTotal.Text:SetText(L["Include guild bank count in the total count"])
 	f.ShowGuildBankCountPerTab.Text:SetText(L["Detailed guild bank count"])
-    f.HideHearthstoneCounters.Text:SetText("Hide counters for Hearthstones")
 	L["Show item source"] = nil
 	L["Show item count per character"] = nil
 	L["Show item count without details"] = nil
@@ -352,6 +416,12 @@ function addon:SetupOptions()
 	L["Show counters for all accounts"] = nil
 	L["Include guild bank count in the total count"] = nil
     UpdateRealmsOptionSelectivity()
+
+    -- ** Tooltip Counters **
+    f = AltoholicTooltipCounterOptions
+    f.Text2:SetText("Enter Item ID")
+    f.HideHearthstoneCounters.Text:SetText("Hide counters for these items:")
+    addon.HiddenHearthstonesUpdate()
 	
 	-- ** Calendar **
 	f = AltoholicCalendarOptions
@@ -432,6 +502,8 @@ function addon:RestoreOptionsToUI()
 	f.ShowGuildBankCount:SetChecked(O["UI.Tooltip.ShowGuildBankCount"])
 	f.IncludeGuildBankInTotal:SetChecked(O["UI.Tooltip.IncludeGuildBankInTotal"])
 	f.ShowGuildBankCountPerTab:SetChecked(O["UI.Tooltip.ShowGuildBankCountPerTab"])
+    
+    f = AltoholicTooltipCounterOptions
     f.HideHearthstoneCounters:SetChecked(O["UI.Tooltip.HideHearthstoneCounters"])
 	
 	f = AltoholicCalendarOptions
