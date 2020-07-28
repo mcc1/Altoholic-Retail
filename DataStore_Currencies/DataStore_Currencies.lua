@@ -32,6 +32,7 @@ local CURRENCY_ID_BFA_WAR_SUPPLIES = 1587		-- BfA: War Supplies
 local CURRENCY_ID_BFA_AZERITE = 1565			-- BfA: Rich Azerite Fragment
 local CURRENCY_ID_BFA_COAL_VISIONS = 1755
 local CURRENCY_ID_BFA_TITAN_RESIDUUM = 1718
+local CURRENCY_ID_CONQUEST = 1602
 
 local AddonDB_Defaults = {
 	global = {
@@ -113,8 +114,7 @@ local function ScanCurrencies()
 	wipe(currencies)
 	
 	local refIndex
-	
-	
+	      
 	for i = 1, GetCurrencyListSize() do
 		local name, isHeader, _, _, _, count, icon = GetCurrencyListInfo(i)
 		
@@ -143,6 +143,9 @@ local function ScanCurrencies()
 
 		currencies[i] = { ["isHeader"] = isHeader, ["index"] = ref.CurrencyTextRev[name], ["count"] = count }
 	end
+    
+    local currentValue = PVPGetConquestLevelInfo()
+    addon.ThisCharacter.Conquest = currentValue
 	
 	RestoreHeaders()
 	
@@ -314,6 +317,10 @@ local function _GetBfATitanResiduum(character)
     return _GetCurrencyTotals(character, CURRENCY_ID_BFA_TITAN_RESIDUUM)
 end
 
+local function _GetConquestPoints(character)
+    return character.Conquest
+end
+
 local PublicMethods = {
 	GetNumCurrencies = _GetNumCurrencies,
 	GetCurrencyInfo = _GetCurrencyInfo,
@@ -338,6 +345,7 @@ local PublicMethods = {
 	GetBfARichAzerite = _GetBfARichAzerite,
     GetBfACoalVisions = _GetBfACoalVisions,
     GetBfATitanResiduum = _GetBfATitanResiduum,
+    GetConquestPoints = _GetConquestPoints,
 }
 
 function addon:OnInitialize()
@@ -376,6 +384,7 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetBfARichAzerite")
     DataStore:SetCharacterBasedMethod("GetBfACoalVisions")
     DataStore:SetCharacterBasedMethod("GetBfATitanResiduum")
+    DataStore:SetCharacterBasedMethod("GetConquestPoints")
 end
 
 function addon:OnEnable()
