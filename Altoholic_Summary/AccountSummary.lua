@@ -1952,7 +1952,7 @@ columns["HighestKeystoneTime"] = {
 columns["BindLocation"] = {
 	-- Header
 	headerWidth = 120,
-	headerLabel = "Location",
+	headerLabel = "Hearthstone",
 	tooltipTitle = "Bind Location",
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("BindLocation") end,
@@ -1964,6 +1964,31 @@ columns["BindLocation"] = {
 	GetText = function(character)
             local name = DataStore:GetHearthstone(character) or ""
 			return format("%s%s", colors.white, name) 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["ConquestPoints"] = {
+	-- Header
+	headerWidth = 120,
+	headerLabel = "Conquest",
+	tooltipTitle = "Conquest Points",
+	tooltipSubTitle = nil,
+	headerOnClick = function() SortView("ConquestPoints") end,
+	headerSort = DataStore.GetConquestPoints,
+	
+	-- Content
+	Width = 120,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local count = DataStore:GetConquestPoints(character) or ""
+            count = tonumber(count)
+            local color = colors.white
+            if count >= 500 then
+                color = colors.red
+            end
+			return format("%s%s", color, count) 
 		end,
 	OnEnter = function(frame)
 		end,
@@ -2005,7 +2030,7 @@ local modes = {
     [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "Level", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
-    [MODE_HEARTHSTONE] = { "Name", "BindLocation" },
+    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints" },
 }
 
 function ns:SetMode(mode)
