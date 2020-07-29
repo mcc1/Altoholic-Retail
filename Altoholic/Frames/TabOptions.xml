@@ -895,17 +895,17 @@
 					<KeyValue key="option" value="UI.Calendar.UseDialogBoxForWarnings" />
 				</KeyValues>
 			</CheckButton>
-			<CheckButton parentKey="WarningsEnabled" inherits="AltoToggleableOptionTemplate">
+			<CheckButton parentKey="WarningsDisabled" inherits="AltoToggleableOptionTemplate">
 				<Anchors> 
 					<Anchor point="TOPLEFT" relativeKey="$parent.UseDialogBoxForWarnings" relativePoint="BOTTOMLEFT" x="0" y="-10" />
 				</Anchors>
 				<KeyValues>
-					<KeyValue key="option" value="UI.Calendar.WarningsEnabled" />
+					<KeyValue key="option" value="UI.Calendar.WarningsDisabled" />
 				</KeyValues>
 			</CheckButton>
 			<Frame name="$parent_WarningType1" inherits="AltoWarningTypeTemplate" id="1">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.WarningsEnabled" relativePoint="BOTTOMLEFT" x="0" y="-10" />
+					<Anchor point="TOPLEFT" relativeKey="$parent.WarningsDisabled" relativePoint="BOTTOMLEFT" x="0" y="-10" />
 				</Anchors>
 			</Frame>
 			<Frame name="$parent_WarningType2" inherits="AltoWarningTypeTemplate" id="2">
