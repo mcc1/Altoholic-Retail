@@ -427,7 +427,7 @@ function addon:SetupOptions()
 	f = AltoholicCalendarOptions
 	f.WeekStartsOnMonday.Text:SetText(L["Week starts on Monday"])
 	f.UseDialogBoxForWarnings.Text:SetText(L["Display warnings in a dialog box"])
-	f.WarningsEnabled.Text:SetText(L["Disable warnings"])
+	f.WarningsDisabled.Text:SetText(L["Disable warnings"])
 	L["Week starts on Monday"] = nil
 	L["Warn %d minutes before an event starts"] = nil
 	L["Display warnings in a dialog box"] = nil
@@ -509,7 +509,7 @@ function addon:RestoreOptionsToUI()
 	f = AltoholicCalendarOptions
 	f.WeekStartsOnMonday:SetChecked(O["UI.Calendar.WeekStartsOnMonday"])
 	f.UseDialogBoxForWarnings:SetChecked(O["UI.Calendar.UseDialogBoxForWarnings"])
-	f.WarningsEnabled:SetChecked(O["UI.Calendar.WarningsEnabled"])
+	f.WarningsDisabled:SetChecked(O["UI.Calendar.WarningsDisabled"])
 end
 
 function addon:UpdateMyMemoryUsage()
