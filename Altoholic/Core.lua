@@ -171,7 +171,7 @@ local AddonDB_Defaults = {
 			["UI.Minimap.IconRadius"] = 78,
 			
 			-- ** Calendar options **
-			["UI.Calendar.WarningsEnabled"] = true,
+			["UI.Calendar.WarningsDisabled"] = false,
 			["UI.Calendar.UseDialogBoxForWarnings"] = false,	-- use a dialog box for warnings (true), or default chat frame (false)
 			["UI.Calendar.WeekStartsOnMonday"] = false,
 
