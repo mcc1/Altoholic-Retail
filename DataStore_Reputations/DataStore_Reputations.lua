@@ -44,7 +44,7 @@ local BottomLevelNames = {
 
 local BottomLevels = { -42000, -6000, -3000, 0, 3000, 9000, 21000, 42000, 43000 }
 
-local BF = LibStub("LibBabble-Faction-3.0"):GetUnstrictLookupTable()
+local BF = LibStub("LibBabble-Faction-ForAltoholic-3.0"):GetUnstrictLookupTable()
 
 --[[	*** Faction UIDs ***
 These UIDs have 2 purposes: 

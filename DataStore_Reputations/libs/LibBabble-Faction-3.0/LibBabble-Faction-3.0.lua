@@ -1,5 +1,5 @@
 --[[
-Name: LibBabble-Faction-3.0
+Name: LibBabble-Faction-ForAltoholic-3.0
 Revision: $Rev: 224 $
 Maintainers: ckknight, nevcairiel, Ackis
 Website: http://www.wowace.com/projects/libbabble-faction-3-0/
@@ -7,7 +7,12 @@ Dependencies: None
 License: MIT
 ]]
 
-local MAJOR_VERSION = "LibBabble-Faction-3.0"
+-- Update: 31 July 2020
+-- I have renamed this library and made changes. To prevent conflicts with other addons that use this library, its renamed.
+-- If this library is ever updated, make sure to make changes in Altoholic to reflect the original library name
+-- libBabble-Faction-ForAltoholic-3.0 to LibBabble-Faction-3.0
+
+local MAJOR_VERSION = "LibBabble-Faction-ForAltoholic-3.0"
 local MINOR_VERSION = 90000 + tonumber(("$Rev: 224 $"):match("%d+"))
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end

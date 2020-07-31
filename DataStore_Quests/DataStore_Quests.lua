@@ -577,6 +577,10 @@ local function _GetEmissaryQuests()
 	return emissaryQuests
 end
 
+local function _IsQuestEmissary(questID)
+    return emissaryQuests[questID]
+end
+
 local function _GetRegularZoneQuests()
     return regularZoneQuests
 end
@@ -703,6 +707,7 @@ local PublicMethods = {
 	IsCharacterOnQuest = _IsCharacterOnQuest,
 	GetCharactersOnQuest = _GetCharactersOnQuest,
 	IterateQuests = _IterateQuests,
+    IsQuestEmissary = _IsQuestEmissary,
 }
 
 function addon:OnInitialize()

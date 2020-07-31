@@ -1603,6 +1603,30 @@ local defaultCurrencies = {
     CURRENCY_ID_BFA_TITAN_RESIDUUM
 }
 
+local function CurrencyRightClickMenu_Initialize(frame, level)
+	if level == 1 then
+        frame:AddTitle("Select Currency:")
+        frame:AddTitle()
+        for currencyListIndex = 1, GetCurrencyListSize() do
+            local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+            if isHeader then
+                frame:AddCategoryButton(name, currencyListIndex, level)
+            end
+        end
+        frame:AddCloseMenu()
+    elseif level == 2 then
+        for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), GetCurrencyListSize() do
+            local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+            if not isHeader then
+            --	AddButtonWithArgs = function(frame, text, value, func, arg1, arg2, isChecked)
+                frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(GetCurrencyListLink(currencyListIndex)), nil, false, level)
+            else
+                break
+            end
+        end
+    end
+end
+
 -- ** Currencies **
 for currencyIndex = 1, 5 do
     local currencyID = addon:GetOption("UI.Tabs.Summary.Currency"..currencyIndex) or defaultCurrencies[currencyIndex]
@@ -1616,32 +1640,7 @@ for currencyIndex = 1, 5 do
         ns:SetMode(addon:GetOption("UI.Tabs.Summary.CurrentMode"))
     end
     
-    local function CurrencyRightClickMenu_Initialize(frame, level)
-                        -- C_CurrencyInfo.GetCurrencyIDFromLink(currencyLink)
-                    -- currencyLink = GetCurrencyListLink(index)
-                    -- 1 to GetCurrencyListSize()
-    	if level == 1 then
-            frame:AddTitle("Select Currency:")
-            frame:AddTitle()
-            for currencyListIndex = 1, GetCurrencyListSize() do
-                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
-                if isHeader then
-                    frame:AddCategoryButton(name, currencyListIndex, level)
-                end
-            end
-            frame:AddCloseMenu()
-        elseif level == 2 then
-            for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), GetCurrencyListSize() do
-                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
-                if not isHeader then
-                --	AddButtonWithArgs = function(frame, text, value, func, arg1, arg2, isChecked)
-                    frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(GetCurrencyListLink(currencyListIndex)), nil, false, level)
-                else
-                    break
-                end
-            end
-        end
-    end
+
 
     columns["Currency"..currencyIndex] = {
     	-- Header
@@ -1650,8 +1649,8 @@ for currencyIndex = 1, 5 do
     	headerOnEnter = function(frame, tooltip)
     			CurrencyHeader_OnEnter(frame, currencyID)
     		end,
-    	headerOnClick = function() SortView("Currency"..currencyIndex) end,
-    	headerSort = function(character) return DataStore.GetCurrencyTotals(character, currencyID) end,
+    	headerOnClick = function(button) SortView("Currency"..currencyIndex) end,
+    	headerSort = function(self, character) return DataStore:GetCurrencyTotals(character, currencyID) end,
     	
     	-- Content
     	Width = 80,
@@ -1680,6 +1679,13 @@ for currencyIndex = 1, 5 do
             		return
 	           end
             end,
+    	OnEnter = function(frame)
+    			local tt = AltoTooltip
+    			tt:ClearLines()
+    			tt:SetOwner(frame, "ANCHOR_RIGHT")
+    			tt:AddLine(colors.green .. "Right-click to change the Currency.",1,1,1)
+    			tt:Show()
+    		end,
     }
 end
 
@@ -1946,7 +1952,7 @@ columns["HighestKeystoneTime"] = {
 columns["BindLocation"] = {
 	-- Header
 	headerWidth = 120,
-	headerLabel = "Location",
+	headerLabel = "Hearthstone",
 	tooltipTitle = "Bind Location",
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("BindLocation") end,
@@ -1958,6 +1964,31 @@ columns["BindLocation"] = {
 	GetText = function(character)
             local name = DataStore:GetHearthstone(character) or ""
 			return format("%s%s", colors.white, name) 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["ConquestPoints"] = {
+	-- Header
+	headerWidth = 120,
+	headerLabel = "Conquest",
+	tooltipTitle = "Conquest Points",
+	tooltipSubTitle = nil,
+	headerOnClick = function() SortView("ConquestPoints") end,
+	headerSort = DataStore.GetConquestPoints,
+	
+	-- Content
+	Width = 120,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local count = DataStore:GetConquestPoints(character) or ""
+            count = tonumber(count) or 0
+            local color = colors.white
+            if count >= 500 then
+                color = colors.red
+            end
+			return format("%s%s", color, count) 
 		end,
 	OnEnter = function(frame)
 		end,
@@ -1999,7 +2030,7 @@ local modes = {
     [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "Level", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
-    [MODE_HEARTHSTONE] = { "Name", "BindLocation" },
+    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints" },
 }
 
 function ns:SetMode(mode)

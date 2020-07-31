@@ -48,7 +48,7 @@ local function GetUsedTokens(header)
 	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
 		local num = DataStore:GetNumCurrencies(character) or 0
 		for i = 1, num do
-			local isHeader, name = DataStore:GetCurrencyInfo(character, i)
+			local isHeader, name, count, icon = DataStore:GetCurrencyInfo(character, i)
 			
 			if isHeader then
 				if header and name ~= header then -- if a specific header (filter) was set, and it's not the one we chose, skip
@@ -61,6 +61,7 @@ local function GetUsedTokens(header)
 					tokens[name] = true
 				end
 			end
+            
 		end
 	end
 	

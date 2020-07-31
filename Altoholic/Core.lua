@@ -4,8 +4,10 @@ _G[addonName] = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "A
 
 local addon = _G[addonName]
 
-addon.Version = "v9.0.Beta.001"
-addon.VersionNum = 900001
+addon.VersionNum = GetAddOnMetadata("Altoholic", "Version")
+local pattern = ".*(%d+).*(%d+).*(%d).*(%d%d%d).*"
+local expansionID, patchID, subpatchID, versionID = addon.VersionNum:match(pattern)
+addon.Version = "v"..expansionID.."."..patchID.."."..subpatchID.."."..versionID
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local commPrefix = addonName
@@ -149,6 +151,13 @@ local AddonDB_Defaults = {
 			["UI.Tooltip.IncludeGuildBankInTotal"] = true,		-- total count = alts + guildbank (1) or alts only (0)
 			["UI.Tooltip.ShowGuildBankCountPerTab"] = false,	-- guild count = guild:count or guild (tab 1: x, tab2: y ..)
             ["UI.Tooltip.HideHearthstoneCounters"] = false,
+            ["UI.Tooltip.HiddenHearthstones"] = {
+                        [6948] = true, -- Hearthstone
+                        [71634] = true, -- Darkmoon Adventurer's Guide
+                        [110560] = true, -- Garrison Hearthstone
+                        [140192] = true, -- Dalaran Hearthstone
+                        [141605] = true, -- Flight Master's Whistle
+                    },
 			
 			-- ** Mail options **
 			["UI.Mail.GuildMailWarning"] = true,					-- be informed when a guildie sends a mail to one of my alts
@@ -162,7 +171,7 @@ local AddonDB_Defaults = {
 			["UI.Minimap.IconRadius"] = 78,
 			
 			-- ** Calendar options **
-			["UI.Calendar.WarningsEnabled"] = true,
+			["UI.Calendar.WarningsDisabled"] = false,
 			["UI.Calendar.UseDialogBoxForWarnings"] = false,	-- use a dialog box for warnings (true), or default chat frame (false)
 			["UI.Calendar.WeekStartsOnMonday"] = false,
 

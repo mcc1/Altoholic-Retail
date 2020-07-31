@@ -246,6 +246,10 @@ local function Warning_MsgBox_Handler(self, button)
 end
 
 local function ShowExpiryWarning(index, minutes)
+	if addon:GetOption("UI.Calendar.WarningsDisabled") then	-- warnings disabled ? do nothing
+		return
+	end
+    
 	local event = ns:Get(index)
 	local CalendarEvent = eventTypes[event.eventType]
 	
@@ -342,16 +346,11 @@ function ns:GetDayCount(year, month, day)
 end
 
 function ns:CheckExpiries(elapsed)
-	if addon:GetOption("UI.Calendar.WarningsEnabled") == false then	-- warnings disabled ? do nothing
-		return
-	end
-
 	-- called every 60 seconds
 	local hasEventExpired
 	
 	for k, v in pairs(eventList) do
 		local numMin = floor(GetEventExpiry(v) / 60)
-
 		if numMin > -1440 and numMin < 0 then		-- expiry older than 1 day is ignored
 			hasEventExpired = true		-- at least one event has expired
 		elseif numMin == 0 then
@@ -441,7 +440,7 @@ function ns:BuildList()
 			if dungeons then
 				for key, _ in pairs(dungeons) do
 					local reset, lastCheck = DataStore:GetSavedInstanceInfo(character, key)
-					local expires = reset + lastCheck + timeGap
+					local expires = reset + lastCheck
 					AddEvent(INSTANCE_LINE, date("%Y-%m-%d",expires), date("%H:%M",expires), characterName, realm, key)
 				end
 			end

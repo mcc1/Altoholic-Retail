@@ -192,10 +192,7 @@
 				self.MenuItem5:SetText(CURRENCY)
 				self.MenuItem6:SetText(GARRISON_FOLLOWERS_TITLE)
                 self.MenuItem7:SetText(PVEFrameTab3:GetText())
-                local textHearthstone = Item:CreateFromItemID(6948)
-                textHearthstone:ContinueOnItemLoad(function()
-                	self.MenuItem8:SetText(textHearthstone:GetItemLink())
-                end)
+                self.MenuItem8:SetText("Misc")
 				
 				-- "Artifacts"
 				-- self.MenuItem7:SetText(GetCategoryInfo(15256))	

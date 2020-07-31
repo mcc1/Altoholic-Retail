@@ -772,6 +772,10 @@ function Altoholic.Sharing.AvailableContent:BuildView()
 				table.insert(self.view, { linetype = CLASS_REFDATA_LINE, class = arg1, size = tonumber(arg2), parentID = i } )
 			end
 		end
+        
+        if AltoAccountSharing_CheckAll:GetChecked() then
+            AvailableContentCheckedItems[i] = true
+        end
 	end
 end
 

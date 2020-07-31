@@ -110,7 +110,7 @@ local function _GetCurrentKeystone(character)
 end
 
 local function _GetHighestKeystone(character)
-    local keystone = character.highestKeystone
+    local keystone = character.highestKeystoneThisWeek
     if not keystone then return nil, nil, nil, nil, nil end
     return keystone.name, keystone.completionMilliseconds, keystone.level, keystone.texture, keystone.backgroundTexture
 end

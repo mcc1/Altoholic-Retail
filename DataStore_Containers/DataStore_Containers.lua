@@ -322,6 +322,7 @@ local function ScanContainer(bagID, containerType)
     newBag.links = {}
     newBag.icon = originalBag.icon
     newBag.link = originalBag.link
+    newBag.rarity = originalBag.rarity
 	
 	local link, count
 	local startTime, duration, isEnabled
