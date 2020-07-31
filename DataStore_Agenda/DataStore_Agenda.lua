@@ -511,7 +511,9 @@ local lastServerMinute
 
 local function SetClientServerTimeGap()
 	-- this function is called every second until the server time changes (track minutes only)
-	local ServerHour, ServerMinute = GetGameTime()
+    --local serverTime = GetServerTime()
+	--local ServerHour, ServerMinute = date("%H", serverTime), date("%M", serverTime)
+    local ServerHour, ServerMinute = GetGameTime()
 
 	if not lastServerMinute then		-- ServerMinute not set ? this is the first pass, save it
 		lastServerMinute = ServerMinute
