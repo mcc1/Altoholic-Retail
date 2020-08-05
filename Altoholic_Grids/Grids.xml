@@ -13,6 +13,7 @@
 	<Script file="Grid_Sets.lua"/>
     <Script file="Grid_Corruption.lua"/>
     <Script file="Grid_Tasks.lua"/>
+    <Script file="Grid_Essences.lua"/>
     
 	
 	<Frame name="AltoholicFrameGrids" parent="AltoholicTabGrids" hidden="true">

@@ -102,10 +102,17 @@
 					<KeyValue key="iconFile" value="Interface\LFGFrame\LFGIcon-Quest" />
 				</KeyValues>
 			</Button>
-
-			<Button parentKey="Dungeons" inherits="AltoTabGridsMenuIconTemplate" id="6">
+            <Button parentKey="Essences" inherits="AltoTabGridsMenuIconTemplate" id="5">
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="200" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="1869493" />
+				</KeyValues>
+			</Button>
+			<Button parentKey="Dungeons" inherits="AltoTabGridsMenuIconTemplate" id="6">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Essences" relativePoint="BOTTOMRIGHT" x="5" y="0" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\inv_helmet_189" />

@@ -19,6 +19,7 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.Sets.text = WARDROBE_SETS
         frame.Corruption.text = "Corruption"
         frame.Tasks.text = "Tasks"
+        frame.Essences.text = "Azerite Essences"
         AltoholicTabGrids.SelectRealm.Middle:SetSize(140, 64)
 		
 		frame.SelectRealm:RegisterClassEvent("RealmChanged", function()
