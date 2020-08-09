@@ -425,7 +425,6 @@ local function ScanFollowers()
 			info.levelXP = follower.levelXP
 			info.link = link
 			info.isInactive = isInactive
-			-- followers[name] = info
 			followers[id] = info
 			
 			-- Stats
@@ -701,6 +700,7 @@ local function OnGarrisonMissionNPCOpened(event, followerType)
 	ScanAvailableMissions(missionNPCType, availableMissionsStorage[missionNPCType])
 	ScanActiveMissions(missionNPCType)
 	ScanOrderHallFollowers()
+    ScanFollowers()
 	
 	addon:RegisterEvent("GARRISON_MISSION_LIST_UPDATE", OnGarrisonMissionListUpdate)
 end

@@ -146,6 +146,7 @@
 					<KeyValue key="text" value="GARRISON_ARCHITECT" type="global" />
 				</KeyValues>
 			</Button>
+            
 			<Button parentKey="GarrisonFollowers" inherits="AltoTabGridsMenuIconTemplate" id="10">
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeKey="$parent.GarrisonArchitect" relativePoint="BOTTOMRIGHT" x="5" y="0" />
@@ -155,6 +156,7 @@
 					<KeyValue key="text" value="GARRISON_FOLLOWERS_TITLE" type="global" />
 				</KeyValues>
 			</Button>
+            
 			<Button parentKey="FollowerAbilities" inherits="AltoTabGridsMenuIconTemplate" id="11">
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeKey="$parent.GarrisonFollowers" relativePoint="BOTTOMRIGHT" x="5" y="0" />
@@ -163,19 +165,30 @@
 					<KeyValue key="iconFile" value="Interface\Icons\spell_shadow_shadowwordpain" />
 				</KeyValues>
 			</Button>
-			<Button parentKey="Emissaries" inherits="AltoTabGridsMenuIconTemplate" id="12">
+            
+			<Button parentKey="OrderHallFollowers" inherits="AltoTabGridsMenuIconTemplate" id="16">
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeKey="$parent.FollowerAbilities" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="Interface\Icons\achievement_garrisonfollower_levelup" />
+					<KeyValue key="text" value="ORDER_HALL_FOLLOWERS" type="global" />
+				</KeyValues>
+			</Button>
+            
+			<Button parentKey="Emissaries" inherits="AltoTabGridsMenuIconTemplate" id="12">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="120" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\inv_legion_cache_dreamweavers" />
 					<KeyValue key="text" value="BOUNTY_BOARD_LOCKED_TITLE" type="global" />
 				</KeyValues>
 			</Button>
-			
+            
 			<Button parentKey="Sets" inherits="AltoTabGridsMenuIconTemplate" id="13">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="120" />
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Emissaries" relativePoint="BOTTOMRIGHT" x="5" y="0" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\inv_chest_cloth_81" />

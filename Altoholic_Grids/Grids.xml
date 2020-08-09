@@ -9,6 +9,7 @@
 	<Script file="Grid_GarrisonArchitect.lua"/>
 	<Script file="Grid_GarrisonFollowers.lua"/>
 	<Script file="Grid_FollowerAbilities.lua"/>
+    <Script file="Grid_OrderHallFollowers.lua"/>
 	<Script file="Grid_Emissaries.lua"/>
 	<Script file="Grid_Sets.lua"/>
     <Script file="Grid_Corruption.lua"/>
