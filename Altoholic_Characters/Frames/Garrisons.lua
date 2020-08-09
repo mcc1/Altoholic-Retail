@@ -95,17 +95,19 @@ addon:Controller("AltoholicUI.GarrisonMissionsPanel", {
 			if line <= #view then
 				local missionID = view[line]
 				local info = DataStore:GetMissionInfo(missionID)
-				local followers, remainingTime, successChance = DataStore:GetActiveMissionInfo(character, missionID)
-				
-				rowFrame:SetName(missionID, info.durationSeconds)
-				rowFrame:SetType(info.typeAtlas)
-				rowFrame:SetLevel(info.level, info.iLevel)
-				rowFrame:SetRemainingTime(remainingTime)
-				rowFrame:SetSuccessChance(successChance)
-				rowFrame:SetCost(info.cost)
-				rowFrame:SetFollowers(followers, missionID, character)
-				rowFrame:SetRewards(info.rewards)
-				rowFrame:Show()
+                if info then
+    				local followers, remainingTime, successChance = DataStore:GetActiveMissionInfo(character, missionID)
+    				
+    				rowFrame:SetName(missionID, info.durationSeconds)
+    				rowFrame:SetType(info.typeAtlas)
+    				rowFrame:SetLevel(info.level, info.iLevel)
+    				rowFrame:SetRemainingTime(remainingTime)
+    				rowFrame:SetSuccessChance(successChance)
+    				rowFrame:SetCost(info.cost)
+    				rowFrame:SetFollowers(followers, missionID, character)
+    				rowFrame:SetRewards(info.rewards)
+    				rowFrame:Show()
+                end
 			end
 		end
 		
