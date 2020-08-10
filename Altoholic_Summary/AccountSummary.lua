@@ -1590,7 +1590,7 @@ columns["MissionTableLastVisit"] = {
 			numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_8_0) or 0			
 			color = colors.green
 			
-			tt:AddLine(WAR_CAMPAIGN.." "..WAR_MISSIONS) -- Couldn't find a GlobalString for "War Campaign Missions". How long until someone playing in another language complains?
+			tt:AddLine(L["War Campaign Missions"]) -- Couldn't find a GlobalString for "War Campaign Missions". How long until someone playing in another language complains?
 			tt:AddLine(format("Available Missions: %s%d", color, numAvail),1,1,1)
 			
 			if numActive == 0 and numAvail ~= 0 then

@@ -813,6 +813,7 @@ L["Warlords Deck"] = true
 L["Warn %d minutes before an event starts"] = true
 L["Warn when mail expires in less days than this value"] = true
 L["Warrior Set"] = true
+L["War Campaign Missions"] = WAR_CAMPAIGN.." "..WAR_MISSIONS
 L["Weapons"] = true
 L["Weaponsmith"] = true
 L["Week starts on Monday"] = true
