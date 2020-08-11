@@ -52,7 +52,8 @@ local AddonDB_Defaults = {
 				avgArmoriLevel = 0,
 				
 				Buildings = {},				-- List of buildings
-				Followers = {},				-- List of followers
+				Followers = {},				-- List of followers (6.0 and 7.0); shipyard was never implemented!
+                BFAFollowers = {},          -- List of followers (8.0)
 				[GARRISON_MISSIONS_STORAGE] = {},					-- List of available missions (6.0)
 				[GARRISON_ACTIVE_MISSIONS_STORAGE] = {},			-- List of active/in-progress missions (6.0)
 				[ORDERHALL_MISSIONS_STORAGE] = {},					-- List of available order hall missions (7.0)
@@ -425,7 +426,6 @@ local function ScanFollowers()
 			info.levelXP = follower.levelXP
 			info.link = link
 			info.isInactive = isInactive
-			-- followers[name] = info
 			followers[id] = info
 			
 			-- Stats
@@ -547,6 +547,50 @@ local function ScanOrderHallFollowers()
 		end
 		
 		ref.FollowerNamesToID[follower.name] = id	-- ["Nat Pagle"] = 202
+	end
+end
+
+local function ScanWarCampaignFollowers()
+	local followersList = C_Garrison.GetFollowers(LE_FOLLOWER_TYPE_GARRISON_8_0)
+	if not followersList then return end
+
+	local followers = addon.ThisCharacter.BFAFollowers
+	
+	local ref = addon.db.global.Reference
+
+	local link		-- follower link
+	local id			-- follower id
+	local isInactive		-- is a follower inactive or not ?
+	
+	for k, follower in pairs(followersList) do
+		id = follower.followerID		-- by default, the id should be this one (numeric)
+		
+		isInactive = nil
+		if type(follower.followerID) == "string" then	-- if the type is string, it's a GUID
+			local status = C_Garrison.GetFollowerStatus(follower.followerID)
+			if status and status == GARRISON_FOLLOWER_INACTIVE then
+				isInactive = true
+			end
+		end
+		
+		if follower.isCollected then
+			-- if the follower is collected, the id will be a GUID (string)
+			-- therefore, it has to be extracted from the link
+			-- also, the link is only valid for collected followers, otherwise it is nil
+			link = C_Garrison.GetFollowerLink(follower.followerID)
+			id = link:match("garrfollower:(%d+)")
+			id = tonumber(id)
+			
+			local info = {}
+			
+			info.xp = follower.xp
+			info.levelXP = follower.levelXP
+			info.link = link
+			info.isInactive = isInactive
+			followers[id] = info
+		end
+		
+		ref.FollowerNamesToID[follower.name] = id	-- ["Rexxar"] = 1069
 	end
 end
 
@@ -701,6 +745,8 @@ local function OnGarrisonMissionNPCOpened(event, followerType)
 	ScanAvailableMissions(missionNPCType, availableMissionsStorage[missionNPCType])
 	ScanActiveMissions(missionNPCType)
 	ScanOrderHallFollowers()
+    ScanFollowers()
+    ScanWarCampaignFollowers()
 	
 	addon:RegisterEvent("GARRISON_MISSION_LIST_UPDATE", OnGarrisonMissionListUpdate)
 end
@@ -742,6 +788,10 @@ end
 -- ** Mixins **
 local function _GetFollowers(character)
 	return character.Followers
+end
+
+local function _GetBFAFollowers(character)
+    return character.BFAFollowers
 end
 
 local function _GetFollowerInfo(character, id)
@@ -918,6 +968,7 @@ end
 
 local PublicMethods = {
 	GetFollowers = _GetFollowers,
+    GetBFAFollowers = _GetBFAFollowers,
 	GetFollowerInfo = _GetFollowerInfo,
 	GetFollowerSpellCounters = _GetFollowerSpellCounters,
 	GetFollowerLink = _GetFollowerLink,
@@ -952,6 +1003,7 @@ function addon:OnInitialize()
 
 	DataStore:RegisterModule(addonName, addon, PublicMethods)
 	DataStore:SetCharacterBasedMethod("GetFollowers")
+    DataStore:SetCharacterBasedMethod("GetBFAFollowers")
 	DataStore:SetCharacterBasedMethod("GetFollowerInfo")
 	DataStore:SetCharacterBasedMethod("GetFollowerSpellCounters")
 	DataStore:SetCharacterBasedMethod("GetFollowerLink")

@@ -687,6 +687,7 @@ L["Warlock Set"] = "Set de Brujo"
 L["Warlords Deck"] = "Baraja de Señores de la guerra"
 L["Warn when mail expires in less days than this value"] = "Advertir cuando el correo expira en menos días que los indicados"
 L["Warrior Set"] = "Set de Guerrero"
+L["War Campaign Missions"] = WAR_CAMPAIGN.." "..WAR_MISSIONS
 L["Weapons"] = "Armas"
 L["Weaponsmith"] = "Forjador de Armas"
 L[ [=[When |cFFFF0000disabled|cFFFFFFFF, all requests will be automatically rejected.

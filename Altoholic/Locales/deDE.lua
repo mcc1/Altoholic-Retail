@@ -823,6 +823,7 @@ L["Warlords Deck"] = "Kriegsfürstenkartenset"
 L["Warn %d minutes before an event starts"] = "%d Minuten bevor ein Ereignis beginnt warnen."
 L["Warn when mail expires in less days than this value"] = "Warnen, wenn Post in weniger Tagen als folgendem Wert verfällt:"
 L["Warrior Set"] = "Krieger-Set"
+L["War Campaign Missions"] = WAR_CAMPAIGN.." "..WAR_MISSIONS
 L["Weapons"] = "Waffen"
 L["Weaponsmith"] = "Waffenschmied"
 L["Week starts on Monday"] = "Woche beginnt Montags"

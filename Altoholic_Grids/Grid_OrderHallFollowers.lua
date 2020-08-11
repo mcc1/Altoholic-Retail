@@ -10,66 +10,6 @@ local view
 local isViewValid
 local collected = {}
 
--- Followers not recruited at the inn
-local nonInnFollowers = { 
-	[32] = true,
-	[34] = true,
-	[153] = true,
-	[154] = true,
-	[155] = true,
-	[157] = true,
-	[159] = true,
-	[168] = true,
-	[170] = true,
-	[171] = true,
-	[176] = true,
-	[177] = true,
-	[178] = true,
-	[179] = true,
-	[180] = true,
-	[182] = true,
-	[183] = true,
-	[184] = true,
-	[185] = true,
-	[186] = true,
-	[189] = true,
-	[190] = true,
-	[192] = true,
-	[193] = true,
-	[194] = true,
-	[195] = true,
-	[202] = true,
-	[203] = true,
-	[204] = true,
-	[205] = true,
-	[207] = true,
-	[208] = true,
-	[209] = true,
-	[211] = true,
-	[212] = true,
-	[216] = true,
-	[217] = true,
-	[218] = true,
-	[219] = true,
-	[224] = true,
-	[225] = true,
-	[453] = true,
-	[455] = true,
-	[458] = true,
-	[459] = true,
-	[460] = true,
-	[462] = true,
-	[463] = true,
-}
-
-local followerTypes = {
-	ALL,
-	L["Collected"],
-	L["Not collected"],
-	L["Recruited at the inn"],
-	L["Not recruited at the inn"],
-}
-
 local function SortByFollowerName(a, b)
 	local nameA = C_Garrison.GetFollowerNameByID(a)
 	local nameB = C_Garrison.GetFollowerNameByID(b)
@@ -94,7 +34,7 @@ local function BuildView()
 			for id, _ in pairs(followers) do
 				-- temporary fix: follower keys have been replaced from their name (string) to their id (numeric)
 				-- fix it here instead of in datastore, which is already ok.
-				if (type(id) == "number") and (id < 583) then
+				if (type(id) == "number") and (id >= 583) then
 					collected[id] = true	-- [123] = true
 				end
 			end
@@ -102,7 +42,7 @@ local function BuildView()
 	end
 	
 	-- Prepare a list of uncollected followers
-	local followersList = C_Garrison.GetFollowers(Enum.GarrisonFollowerType.FollowerType_6_0)
+	local followersList = C_Garrison.GetFollowers(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	if followersList then 
 		local link
 		for k, follower in pairs(followersList) do
@@ -124,58 +64,18 @@ local function BuildView()
 	
 	local currentFollowers = addon:GetOption(OPTION_FOLLOWERS)
 	
-	if currentFollowers == 3 then		-- Not collected only
-		for k, id in pairs(uncollected) do
-			table.insert(view, id)
-		end
-		
-		-- table is already sorted.
-	
-		isViewValid = true
-		return 
-	end
-	
 	-- in every other case (1, 2, 4 ,5) , we must add collected followers
 	for id, _ in pairs(collected) do
-		if currentFollowers <= 2 then				-- All (collected + uncollected) = 1, or 2 = collected only
-			table.insert(view, id)
-		elseif currentFollowers == 4 and not nonInnFollowers[id] then		-- All, but only from the inn
-			table.insert(view, id)
-		elseif currentFollowers == 5 and nonInnFollowers[id] then		-- All, but only NOT from the inn
-			table.insert(view, id)
-		end
+		table.insert(view, id)
 	end
 	table.sort(view, SortByFollowerName)
 
-	-- add uncollected, only for the "All" option (1)
-	if currentFollowers == 1 then				-- All (collected + uncollected)
-		-- already sorted
-		for k, id in pairs(uncollected) do
-			table.insert(view, id)
-		end
+	-- add uncollected
+	for k, id in pairs(uncollected) do
+		table.insert(view, id)
 	end
 	
 	isViewValid = true
-end
-
-local function OnFollowerFilterChange(self)
-	local currentFollowers = self.value
-	
-	addon:SetOption(OPTION_FOLLOWERS, currentFollowers)
-
-	AltoholicTabGrids:SetViewDDMText(followerTypes[currentFollowers])
-	
-	isViewValid = nil
-	AltoholicTabGrids:Update()
-end
-
-local function DropDown_Initialize(frame)
-	local currentFollowers = addon:GetOption(OPTION_FOLLOWERS)
-	
-	for i = 1, #followerTypes do
-		frame:AddButton(followerTypes[i], i, OnFollowerFilterChange, nil, (i==currentFollowers))
-	end
-	frame:AddCloseMenu()
 end
 
 local callbacks = {
@@ -266,15 +166,8 @@ local callbacks = {
 			FloatingGarrisonFollowerTooltip:Hide()
 		end,
 	InitViewDDM = function(frame, title)
-			frame:Show()
-			title:Show()
-
-			local currentFollowers = addon:GetOption(OPTION_FOLLOWERS)
-			
-			frame:SetMenuWidth(100) 
-			frame:SetButtonWidth(20)
-			frame:SetText(followerTypes[currentFollowers])
-			frame:Initialize(DropDown_Initialize, "MENU_NO_BORDERS")
+			frame:Hide()
+            title:Hide()
 		end,
 }
 
@@ -285,4 +178,4 @@ end
 
 addon:RegisterMessage("DATASTORE_GARRISON_FOLLOWERS_UPDATED", OnFollowersUpdated)
 
-AltoholicTabGrids:RegisterGrid(10, callbacks)
+AltoholicTabGrids:RegisterGrid(16, callbacks)

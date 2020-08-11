@@ -804,6 +804,7 @@ L["Warlords Deck"] = "대장군 카드 한 벌"
 L["Warn %d minutes before an event starts"] = "이벤트 시작 %d 분 전에 경고"
 L["Warn when mail expires in less days than this value"] = "우편물이 이 값보다 이른 시일 내에 소멸하면 경고"
 L["Warrior Set"] = "전사 세트"
+L["War Campaign Missions"] = WAR_CAMPAIGN.." "..WAR_MISSIONS
 L["Weapons"] = "무기"
 L["Weaponsmith"] = "무기제작"
 L["Week starts on Monday"] = "한 주 시작을 월요일부터"

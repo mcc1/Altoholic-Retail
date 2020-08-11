@@ -9,9 +9,11 @@
 	<Script file="Grid_GarrisonArchitect.lua"/>
 	<Script file="Grid_GarrisonFollowers.lua"/>
 	<Script file="Grid_FollowerAbilities.lua"/>
+    <Script file="Grid_OrderHallFollowers.lua"/>
 	<Script file="Grid_Emissaries.lua"/>
 	<Script file="Grid_Sets.lua"/>
     <Script file="Grid_Tasks.lua"/>
+    <Script file="Grid_Essences.lua"/>
     
 	
 	<Frame name="AltoholicFrameGrids" parent="AltoholicTabGrids" hidden="true">

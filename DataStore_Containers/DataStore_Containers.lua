@@ -723,7 +723,8 @@ end
 local function _GetContainerSize(character, containerID)
 	-- containerID can be number or string
 	if type(containerID) == "number" then
-		return character.Containers["Bag" .. containerID].size
+		if not character.Containers["Bag"..containerID] then return 0 end
+        return character.Containers["Bag" .. containerID].size
 	end
 	return character.Containers[containerID].size
 end
@@ -736,9 +737,9 @@ local rarityColors = {
 
 local function _GetColoredContainerSize(character, containerID)
 	local bag = _GetContainer(character, containerID)
-	local size = _GetContainerSize(character, containerID)
+	local size = _GetContainerSize(character, containerID) or 0
 	
-	if bag.rarity and rarityColors[bag.rarity] then
+	if bag and bag.rarity and rarityColors[bag.rarity] then
 		return format("%s%s", rarityColors[bag.rarity], size)
 	end
 	

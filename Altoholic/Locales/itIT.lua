@@ -582,6 +582,7 @@ L["Warlords Deck"] = "Mazzo dei Signori della Guerra"
 L["Warn %d minutes before an event starts"] = "Avverti %d minuti prima dell'inizio di un evento"
 L["Warn when mail expires in less days than this value"] = "Avverti quando c'è posta in scadenza in meno giorni di questo valore"
 L["Warrior Set"] = "Set da Guerriero"
+L["War Campaign Missions"] = WAR_CAMPAIGN.." "..WAR_MISSIONS
 L["Weapons"] = "Armi"
 L["Week starts on Monday"] = "La settimana inizia di Lunedì"
 L[ [=[When |cFFFF0000disabled|cFFFFFFFF, all requests will be automatically rejected.

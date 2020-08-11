@@ -524,7 +524,7 @@
 	</Frame>
     
     <!-- moved from Altoholic.xml, the account sharing frame -->     
-    <Frame name="AltoAccountSharing" toplevel="true" parent="UIParent" hidden="true">
+    <Frame name="AltoAccountSharing" toplevel="true" parent="UIParent" hidden="true" movable="true">
 		<Size x="800" y="300" />
 		<Anchors>
 			<Anchor point="CENTER" x="0" y="20" />
@@ -630,10 +630,14 @@
         					<Anchor point="TOPLEFT" relativeTo="AltoAccountSharingText1" relativePoint="BOTTOMLEFT" x="0" y="-10" />
         				</Anchors>
         				<Scripts>
-        					<OnLoad>
-        						_G[self:GetName().."Text"]:SetText(TARGET);
-        						AltoAccountSharing_UseTarget:SetChecked(1)
-        					</OnLoad>
+        					<OnShow inherit="prepend">
+                                _G[self:GetName().."Text"]:SetText(TARGET);
+        					    if Altoholic:GetOption("UI.Sharing.EntireDatabase.Remember") and Altoholic:GetOption("UI.Sharing.EntireDatabase.RememberTarget") then
+        						    AltoAccountSharing_UseTarget:SetChecked(nil)
+                                else
+                                    AltoAccountSharing_UseTarget:SetChecked(true)
+                                end
+        					</OnShow>
         					<OnClick>
         						AltoAccountSharing_UseName:SetChecked(nil)
         					</OnClick>
@@ -647,6 +651,11 @@
         					<OnLoad>
         						AltoAccountSharing_UseName:SetChecked(nil)
         					</OnLoad>
+                            <OnShow inherit="prepend">
+                                if Altoholic:GetOption("UI.Sharing.EntireDatabase.Remember") and Altoholic:GetOption("UI.Sharing.EntireDatabase.RememberTarget") then
+                                    self:SetChecked(true)
+                                end
+                            </OnShow>
         					<OnClick>
         						AltoAccountSharing_UseTarget:SetChecked(nil)
         					</OnClick>
@@ -662,6 +671,11 @@
         					<OnLoad>
         						self:SetAutoFocus( false );
         					</OnLoad>
+                            <OnShow inherit="prepend">
+                                if Altoholic:GetOption("UI.Sharing.EntireDatabase.Remember") and Altoholic:GetOption("UI.Sharing.EntireDatabase.RememberTarget") then
+                                    self:SetText(Altoholic:GetOption("UI.Sharing.EntireDatabase.RememberTarget"))
+                                end
+                            </OnShow>
         					<OnEnterPressed>
         						self:ClearFocus();
         					</OnEnterPressed>
@@ -669,9 +683,31 @@
         						AltoAccountSharing:Hide()
         						Altoholic:ToggleUI()
         					</OnEscapePressed>
+                            <OnTextChanged>
+                                if userInput and Altoholic:GetOption("UI.Sharing.EntireDatabase.Remember") then
+                                    AltoAccountSharing_UseName:SetChecked(true)
+                                    AltoAccountSharing_UseTarget:SetChecked(nil)
+                                    Altoholic:SetOption("UI.Sharing.EntireDatabase.RememberTarget", self:GetText())
+                                end
+                            </OnTextChanged>
         				</Scripts>
         			</EditBox>
-
+                    <CheckButton name="AltoAccountSharing_RememberName" inherits="UICheckButtonTemplate">
+        				<Anchors>
+        					<Anchor point="TOPLEFT" relativeTo="AltoAccountSharing_AccTargetEditBox" relativePoint="TOPRIGHT" x="10" y="6" />
+        				</Anchors>
+        				<Scripts>
+        					<OnShow inherit="prepend">
+        						self:SetChecked(Altoholic:GetOption("UI.Sharing.EntireDatabase.Remember"))
+                                AltoAccountSharing_RememberNameText:SetText("Remember")
+                                AltoAccountSharing_RememberNameText:SetPoint("TOPLEFT", self, "TOPLEFT", -13, 10)
+        					</OnShow>
+        					<OnClick>
+        						Altoholic:SetOption("UI.Sharing.EntireDatabase.Remember", AltoAccountSharing_RememberName:GetChecked())
+                                Altoholic:SetOption("UI.Sharing.EntireDatabase.RememberTarget", AltoAccountSharing_AccTargetEditBox:GetText())
+        					</OnClick>
+        				</Scripts>
+        			</CheckButton>
         			<Button name="AltoAccountSharing_SendButton" inherits="UIPanelButtonTemplate">
         				<Size x="140" y="24" />
         				<Anchors>
@@ -699,7 +735,17 @@
         					</OnClick>
         				</Scripts>
         			</Button>
-
+                    <Button name="AltoAccountSharing_CloseButton" inherits="UIPanelCloseButton">
+        				<Anchors>
+        					<Anchor relativePoint="TOPRIGHT" x="-36" y="-4" />
+        				</Anchors>
+        				<Scripts>
+        					<OnClick>
+        						AltoAccountSharing:Hide()
+        						Altoholic:ToggleUI()
+        					</OnClick>
+        				</Scripts>
+        			</Button>
         			<Button name="AltoAccountSharing_ToggleAll">
         				<Size x="16" y="16" />
         				<Anchors>
@@ -881,10 +927,19 @@
 			</Button>
 		</Frames>
         <Scripts>
-            <OnLoad>
+            <OnLoad inherit="prepend">
                 PanelTemplates_SetNumTabs(AltoAccountSharing, 2);
                 PanelTemplates_SetTab(AltoAccountSharing, 1);
+                self:RegisterForDrag("LeftButton")
             </OnLoad>
+            <OnDragStart>
+                 if not self.isLocked then
+                  self:StartMoving()
+                 end
+            </OnDragStart>
+            <OnDragStop>
+                 self:StopMovingOrSizing()
+            </OnDragStop>
         </Scripts>
 	</Frame>
         
