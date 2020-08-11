@@ -194,19 +194,10 @@
 					<KeyValue key="iconFile" value="Interface\Icons\inv_chest_cloth_81" />
 				</KeyValues>
 			</Button>
-            
-            <Button parentKey="Corruption" inherits="AltoTabGridsMenuIconTemplate" id="14">
-				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Sets" relativePoint="BOTTOMRIGHT" x="5" y="0" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="iconFile" value="1386548" />
-				</KeyValues>
-			</Button>
 
             <Button parentKey="Tasks" inherits="AltoTabGridsMenuIconTemplate" id="15">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Corruption" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Sets" relativePoint="BOTTOMRIGHT" x="5" y="0" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\INV_Misc_Book_17" />

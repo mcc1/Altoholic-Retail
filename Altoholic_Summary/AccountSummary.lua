@@ -1508,12 +1508,12 @@ columns["MissionTableLastVisit"] = {
 	Width = 65,
 	JustifyH = "RIGHT",
 	GetText = function(character)
-			local numAvail = 	(DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-									(DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
-			local numActive = (DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-									(DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
-			local numCompleted = (DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-										(DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
+			local numAvail = 	(DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+									(DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
+			local numActive = (DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+									(DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
+			local numCompleted = (DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+										(DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
 			local text = ""
 			
 			if numCompleted > 0 then		-- add a '*' to show that there are some completed missions
@@ -1547,9 +1547,9 @@ columns["MissionTableLastVisit"] = {
 			
 			-- ** Garrison Missions **
 			
-			local numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
-			local numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
-			local numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
+			local numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
+			local numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
+			local numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
 			local color = colors.green
 			
 			tt:AddLine(GARRISON_MISSIONS_TITLE)
@@ -1566,9 +1566,9 @@ columns["MissionTableLastVisit"] = {
 			
 			-- ** Order Hall Missions **
 			
-			numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0
-			numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0
-			numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0			
+			numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0
+			numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0
+			numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0			
 			color = colors.green
 			
 			tt:AddLine(ORDER_HALL_MISSIONS)
@@ -2167,12 +2167,8 @@ function addon:AiLTooltip()
 	local tt = AltoTooltip
 	
 	tt:AddLine(" ")
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME0), FormatAiL("1-62"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME1), FormatAiL("63-94"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME2), FormatAiL("95-102"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME3), FormatAiL("103-114"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME4), FormatAiL("115-130"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME5), FormatAiL("131-149"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME6), FormatAiL("150-265"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME7), FormatAiL("266+"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Intro (1-10)"), FormatAiL("1-44"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Chromie Time (11-49)"), FormatAiL("13-125"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (50-59)"), FormatAiL("59-164"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (60)"), FormatAiL("165+"))
 end
