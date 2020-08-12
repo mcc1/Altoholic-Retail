@@ -21,9 +21,9 @@
 
 	<Frame name="AltoholicFrame" toplevel="true" parent="UIParent" movable="true" enableMouse="true" hidden="true">
 		<Size x="832" y="447" />
-		<!--Anchors>
+		<Anchors>
 			<Anchor point="TOPLEFT" x="0" y="-104" />
-		</Anchors-->
+		</Anchors>
 		<Scripts>
 			<OnLoad>
 				self:RegisterForDrag("LeftButton")
