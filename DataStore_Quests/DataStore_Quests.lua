@@ -237,11 +237,11 @@ local function RestoreHeaders()
 	wipe(headersState)
 end
 
-local function ScanChoices(rewards)
+local function ScanChoices(rewards, questID)
 	-- rewards = out parameter
 
 	-- these are the actual item choices proposed to the player
-	for i = 1, GetNumQuestLogChoices() do
+	for i = 1, GetNumQuestLogChoices(questID) do
 		local _, _, numItems, _, isUsable = GetQuestLogChoiceInfo(i)
 		isUsable = isUsable and 1 or 0	-- this was 1 or 0, in WoD, it is a boolean, convert back to 0 or 1
 		local link = GetQuestLogItemLink("choice", i)
@@ -370,7 +370,7 @@ local function ScanQuests()
 			end
 
 			wipe(rewardsCache)
-			ScanChoices(rewardsCache)
+			ScanChoices(rewardsCache, info.questID)
 			ScanRewards(rewardsCache)
 			ScanRewardSpells(rewardsCache)
 
