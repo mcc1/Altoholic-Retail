@@ -1540,7 +1540,7 @@ columns["MissionTableLastVisit"] = {
 			local tt = AltoTooltip
 			tt:ClearLines()
 			tt:SetOwner(frame, "ANCHOR_RIGHT")
-			tt:AddDoubleLine(DataStore:GetColoredCharacterName(character), GARRISON_MISSIONS_TITLE)
+			tt:AddDoubleLine(DataStore:GetColoredCharacterName(character), WAR_MISSIONS)
 			tt:AddLine(" ")
 			tt:AddLine(format("%s: %s", L["Visited"], SecondsToTime(time() - lastVisit)),1,1,1)
 			tt:AddLine(" ")
@@ -1623,30 +1623,6 @@ local defaultCurrencies = {
     CURRENCY_ID_BFA_TITAN_RESIDUUM
 }
 
-local function CurrencyRightClickMenu_Initialize(frame, level)
-	if level == 1 then
-        frame:AddTitle("Select Currency:")
-        frame:AddTitle()
-        for currencyListIndex = 1, GetCurrencyListSize() do
-            local name, isHeader = GetCurrencyListInfo(currencyListIndex)
-            if isHeader then
-                frame:AddCategoryButton(name, currencyListIndex, level)
-            end
-        end
-        frame:AddCloseMenu()
-    elseif level == 2 then
-        for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), GetCurrencyListSize() do
-            local name, isHeader = GetCurrencyListInfo(currencyListIndex)
-            if not isHeader then
-            --	AddButtonWithArgs = function(frame, text, value, func, arg1, arg2, isChecked)
-                frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(GetCurrencyListLink(currencyListIndex)), nil, false, level)
-            else
-                break
-            end
-        end
-    end
-end
-
 -- ** Currencies **
 for currencyIndex = 1, 5 do
     local currencyID = addon:GetOption("UI.Tabs.Summary.Currency"..currencyIndex) or defaultCurrencies[currencyIndex]
@@ -1660,7 +1636,29 @@ for currencyIndex = 1, 5 do
         ns:SetMode(addon:GetOption("UI.Tabs.Summary.CurrentMode"))
     end
     
-
+    local function CurrencyRightClickMenu_Initialize(frame, level)
+    	if level == 1 then
+            frame:AddTitle("Select Currency:")
+            frame:AddTitle()
+            for currencyListIndex = 1, GetCurrencyListSize() do
+                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+                if isHeader then
+                    frame:AddCategoryButton(name, currencyListIndex, level)
+                end
+            end
+            frame:AddCloseMenu()
+        elseif level == 2 then
+            for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), GetCurrencyListSize() do
+                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+                if not isHeader then
+                --	AddButtonWithArgs = function(frame, text, value, func, arg1, arg2, isChecked)
+                    frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(GetCurrencyListLink(currencyListIndex)), nil, false, level)
+                else
+                    break
+                end
+            end
+        end
+    end
 
     columns["Currency"..currencyIndex] = {
     	-- Header
