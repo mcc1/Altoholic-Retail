@@ -375,17 +375,6 @@ local function _GetClientServerTimeGap()
 end
 
 -- * Contacts *
-local function _GetContacts(character)
-	return character.Contacts
-
-	--[[	Typical usage:
-
-		for name, _ in pairs(DataStore:GetContacts(character) do
-			myvar1, myvar2, .. = DataStore:GetContactInfo(character, name)
-		end
-	--]]
-end
-
 local function _GetContactInfo(character, key)
 	local contact = character.Contacts[key]
 	if type(contact) == "table" then
@@ -641,7 +630,6 @@ end
 
 local PublicMethods = {
 	GetClientServerTimeGap = _GetClientServerTimeGap,
-	GetNumContacts = _GetNumContacts,
 	GetContactInfo = _GetContactInfo,
 
 	GetSavedInstances = _GetSavedInstances,
@@ -668,7 +656,6 @@ function addon:OnInitialize()
 	addon.db = LibStub("AceDB-3.0"):New(addonName .. "DB", AddonDB_Defaults)
 
 	DataStore:RegisterModule(addonName, addon, PublicMethods)
-	DataStore:SetCharacterBasedMethod("GetNumContacts")
 	DataStore:SetCharacterBasedMethod("GetContactInfo")
 
 	DataStore:SetCharacterBasedMethod("GetSavedInstances")
