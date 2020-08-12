@@ -1,4 +1,4 @@
-## Interface: 90000
+## Interface: 90001
 ## Title: DataStore by |cFF69CCF0Thaoky|r
 ## Notes: Main DataStore Module - Teelos Fork
 ## Author: Thaoky (EU-Marécages de Zangar)

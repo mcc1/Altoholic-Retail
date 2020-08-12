@@ -1,4 +1,4 @@
-## Interface: 90000
+## Interface: 90001
 ## Title: Altoholic_Summary
 ## Notes: Altoholic's Summary Tab
 ## Author: Thaoky (EU-Marécages de Zangar)
