@@ -607,7 +607,8 @@ end
 local function _IterateRecipes(profession, mainCategory, subCategory, callback)
 	-- mainCategory : category index (or 0 for all)
 	-- subCategory : sub-category index (or 0 for all)
-	local crafts = profession.Crafts
+	if not profession then return end
+    local crafts = profession.Crafts
 
 	-- loop through categories
 	for catIndex = 1, _GetNumRecipeCategories(profession) do
