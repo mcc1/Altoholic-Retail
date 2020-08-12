@@ -488,8 +488,13 @@ local function ScanFollowers()
 	c.numFollowersAtiLevel645 = num645
 	c.numFollowersAtiLevel660 = num660
 	c.numFollowersAtiLevel675 = num675
-	c.avgWeaponiLevel = weaponiLvl / numActive
-	c.avgArmoriLevel = armoriLvl / numActive
+	if numActive == 0 then
+        c.avgWeaponiLevel = 0
+        c.avgArmoriLevel = 0
+    else
+        c.avgWeaponiLevel = weaponiLvl / numActive
+	    c.avgArmoriLevel = armoriLvl / numActive
+    end
 	c.numRareFollowers = numRare
 	c.numEpicFollowers = numEpic
 	c.Abilities = abilities
