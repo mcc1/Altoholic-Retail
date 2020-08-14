@@ -106,7 +106,7 @@ local function LevelIcon_Initialize(frame, level)
 	local option = addon:GetOption(OPTION_LEVELS)
 	
 	frame:AddTitle(L["FILTER_LEVELS"])
-	frame:AddButtonWithArgs(ALL, 1, OnLevelFilterChange, 1, 60, (option == 1))
+	frame:AddButtonWithArgs(ALL, 1, OnLevelFilterChange, 1, 120, (option == 1)) -- Leaving this on 1-120 so players don't ask why characters they haven't logged into since Shadowlands are missing. Perhaps lower it in 9.1?
 	frame:AddTitle()
 	frame:AddButtonWithArgs("1-9", 2, OnLevelFilterChange, 1, 9, (option == 2))
 	frame:AddButtonWithArgs("10-19", 3, OnLevelFilterChange, 10, 19, (option == 3))
