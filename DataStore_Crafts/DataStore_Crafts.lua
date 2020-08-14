@@ -385,8 +385,6 @@ local function ScanRecipes()
 	addon:SendMessage("DATASTORE_RECIPES_SCANNED", char, tradeskillName)
 end
 
-
-
 local function ScanTradeSkills()
 	ScanRecipes()
 	
