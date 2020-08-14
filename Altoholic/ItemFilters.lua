@@ -58,7 +58,10 @@ local function FilterNameOrDescription()
     local tooltip = AltoScanningTooltip
 	
 	tooltip:ClearLines()
-	tooltip:SetHyperlink(searchedItem["itemLink"])
+	if not pcall(tooltip.SetHyperlink, tooltip, searchedItem["itemLink"]) then
+        -- this fails for battle pets
+        return
+    end
 	
 	local tooltipName = tooltip:GetName()
 	
