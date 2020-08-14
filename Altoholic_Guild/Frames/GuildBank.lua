@@ -100,7 +100,7 @@ addon:Controller("AltoholicUI.GuildBank", { "AltoholicUI.Formatter", function(fo
 			frame:Show()
 		end,
 		UpdateBankTabButtons = function(frame)
-			if not currentGuildKey then return end
+			--if not currentGuildKey then return end
 			
 			for _, button in pairs(frame.TabButtons) do
 				local id = button:GetID()
