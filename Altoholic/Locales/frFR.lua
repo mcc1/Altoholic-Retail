@@ -830,7 +830,7 @@ L["Warn %d minutes before an event starts"] = "Avertir %d minutes avant le débu
 L["Warn when mail expires in less days than this value"] = [=[Avertir quand du courrier arrive à expiration
 dans moins de jours que cette valeur]=]
 L["Warrior Set"] = "Set Guerrier"
-L["War Campaign Missions"] = WAR_CAMPAIGN.." "..WAR_MISSIONS
+L["War Campaign Missions"] = "Missions de Campagne de Guerre"
 L["Weapons"] = "Armes"
 L["Weaponsmith"] = "Fabricant d'armes"
 L["Week starts on Monday"] = "La semaine commence le lundi"
