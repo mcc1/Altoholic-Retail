@@ -180,15 +180,15 @@ local buildingTypes = {
 }
 
 local availableMissionsStorage = {
-	[LE_FOLLOWER_TYPE_GARRISON_6_0] = GARRISON_MISSIONS_STORAGE,
-	[LE_FOLLOWER_TYPE_GARRISON_7_0] = ORDERHALL_MISSIONS_STORAGE,
-	[LE_FOLLOWER_TYPE_GARRISON_8_0] = WARCAMPAIGN_MISSIONS_STORAGE,
+	[Enum.GarrisonFollowerType.FollowerType_6_0] = GARRISON_MISSIONS_STORAGE,
+	[Enum.GarrisonFollowerType.FollowerType_7_0] = ORDERHALL_MISSIONS_STORAGE,
+	[Enum.GarrisonFollowerType.FollowerType_8_0] = WARCAMPAIGN_MISSIONS_STORAGE,
 }
 
 local activeMissionsStorage = {
-	[LE_FOLLOWER_TYPE_GARRISON_6_0] = GARRISON_ACTIVE_MISSIONS_STORAGE,
-	[LE_FOLLOWER_TYPE_GARRISON_7_0] = ORDERHALL_ACTIVE_MISSIONS_STORAGE,
-	[LE_FOLLOWER_TYPE_GARRISON_8_0] = WARCAMPAIGN_ACTIVE_MISSIONS_STORAGE,
+	[Enum.GarrisonFollowerType.FollowerType_6_0] = GARRISON_ACTIVE_MISSIONS_STORAGE,
+	[Enum.GarrisonFollowerType.FollowerType_7_0] = ORDERHALL_ACTIVE_MISSIONS_STORAGE,
+	[Enum.GarrisonFollowerType.FollowerType_8_0] = WARCAMPAIGN_ACTIVE_MISSIONS_STORAGE,
 }
 
 -- *** Utility functions ***
@@ -234,20 +234,20 @@ local function ClearInactiveMissionsData()
 	-- loop through all characters
 	for key, character in pairs(addon.db.global.Characters) do			
 		-- get all garrison missions
-		for _, missionID in pairs(character[availableMissionsStorage[LE_FOLLOWER_TYPE_GARRISON_6_0]]) do
+		for _, missionID in pairs(character[availableMissionsStorage[Enum.GarrisonFollowerType.FollowerType_6_0]]) do
 			availableMissions[missionID] = true
 		end
 
-		for _, missionID in pairs(character[activeMissionsStorage[LE_FOLLOWER_TYPE_GARRISON_6_0]]) do
+		for _, missionID in pairs(character[activeMissionsStorage[Enum.GarrisonFollowerType.FollowerType_6_0]]) do
 			activeMissions[missionID] = true
 		end		
 		
 		-- get all order hall missions
-		for _, missionID in pairs(character[availableMissionsStorage[LE_FOLLOWER_TYPE_GARRISON_7_0]]) do
+		for _, missionID in pairs(character[availableMissionsStorage[Enum.GarrisonFollowerType.FollowerType_7_0]]) do
 			availableMissions[missionID] = true
 		end
 
-		for _, missionID in pairs(character[activeMissionsStorage[LE_FOLLOWER_TYPE_GARRISON_7_0]]) do
+		for _, missionID in pairs(character[activeMissionsStorage[Enum.GarrisonFollowerType.FollowerType_7_0]]) do
 			activeMissions[missionID] = true
 		end		
 	
@@ -304,7 +304,7 @@ end
 
 -- *** Scanning functions ***
 local function ScanBuildings()
-	local plots = C_Garrison.GetPlots(LE_FOLLOWER_TYPE_GARRISON_6_0)
+	local plots = C_Garrison.GetPlots(Enum.GarrisonFollowerType.FollowerType_6_0)
 
 	-- to avoid deleting previously saved data when the game is not ready to deliver information
 	-- exit if no data is available
@@ -314,7 +314,7 @@ local function ScanBuildings()
 	wipe(buildings)
 	
 	-- Scan Town Hall
-	local level = C_Garrison.GetGarrisonInfo(LE_GARRISON_TYPE_6_0)
+	local level = C_Garrison.GetGarrisonInfo(Enum.GarrisonType.Type_6_0)
 	
 	buildings[BUILDING_TOWN_HALL] = { id = 0, rank = level }
 	
@@ -338,7 +338,7 @@ local function ScanBuildings()
 end
 	
 local function ScanFollowers()
-	local followersList = C_Garrison.GetFollowers(LE_FOLLOWER_TYPE_GARRISON_6_0)
+	local followersList = C_Garrison.GetFollowers(Enum.GarrisonFollowerType.FollowerType_6_0)
 	if not followersList then return end
 
 	local followers = addon.ThisCharacter.Followers
@@ -488,8 +488,13 @@ local function ScanFollowers()
 	c.numFollowersAtiLevel645 = num645
 	c.numFollowersAtiLevel660 = num660
 	c.numFollowersAtiLevel675 = num675
-	c.avgWeaponiLevel = weaponiLvl / numActive
-	c.avgArmoriLevel = armoriLvl / numActive
+	if numActive == 0 then
+        c.avgWeaponiLevel = 0
+        c.avgArmoriLevel = 0
+    else
+        c.avgWeaponiLevel = weaponiLvl / numActive
+	    c.avgArmoriLevel = armoriLvl / numActive
+    end
 	c.numRareFollowers = numRare
 	c.numEpicFollowers = numEpic
 	c.Abilities = abilities
@@ -502,7 +507,7 @@ local function ScanFollowers()
 end
 
 local function ScanOrderHallFollowers()
-	local followersList = C_Garrison.GetFollowers(LE_FOLLOWER_TYPE_GARRISON_7_0)
+	local followersList = C_Garrison.GetFollowers(Enum.GarrisonFollowerType.FollowerType_7_0)
 	if not followersList then return end
 
 	local followers = addon.ThisCharacter.Followers
@@ -664,7 +669,7 @@ end
 local function ScanNextArtifactResearch()
 	-- scan the remaining time until the next artifact research notes are complete
 	
-	local shipments = C_Garrison.GetLooseShipments(LE_GARRISON_TYPE_7_0)
+	local shipments = C_Garrison.GetLooseShipments(Enum.GarrisonType.Type_7_0)
 	local char = addon.ThisCharacter
 
 	-- reset values 
@@ -765,19 +770,17 @@ local function OnGarrisonMissionNPCClosed(event)
 end
 
 local function OnGarrisonUpdate(event)
-	ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_6_0, GARRISON_MISSIONS_STORAGE)
-	ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_7_0, ORDERHALL_MISSIONS_STORAGE)
-	ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_8_0, WARCAMPAIGN_MISSIONS_STORAGE)
+	ScanAvailableMissions(Enum.GarrisonFollowerType.FollowerType_6_0, GARRISON_MISSIONS_STORAGE)
+	ScanAvailableMissions(Enum.GarrisonFollowerType.FollowerType_7_0, ORDERHALL_MISSIONS_STORAGE)
+	ScanAvailableMissions(Enum.GarrisonFollowerType.FollowerType_8_0, WARCAMPAIGN_MISSIONS_STORAGE)
 end
 
 local function OnGarrisonMissionStarted(event, followerType, missionID)
-	-- ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_6_0, GARRISON_MISSIONS_STORAGE) not needed, done by the list update
-	-- only re-scan in progress
 	ScanMissionStartTime(missionID)
 end
 
 local function OnGarrisonMissionFinished()
-	ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_6_0, GARRISON_MISSIONS_STORAGE)
+	ScanAvailableMissions(Enum.GarrisonFollowerType.FollowerType_6_0, GARRISON_MISSIONS_STORAGE)
 end
 
 local function OnAddonLoaded(event, addonName)
@@ -1052,12 +1055,12 @@ function addon:OnEnable()
 	-- Missions
 	addon:ScheduleTimer(function()
 			-- To avoid the long list of GARRISON_MISSION_LIST_UPDATE at startup, make the initial scan 3 seconds later ..
-			ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_6_0, GARRISON_MISSIONS_STORAGE)
-			ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_7_0, ORDERHALL_MISSIONS_STORAGE)
-			ScanAvailableMissions(LE_FOLLOWER_TYPE_GARRISON_8_0, WARCAMPAIGN_MISSIONS_STORAGE)
-			ScanActiveMissions(LE_FOLLOWER_TYPE_GARRISON_6_0)
-			ScanActiveMissions(LE_FOLLOWER_TYPE_GARRISON_7_0)
-			ScanActiveMissions(LE_FOLLOWER_TYPE_GARRISON_8_0)
+			ScanAvailableMissions(Enum.GarrisonFollowerType.FollowerType_6_0, GARRISON_MISSIONS_STORAGE)
+			ScanAvailableMissions(Enum.GarrisonFollowerType.FollowerType_7_0, ORDERHALL_MISSIONS_STORAGE)
+			ScanAvailableMissions(Enum.GarrisonFollowerType.FollowerType_8_0, WARCAMPAIGN_MISSIONS_STORAGE)
+			ScanActiveMissions(Enum.GarrisonFollowerType.FollowerType_6_0)
+			ScanActiveMissions(Enum.GarrisonFollowerType.FollowerType_7_0)
+			ScanActiveMissions(Enum.GarrisonFollowerType.FollowerType_8_0)
 
 			-- .. then register the event
 			-- note, at logon, GARRISON_UPDATE is fired before MISSION_LIST_UPDATE

@@ -368,8 +368,15 @@ local function ScanRecipes()
 		end
 		
 		-- scan cooldown
-		local cooldown = C_TradeSkillUI.GetRecipeCooldown(recipeID)
+		local cooldown, isDaily = C_TradeSkillUI.GetRecipeCooldown(recipeID)
 		if cooldown then
+            if isDaily then
+                -- Bugfix: 13/August/2020
+                -- to compensate for a bug on Blizzards end, I cannot rely on cooldown when isDaily is true
+                -- it returns a time 2 hours earlier than the correct time if called immediately after crafting something
+                -- So, instead I will use the newly added C_DateAndTime.GetSecondsUntilWeeklyReset
+                cooldown = DataStore:GetSecondsUntilDailyReset()
+            end
 			-- ex: "Hexweave Cloth|86220|1533539676" expire at "now + cooldown"
 			table.insert(profession.Cooldowns, format("%s|%d|%d", info.name, cooldown, cooldown + time()))
 		end
@@ -523,6 +530,10 @@ local function OnTradeSkillListUpdate(self)
     local info = C_TradeSkillUI.GetRecipeInfo(recipeID)
     
 	if cooldown then
+        if isDayCooldown then
+            cooldown = DataStore:GetSecondsUntilDailyReset()
+        end
+        
     	local tradeskillName = select(7, C_TradeSkillUI.GetTradeSkillLine())
 	    if not tradeskillName or tradeskillName == "UNKNOWN" then return end
 	    local profession = addon.ThisCharacter.Professions[tradeskillName]
@@ -607,7 +618,8 @@ end
 local function _IterateRecipes(profession, mainCategory, subCategory, callback)
 	-- mainCategory : category index (or 0 for all)
 	-- subCategory : sub-category index (or 0 for all)
-	local crafts = profession.Crafts
+	if not profession then return end
+    local crafts = profession.Crafts
 
 	-- loop through categories
 	for catIndex = 1, _GetNumRecipeCategories(profession) do

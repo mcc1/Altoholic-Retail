@@ -17,7 +17,6 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.Dailies.text = "Daily Quests"
 		frame.FollowerAbilities.text = format("Garrison %s/%s", GARRISON_RECRUIT_ABILITIES, GARRISON_RECRUIT_TRAITS)
 		frame.Sets.text = WARDROBE_SETS
-        frame.Corruption.text = "Corruption"
         frame.Tasks.text = "Tasks"
         frame.Essences.text = "Azerite Essences"
         AltoholicTabGrids.SelectRealm.Middle:SetSize(140, 64)
