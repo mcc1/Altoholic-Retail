@@ -320,7 +320,7 @@ local Dungeons = {
         },
     },
     { -- [8]
-        name = EXPANSION_NAME7, -- "Bad for Azeroth"
+        name = EXPANSION_NAME7, -- "Badtle for Azeroth"
         { -- [1] LFR
              name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_LFR)),
 			{ id = 1731, achID = 12521, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Halls of Containment
@@ -366,7 +366,28 @@ local Dungeons = {
             { id = 2035, achID = 14055, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Ny'alotha, the Waking City   
         },
     },
-    
+    { -- [9]
+        name = EXPANSION_NAME8, -- "Shadowlands"
+        { -- [1] LFR
+             name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_LFR)),
+			{ id = 2090, achID = 14365, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- The Leeching Vaults
+			{ id = 2091, achID = 14365, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- Revendreth's Last Dance
+			{ id = 2092, achID = 14365, bosses = 2, difficulty = DIFFICULTY_RAID_LFR },	-- Blood from Stone
+			{ id = 2096, achID = 14365, bosses = 3, difficulty = DIFFICULTY_RAID_LFR },	-- An Audience with Arrogance
+        },
+        {   -- [2] Normal Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_FLEX)),
+            { id = 2095, achID = 14365, difficulty = DIFFICULTY_RAID_FLEX },	-- Castle Nathria - TODO: achievement for beating the raid on normal doesn't appear to be on the PTR yet. Check for one later.
+        },
+        {   -- [3] Heroic Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_HEROIC)),
+            { id = 2094, achID = 14365, difficulty = DIFFICULTY_RAID_HEROIC },	-- Castle Nathria 
+        },
+        {   -- [4] Mythic Raids
+            name = format("%s - %s", RAIDS, GetDifficultyInfo(DIFFICULTY_RAID_MYTHIC)),
+            { id = 2093, achID = 14365, difficulty = DIFFICULTY_RAID_MYTHIC },	-- Castle Nathria   
+        },
+    },
 }
 
 local view
