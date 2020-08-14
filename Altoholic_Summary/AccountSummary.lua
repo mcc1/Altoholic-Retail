@@ -1640,19 +1640,20 @@ for currencyIndex = 1, 5 do
     	if level == 1 then
             frame:AddTitle("Select Currency:")
             frame:AddTitle()
-            for currencyListIndex = 1, GetCurrencyListSize() do
-                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+            for currencyListIndex = 1, C_CurrencyInfo.GetCurrencyListSize() do
+                local info = C_CurrencyInfo.GetCurrencyListInfo(currencyListIndex)
+                local name, isHeader = info.name, info.isHeader
                 if isHeader then
                     frame:AddCategoryButton(name, currencyListIndex, level)
                 end
             end
             frame:AddCloseMenu()
         elseif level == 2 then
-            for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), GetCurrencyListSize() do
-                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+            for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), C_CurrencyInfo.GetCurrencyListSize() do
+                local info = C_CurrencyInfo.GetCurrencyListInfo(currencyListIndex)  
+                local name, isHeader = info.name, info.isHeader 
                 if not isHeader then
-                --	AddButtonWithArgs = function(frame, text, value, func, arg1, arg2, isChecked)
-                    frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(GetCurrencyListLink(currencyListIndex)), nil, false, level)
+                    frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(C_CurrencyInfo.GetCurrencyListLink(currencyListIndex)), nil, false, level) 
                 else
                     break
                 end
