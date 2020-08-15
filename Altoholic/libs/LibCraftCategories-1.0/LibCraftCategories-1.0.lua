@@ -9,7 +9,7 @@ Converted to Lua using: https://thdoan.github.io/mr-data-converter/
 
 --]]
 
-local LIB_VERSION_MAJOR, LIB_VERSION_MINOR = "LibCraftCategories-1.0", 1
+local LIB_VERSION_MAJOR, LIB_VERSION_MINOR = "LibCraftCategories-1.0", 2
 local lib = LibStub:NewLibrary(LIB_VERSION_MAJOR, LIB_VERSION_MINOR)
 
 if not lib then return end -- No upgrade needed
