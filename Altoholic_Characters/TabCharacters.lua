@@ -118,22 +118,25 @@ function ns:ShowCharInfo(view)
 		addon.Containers:SetView(addon:GetOption("UI.Tabs.Characters.ViewBagsAllInOne"))
 		AltoholicFrameContainers:Show()
 		addon.Containers:Update()
-		
+        
 	elseif view == VIEW_QUESTS then
 		AltoholicTabCharacters.QuestLog:Update()
+        
 	elseif view == VIEW_TALENTS then
 		AltoholicTabCharacters.Talents:Update()
-	
+        
 	elseif view == VIEW_AUCTIONS then
 		addon.AuctionHouse:SetListType("Auctions")
 		AltoholicFrameAuctions:Show()
 		addon.AuctionHouse:InvalidateView()
 		addon.AuctionHouse:Update()
+        
 	elseif view == VIEW_BIDS then
 		addon.AuctionHouse:SetListType("Bids")
 		AltoholicFrameAuctions:Show()
 		addon.AuctionHouse:InvalidateView()
 		addon.AuctionHouse:Update()
+        
 	elseif view == VIEW_MAILS then
 		AltoholicFrameMail:Show()
 		addon.Mail:BuildView()

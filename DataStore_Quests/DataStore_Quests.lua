@@ -392,7 +392,8 @@ local function ScanQuests()
         end
         -- if the current character has completed the quest already, then C_TaskQuest.GetQuestTimeLeftMinutes(questID) will return nil, so we can't give an accurate time remaining
         local timeRemaining = C_TaskQuest.GetQuestTimeLeftMinutes(questID)
-        if not IsQuestFlaggedCompleted(questID) then
+        if (not IsQuestFlaggedCompleted(questID)) and (not C_QuestSession.Exists()) then
+            -- C_TaskQuest.GetQuestInfoByQuestID is throwing errors while the character has Party Sync on.
             savedRegularZoneQuests[questID] = format("%d|%d|%s|%d|%s", timeRemaining, numRequired, objective or "", time(), C_TaskQuest.GetQuestInfoByQuestID(questID))
         end
         char.RegularZoneQuests[questID] = {["numFulfilled"] = numFulfilled}    
