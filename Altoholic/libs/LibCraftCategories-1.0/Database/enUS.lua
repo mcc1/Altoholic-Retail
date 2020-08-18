@@ -127,7 +127,7 @@ LibStub("LibCraftCategories-1.0").enUS = {
   [126]={["Name_lang"]="Utility",["HordeName_lang"]="",["ID"]=203,["ParentTradeSkillCategoryID"]=419,["SkillLineID"]=202,["OrderIndex"]=1100,["Flags"]=0},
   [127]={["Name_lang"]="Powered Armor",["HordeName_lang"]="",["ID"]=204,["ParentTradeSkillCategoryID"]=419,["SkillLineID"]=202,["OrderIndex"]=1000,["Flags"]=0},
   [128]={["Name_lang"]="Runes",["HordeName_lang"]="",["ID"]=210,["ParentTradeSkillCategoryID"]=0,["SkillLineID"]=960,["OrderIndex"]=0,["Flags"]=0},
-  [129]={["Name_lang"]="Research",["HordeName_lang"]="",["ID"]=214,["ParentTradeSkillCategoryID"]=372,["SkillLineID"]=755,["OrderIndex"]=-1,["Flags"]=0},
+  [129]={["Name_lang"]="Research",["HordeName_lang"]="",["ID"]=214,["ParentTradeSkillCategoryID"]=372,["SkillLineID"]=755,["OrderIndex"]="-1",["Flags"]=0},
   [130]={["Name_lang"]="Materials",["HordeName_lang"]="",["ID"]=215,["ParentTradeSkillCategoryID"]=590,["SkillLineID"]=164,["OrderIndex"]=10,["Flags"]=0},
   [131]={["Name_lang"]="Weapon Mods",["HordeName_lang"]="",["ID"]=216,["ParentTradeSkillCategoryID"]=590,["SkillLineID"]=164,["OrderIndex"]=20,["Flags"]=0},
   [132]={["Name_lang"]="Armor Mods",["HordeName_lang"]="",["ID"]=217,["ParentTradeSkillCategoryID"]=590,["SkillLineID"]=164,["OrderIndex"]=30,["Flags"]=0},
@@ -1130,5 +1130,5 @@ LibStub("LibCraftCategories-1.0").enUS = {
   [1129]={["Name_lang"]="Quest Recipes",["HordeName_lang"]="",["ID"]=1529,["ParentTradeSkillCategoryID"]=1406,["SkillLineID"]=773,["OrderIndex"]=0,["Flags"]=0},
   [1130]={["Name_lang"]="Quest Recipes",["HordeName_lang"]="",["ID"]=1530,["ParentTradeSkillCategoryID"]=1418,["SkillLineID"]=755,["OrderIndex"]=0,["Flags"]=0},
   [1131]={["Name_lang"]="Quest Recipes",["HordeName_lang"]="",["ID"]=1531,["ParentTradeSkillCategoryID"]=1334,["SkillLineID"]=165,["OrderIndex"]=0,["Flags"]=0},
-  [1132]={["Name_lang"]="Quest Recipes",["HordeName_lang"]="",["ID"]=1532,["ParentTradeSkillCategoryID"]=1395,["SkillLineID"]=197,["OrderIndex"]=0,["Flags"]=0}
+  [1132]={["Name_lang"]="Quest Recipes",["HordeName_lang"]="",["ID"]=1532,["ParentTradeSkillCategoryID"]=1395,["SkillLineID"]=197,["OrderIndex"]=0,["Flags"]=0},
 }
