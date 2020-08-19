@@ -18,11 +18,11 @@ local GAME_LOCALE = GetLocale()
 
 local function initialize()
     table.sort(lib.enUS, function(k1, k2)
-            return k1.OrderIndex < k2.OrderIndex
+            return tonumber(k1.OrderIndex) < tonumber(k2.OrderIndex)
         end)
     if GAME_LOCALE ~= "enUS" then
         table.sort(lib[GAME_LOCALE], function(k1, k2)
-                return k1.OrderIndex < k2.OrderIndex
+                return tonumber(k1.OrderIndex) < tonumber(k2.OrderIndex)
             end)
     end
 end
