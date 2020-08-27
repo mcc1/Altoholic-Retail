@@ -556,7 +556,7 @@ local function ScanOrderHallFollowers()
 end
 
 local function ScanWarCampaignFollowers()
-	local followersList = C_Garrison.GetFollowers(LE_FOLLOWER_TYPE_GARRISON_8_0)
+	local followersList = C_Garrison.GetFollowers(Enum.GarrisonFollowerType.FollowerType_8_0)
 	if not followersList then return end
 
 	local followers = addon.ThisCharacter.BFAFollowers
@@ -800,7 +800,7 @@ local function _GetBFAFollowers(character)
 end
 
 local function _GetFollowerInfo(character, id)
-	local follower = character.Followers[id]
+	local follower = character.Followers[id] or character.BFAFollowers[id]
 	if not follower then return end
 	
 	local link = follower.link
@@ -827,7 +827,7 @@ local function _GetFollowerSpellCounters(character, counterType, id)
 end
 
 local function _GetFollowerLink(character, id)
-	local follower = character.Followers[id]
+	local follower = character.Followers[id] or character.BFAFollowers[id]
 	if not follower then return end
 	
 	return follower.link
