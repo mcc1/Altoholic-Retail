@@ -203,6 +203,16 @@
 					<KeyValue key="iconFile" value="Interface\Icons\INV_Misc_Book_17" />
 				</KeyValues>
 			</Button>
+            
+			<Button parentKey="WarCampaignFollowers" inherits="AltoTabGridsMenuIconTemplate" id="17">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Tasks" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="Interface\Icons\INV_Icon_Mission_Complete_Order" />
+					<KeyValue key="text" value="WAR_FOLLOWERS" type="global" />
+				</KeyValues>
+			</Button>
             			
 			<!-- Tooltip for Garrison Levels, to avoid messing with Blizzard's own -->
 			<Frame parentKey="BuildingLevelTooltip" inherits="TooltipBorderedFrameTemplate" hidden="true" frameStrata="TOOLTIP" clampedToScreen="true">
