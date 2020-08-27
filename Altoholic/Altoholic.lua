@@ -8,7 +8,7 @@ local addon = _G[addonName]
 local colors = addon.Colors
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
-local LR = LibStub("LibRecipes-ForAltoholic-2.0")
+local LR = LibStub("LibRecipes-3.0")
 
 local THIS_ACCOUNT = "Default"
 

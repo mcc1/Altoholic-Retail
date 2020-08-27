@@ -4,7 +4,7 @@ local colors = addon.Colors
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local BB = LibStub("LibBabble-Boss-3.0"):GetLookupTable()
-local LR = LibStub("LibRecipes-ForAltoholic-2.0")
+local LR = LibStub("LibRecipes-3.0")
 local LCL = LibStub("LibCraftLevels-1.0")
 local TS = addon.TradeSkills.Names
 
@@ -631,7 +631,7 @@ function ns:GetSource(searchedID)
 		end
 	end
 	
-	local spellID = LR:CreatedBy(searchedID)
+	local _, spellID = LR:GetItemInfo(searchedID)
     local name 
     if spellID then
         name = GetSpellInfo(spellID)

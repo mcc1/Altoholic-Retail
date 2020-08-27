@@ -16,6 +16,7 @@ local xPacks = {
 	EXPANSION_NAME5,	-- "Warlords of Draenor"
     EXPANSION_NAME6,    -- "Legion"
     EXPANSION_NAME7,    -- "BfA"
+    EXPANSION_NAME8,    -- "Shadowlands"
 }
 
 local OPTION_XPACK = "UI.Tabs.Grids.Tradeskills.CurrentXPack"

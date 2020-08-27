@@ -98,8 +98,8 @@ end
 
 local function GetQuestLogIndexByName(name)
 	-- helper function taken from QuestGuru
-	for i = 1, GetNumQuestLogEntries() do
-		local title = GetQuestLogTitle(i);
+	for i = 1, C_QuestLog.GetNumQuestLogEntries() do
+		local title = C_QuestLog.GetInfo(i).title
 		if title == strtrim(name) then
 			return i
 		end
@@ -175,7 +175,8 @@ end
 
 local function GetQuestTagID(questID, isComplete, frequency)
 
-	local tagID = GetQuestTagInfo(questID)
+	local info = C_QuestLog.GetQuestTagInfo(questID) or {}
+    local tagID = info.tagID
 	if tagID then	
 		-- if there is a tagID, process it
 		if tagID == QUEST_TAG_ACCOUNT then
@@ -194,11 +195,11 @@ local function GetQuestTagID(questID, isComplete, frequency)
 	end
 
 	-- at this point, isComplete is either nil or 0
-	if frequency == LE_QUEST_FREQUENCY_DAILY then
+	if frequency == Enum.QuestFrequency.Daily then
 		return "DAILY"
 	end
 
-	if frequency == LE_QUEST_FREQUENCY_WEEKLY then
+	if frequency == Enum.QuestFrequency.Weekly then
 		return "WEEKLY"
 	end
 end
@@ -210,8 +211,8 @@ local headersState = {}
 local function SaveHeaders()
 	local headerCount = 0		-- use a counter to avoid being bound to header names, which might not be unique.
 
-	for i = GetNumQuestLogEntries(), 1, -1 do		-- 1st pass, expand all categories
-		local _, _, _, _, isHeader, isCollapsed = GetQuestLogTitle(i)
+	for i = C_QuestLog.GetNumQuestLogEntries(), 1, -1 do		-- 1st pass, expand all categories
+		local isHeader, isCollapsed = C_QuestLog.GetInfo(i).isHeader, C_QuestLog.GetInfo(i).isCollapsed
 		if isHeader then
 			headerCount = headerCount + 1
 			if isCollapsed then
@@ -224,8 +225,8 @@ end
 
 local function RestoreHeaders()
 	local headerCount = 0
-	for i = GetNumQuestLogEntries(), 1, -1 do
-		local _, _, _, _, isHeader = GetQuestLogTitle(i)
+	for i = C_QuestLog.GetNumQuestLogEntries(), 1, -1 do
+		local isHeader = C_QuestLog.GetInfo(i).isHeader
 		if isHeader then
 			headerCount = headerCount + 1
 			if headersState[headerCount] then
@@ -236,11 +237,11 @@ local function RestoreHeaders()
 	wipe(headersState)
 end
 
-local function ScanChoices(rewards)
+local function ScanChoices(rewards, questID)
 	-- rewards = out parameter
 
 	-- these are the actual item choices proposed to the player
-	for i = 1, GetNumQuestLogChoices() do
+	for i = 1, GetNumQuestLogChoices(questID) do
 		local _, _, numItems, _, isUsable = GetQuestLogChoiceInfo(i)
 		isUsable = isUsable and 1 or 0	-- this was 1 or 0, in WoD, it is a boolean, convert back to 0 or 1
 		local link = GetQuestLogItemLink("choice", i)
@@ -324,52 +325,52 @@ local function ScanQuests()
         end            
 	end
     
-	local currentSelection = GetQuestLogSelection()		-- save the currently selected quest
+	local currentSelection = C_QuestLog.GetSelectedQuest()		-- save the currently selected quest
 	SaveHeaders()
 
 	local rewardsCache = {}
 	local lastHeaderIndex = 0
 	local lastQuestIndex = 0
 	
-	for i = 1, GetNumQuestLogEntries() do
-		local title, level, groupSize, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, 
-				isOnMap, hasLocalPOI, isTask, isBounty, isStory, isHidden = GetQuestLogTitle(i)
-
-		if isHeader then
-			table.insert(headers, title or "")
+	for questLogIndex = 1, C_QuestLog.GetNumQuestLogEntries() do 
+		local info = C_QuestLog.GetInfo(questLogIndex)
+        info.frequency = info.frequency or 0
+           
+		if info.isHeader then
+			table.insert(headers, info.title or "")
 			lastHeaderIndex = lastHeaderIndex + 1
 		else
-			SelectQuestLogEntry(i)
+			C_QuestLog.SetSelectedQuest(info.questID)
 			
-			local value = (isComplete and isComplete > 0) and 1 or 0		-- bit 0 : isComplete
-			value = value + LShift((frequency == LE_QUEST_FREQUENCY_DAILY) and 1 or 0, 1)		-- bit 1 : isDaily
-			value = value + LShift(isTask and 1 or 0, 2)						-- bit 2 : isTask
-			value = value + LShift(isBounty and 1 or 0, 3)					-- bit 3 : isBounty
-			value = value + LShift(isStory and 1 or 0, 4)					-- bit 4 : isStory
-			value = value + LShift(isHidden and 1 or 0, 5)					-- bit 5 : isHidden
-			value = value + LShift((groupSize == 0) and 1 or 0, 6)		-- bit 6 : isSolo
+			local value = (info.isComplete and info.isComplete > 0) and 1 or 0		-- bit 0 : isComplete
+			value = value + LShift((info.frequency == Enum.QuestFrequency.Daily) and 1 or 0, 1)		-- bit 1 : isDaily
+			value = value + LShift(info.isTask and 1 or 0, 2)						-- bit 2 : isTask
+			value = value + LShift(info.isBounty and 1 or 0, 3)					-- bit 3 : isBounty
+			value = value + LShift(info.isStory and 1 or 0, 4)					-- bit 4 : isStory
+			value = value + LShift(info.isHidden and 1 or 0, 5)					-- bit 5 : isHidden
+			value = value + LShift((info.groupSize == 0) and 1 or 0, 6)		-- bit 6 : isSolo
 			-- bit 7 : unused, reserved
 
-			value = value + LShift(groupSize, 8)							-- bits 8-10 : groupSize, 3 bits, shouldn't exceed 5
+			value = value + LShift(info.suggestedGroup, 8)							-- bits 8-10 : groupSize, 3 bits, shouldn't exceed 5
 			value = value + LShift(lastHeaderIndex, 11)					-- bits 11-15 : index of the header (zone) to which this quest belongs
-			value = value + LShift(level, 16)								-- bits 16-23 : level
+			value = value + LShift(info.level, 16)								-- bits 16-23 : level
 			-- value = value + LShift(GetQuestLogRewardMoney(), 24)		-- bits 24+ : money
 			
 			table.insert(quests, value)
 			lastQuestIndex = lastQuestIndex + 1
 			
-			tags[lastQuestIndex] = GetQuestTagID(questID, isComplete, frequency)
-			links[lastQuestIndex] = GetQuestLink(questID)
+			tags[lastQuestIndex] = GetQuestTagID(info.questID, info.isComplete, info.frequency)
+			links[lastQuestIndex] = GetQuestLink(info.questID)
 			money[lastQuestIndex] = GetQuestLogRewardMoney()
 
 			-- is the quest an emissary quest ?
-			if emissaryQuests[questID] then
-				local objective, _, _, numFulfilled, numRequired = GetQuestObjectiveInfo(questID, 1, false)
-				emissaries[questID] = format("%d|%d|%d|%s|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(questID), objective or "", time(), C_QuestLog.GetQuestInfo(questID))
+			if emissaryQuests[info.questID] then
+				local objective, _, _, numFulfilled, numRequired = GetQuestObjectiveInfo(info.questID, 1, false)
+				emissaries[info.questID] = format("%d|%d|%d|%s|%d|%s", numFulfilled, numRequired, C_TaskQuest.GetQuestTimeLeftMinutes(info.questID), objective or "", time(), info.title)
 			end
 
 			wipe(rewardsCache)
-			ScanChoices(rewardsCache)
+			ScanChoices(rewardsCache, info.questID)
 			ScanRewards(rewardsCache)
 			ScanRewardSpells(rewardsCache)
 
@@ -383,7 +384,7 @@ local function ScanQuests()
         -- initialize the saved variable if needed
         if not savedRegularZoneQuests then savedRegularZoneQuests = {} end
         local objective, _, _, numFulfilled, numRequired
-        if IsQuestTask(questID) then
+        if C_QuestLog.IsQuestTask(questID) then
             objective = GetQuestObjectiveInfo(questID, 1, false)
             numFulfilled = C_TaskQuest.GetQuestProgressBarInfo(questID)
             numRequired = 100
@@ -392,15 +393,15 @@ local function ScanQuests()
         end
         -- if the current character has completed the quest already, then C_TaskQuest.GetQuestTimeLeftMinutes(questID) will return nil, so we can't give an accurate time remaining
         local timeRemaining = C_TaskQuest.GetQuestTimeLeftMinutes(questID)
-        if (not IsQuestFlaggedCompleted(questID)) and (not C_QuestSession.Exists()) then
-            -- C_TaskQuest.GetQuestInfoByQuestID is throwing errors while the character has Party Sync on.
+
+        if (not C_QuestLog.IsQuestFlaggedCompleted(questID)) and (not C_QuestSession.Exists()) then
             savedRegularZoneQuests[questID] = format("%d|%d|%s|%d|%s", timeRemaining, numRequired, objective or "", time(), C_TaskQuest.GetQuestInfoByQuestID(questID))
         end
         char.RegularZoneQuests[questID] = {["numFulfilled"] = numFulfilled}    
     end
 
 	RestoreHeaders()
-	SelectQuestLogEntry(currentSelection)		-- restore the selection to match the cursor, must be properly set if a user abandons a quest
+	C_QuestLog.SetSelectedQuest(currentSelection)		-- restore the selection to match the cursor, must be properly set if a user abandons a quest
 
 	addon.ThisCharacter.lastUpdate = time()
 	
@@ -427,8 +428,8 @@ local function RefreshQuestHistory()
 	local thisChar = addon.ThisCharacter
 	local history = thisChar.History
 	wipe(history)
-	local quests = {}
-	GetQuestsCompleted(quests)
+	local quests = C_QuestLog.GetAllCompletedQuestIDs()
+    -- 9.0: the questIDs were moved from values to keys
 
 	--[[	In order to save memory, we'll save the completion status of 32 quests into one number (by setting bits 0 to 31)
 		Ex:
@@ -441,7 +442,7 @@ local function RefreshQuestHistory()
 
 	local count = 0
 	local index, bitPos
-	for questID in pairs(quests) do
+	for _, questID in pairs(quests) do
 		bitPos = (questID % 32)
 		index = ceil(questID / 32)
 
