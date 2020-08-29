@@ -16,7 +16,6 @@
     <Script file="Grid_Tasks.lua"/>
     <Script file="Grid_Essences.lua"/>
     
-	
 	<Frame name="AltoholicFrameGrids" parent="AltoholicTabGrids" hidden="true">
 		<Size x="615" y="306" />
 		<Anchors>

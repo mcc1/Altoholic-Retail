@@ -10,7 +10,7 @@ local start_char_index = 1
 
 addon:Controller("AltoholicUI.TabGrids", {
 	OnBind = function(frame)
-		frame.Label1:SetText(L["Realm"])
+		frame.Label1:SetText(L["Account"])
 		frame.Equipment.text = L["Equipment"]
 		frame.Factions.text = L["Reputations"]
 		frame.Archeology.text = GetSpellInfo(78670)
@@ -20,9 +20,9 @@ addon:Controller("AltoholicUI.TabGrids", {
         frame.Corruption.text = "Corruption"
         frame.Tasks.text = "Tasks"
         frame.Essences.text = "Azerite Essences"
-        AltoholicTabGrids.SelectRealm.Middle:SetSize(140, 64)
+        AltoholicTabGrids.SelectAccount.Middle:SetSize(140, 64)
 		
-		frame.SelectRealm:RegisterClassEvent("RealmChanged", function()
+		frame.SelectAccount:RegisterClassEvent("AccountChanged", function()
 				frame.Status:SetText("")
 				frame:Update()
 			end)
@@ -44,8 +44,8 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.currentGridID = gridID
 	end,
 	Update = function(frame)
-		local account, realm = frame.SelectRealm:GetCurrentRealm()
-		frame.ClassIcons:Update(account, realm)
+		local account = frame.SelectAccount:GetCurrentAccount()
+		frame.ClassIcons:Update(account)
 
 		local grids = AltoholicFrameGrids
 		local scrollFrame = grids.ScrollFrame
@@ -61,8 +61,6 @@ addon:Controller("AltoholicUI.TabGrids", {
 		local size = obj:GetSize()
 		local itemButton
 		
-        -- AltoIconListEntryTemplate.Item1
-        -- 	<Anchor point="BOTTOMLEFT" relativeKey="$parent" relativePoint="BOTTOMLEFT" x="180" y="0" />
         local classIcons = frame.ClassIcons
 
         -- Update which class icons are shown
@@ -98,7 +96,7 @@ addon:Controller("AltoholicUI.TabGrids", {
 					itemButton = rowFrame["Item"..colIndex]
 					itemButton.IconBorder:Hide()
 					
-					character = addon:GetOption(format("Tabs.Grids.%s.%s.Column%d", account, realm, colIndex))
+					character = addon:GetOption(format("Tabs.Grids.%s.Column%d", account, colIndex))
 					if character then
 						itemButton:SetScript("OnEnter", obj.OnEnter)
 						itemButton:SetScript("OnClick", obj.OnClick)
@@ -178,8 +176,8 @@ addon:Controller("AltoholicUI.TabGrids", {
 	SetViewDDMText = function(frame, text)
 		frame.SelectView:SetText(text)
 	end,
-	GetRealm = function(frame)
-		return frame.SelectRealm:GetCurrentRealm()	-- returns : account, realm
+	GetAccount = function(frame)
+		return frame.SelectAccount:GetCurrentAccount()	-- returns : account
 	end,
 })
 
