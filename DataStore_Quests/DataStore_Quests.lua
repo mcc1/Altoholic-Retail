@@ -444,7 +444,7 @@ local function OnUnitQuestLogChanged()			-- triggered when accepting/validating 
 	addon:RegisterEvent("QUEST_LOG_UPDATE", OnQuestLogUpdate)		-- so register for this one ..
 end
 
-local function OnCovenentCallingsUpdated(self, event, ...)
+local function OnCovenantCallingsUpdated(event, ...)
     ScanCallings(...)
 end
 
@@ -767,7 +767,7 @@ function addon:OnEnable()
 	addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
 	addon:RegisterEvent("UNIT_QUEST_LOG_CHANGED", OnUnitQuestLogChanged)
     addon:RegisterEvent("WORLD_QUEST_COMPLETED_BY_SPELL", ScanQuests)
-    addon:RegisterEvent("COVENANT_CALLINGS_UPDATED", OnCovenentCallingsUpdated)
+    addon:RegisterEvent("COVENANT_CALLINGS_UPDATED", OnCovenantCallingsUpdated)
 
 	addon:SetupOptions()
 
