@@ -30,64 +30,66 @@ local function BuildView()
 	questList = {}
 	view = {}
 	
-	local account, realm = AltoholicTabGrids:GetRealm()
+	local account = AltoholicTabGrids:GetAccount()
 	
 	-- parse the emissary quests, but only the ones that have NOT been completed
-	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
-		for questID, _ in pairs(DataStore:GetEmissaryQuests()) do
-            if (not addon:GetOption(OPTION_TOKEN)) or 
-                    ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME6) and questID < 50000) or
-                    ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7) and questID > 50000) then
-                    -- TODO: In Badowlands, find the questIDs of emissaries there and extend this out  
-    			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
-                local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
-    			local _, _, timeLeft, objective, emissaryQuestName = DataStore:GetEmissaryQuestInfo(character, questID)
-    			
-    			if timeLeft and timeLeft > 0 then
-    				local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
-                    if not questName then questName = emissaryQuestName end
-                    if not emissaryQuestName then questName = C_QuestLog.GetQuestInfo(questID) end
-                    if not questName then questName = "" end
-    
-    				if not questList[questID] then
-    					questList[questID] = {}
-    					questList[questID].title = questName
-    					questList[questID].timeLeft = timeLeft
-    					questList[questID].completionStatus = {}
-    				end				
-    
-                    if isOnQuest then
-    				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
-                    elseif isCompleted then
-                        questList[questID].completionStatus[character] = QUEST_COMPLETE
-                    end
-    			end
-            end
-		end
+    for realm in pairs(DataStore:GetRealms(account)) do
+    	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
+    		for questID, _ in pairs(DataStore:GetEmissaryQuests()) do
+                if (not addon:GetOption(OPTION_TOKEN)) or 
+                        ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME6) and questID < 50000) or
+                        ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7) and questID > 50000) then
+                        -- TODO: In Badowlands, find the questIDs of emissaries there and extend this out  
+        			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
+                    local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
+        			local _, _, timeLeft, objective, emissaryQuestName = DataStore:GetEmissaryQuestInfo(character, questID)
+        			
+        			if timeLeft and timeLeft > 0 then
+        				local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
+                        if not questName then questName = emissaryQuestName end
+                        if not emissaryQuestName then questName = C_QuestLog.GetQuestInfo(questID) end
+                        if not questName then questName = "" end
         
-        if (not addon:GetOption(OPTION_TOKEN)) or (addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7) then
-            for questID, _ in pairs(DataStore:GetRegularZoneQuests()) do
-                local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
-                local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
-    			local numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetRegularZoneQuestInfo(character, questID)
-    			
-    			if numRequired and timeLeft and timeLeft > 0 then
-    				if not questList[questID] then
-    					questList[questID] = {}
-    					questList[questID].title = questName
-    					questList[questID].timeLeft = timeLeft
-    					questList[questID].completionStatus = {}
-    				end				
-    
-                    if isOnQuest then
-    				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
-                    elseif isCompleted then
-                        questList[questID].completionStatus[character] = QUEST_COMPLETE
-                    end
-    			end
+        				if not questList[questID] then
+        					questList[questID] = {}
+        					questList[questID].title = questName
+        					questList[questID].timeLeft = timeLeft
+        					questList[questID].completionStatus = {}
+        				end				
+        
+                        if isOnQuest then
+        				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                        elseif isCompleted then
+                            questList[questID].completionStatus[character] = QUEST_COMPLETE
+                        end
+        			end
+                end
+    		end
+            
+            if (not addon:GetOption(OPTION_TOKEN)) or (addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7) then
+                for questID, _ in pairs(DataStore:GetRegularZoneQuests()) do
+                    local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
+                    local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
+        			local numFulfilled, numRequired, timeLeft, objective, questName = DataStore:GetRegularZoneQuestInfo(character, questID)
+        			
+        			if numRequired and timeLeft and timeLeft > 0 then
+        				if not questList[questID] then
+        					questList[questID] = {}
+        					questList[questID].title = questName
+        					questList[questID].timeLeft = timeLeft
+        					questList[questID].completionStatus = {}
+        				end				
+        
+                        if isOnQuest then
+        				    questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                        elseif isCompleted then
+                            questList[questID].completionStatus[character] = QUEST_COMPLETE
+                        end
+        			end
+                end
             end
-        end
-	end
+    	end
+    end
 
 	-- .. and only when the questList table is ready with emissaries info for all alts, loop again on the dailies
 	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm

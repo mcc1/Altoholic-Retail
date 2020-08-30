@@ -82,24 +82,26 @@ local function BuildView()
 	-- list all collected followers (across all alts), sorted alphabetically
 	-- .. then list all uncollected followers, also sorted alphabetically
 
-	local account, realm = AltoholicTabGrids:GetRealm()
+	local account = AltoholicTabGrids:GetAccount()
 	local uncollected = {}
 	local followers
 	
 	-- Prepare a list of all collected followers across all alts on this realm
-	for characterKey, character in pairs(DataStore:GetCharacters(realm, account)) do
-		followers = DataStore:GetFollowers(character)
-		
-		if followers then
-			for id, _ in pairs(followers) do
-				-- temporary fix: follower keys have been replaced from their name (string) to their id (numeric)
-				-- fix it here instead of in datastore, which is already ok.
-				if (type(id) == "number") and (id < 583) then
-					collected[id] = true	-- [123] = true
-				end
-			end
-		end
-	end
+    for realm in pairs(DataStore:GetRealms(account)) do
+    	for characterKey, character in pairs(DataStore:GetCharacters(realm, account)) do
+    		followers = DataStore:GetFollowers(character)
+    		
+    		if followers then
+    			for id, _ in pairs(followers) do
+    				-- temporary fix: follower keys have been replaced from their name (string) to their id (numeric)
+    				-- fix it here instead of in datastore, which is already ok.
+    				if (type(id) == "number") and (id < 583) then
+    					collected[id] = true	-- [123] = true
+    				end
+    			end
+    		end
+    	end
+    end
 	
 	-- Prepare a list of uncollected followers
 	local followersList = C_Garrison.GetFollowers(LE_FOLLOWER_TYPE_GARRISON_6_0)
