@@ -37,6 +37,16 @@ local modes = {
 		GetMissions = function(c) return DataStore:GetActiveMissions(c, Enum.GarrisonFollowerType.FollowerType_8_0) end,
 		GetNumMissions = function(c) return DataStore:GetNumActiveMissions(c, Enum.GarrisonFollowerType.FollowerType_8_0) end,
 	},
+    [7] = {	-- available missions
+		GetName = function() return GARRISON_LANDING_AVAILABLE end,
+		GetMissions = function(c) return DataStore:GetAvailableMissions(c, Enum.GarrisonFollowerType.FollowerType_9_0) end,
+		GetNumMissions = function(c) return DataStore:GetNumAvailableMissions(c, Enum.GarrisonFollowerType.FollowerType_9_0) end,
+	},
+	[8] = {	-- active missions
+		GetName = function() return GARRISON_LANDING_IN_PROGRESS end,
+		GetMissions = function(c) return DataStore:GetActiveMissions(c, Enum.GarrisonFollowerType.FollowerType_9_0) end,
+		GetNumMissions = function(c) return DataStore:GetNumActiveMissions(c, Enum.GarrisonFollowerType.FollowerType_9_0) end,
+	},
 }
 
 local function BuildView()

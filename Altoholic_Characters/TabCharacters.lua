@@ -832,6 +832,12 @@ local function GarrisonIcon_Initialize(self, level)
 				5, OnGarrisonMenuChange, nil, (currentMenu == 5))
 	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_8_0)), 
 				6, OnGarrisonMenuChange, nil, (currentMenu == 6))
+	DDM_AddTitle(" ")
+	DDM_AddTitle(COVENANT_MISSIONS_COVENANT_ADVENTURE)
+	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_9_0)), 
+				7, OnGarrisonMenuChange, nil, (currentMenu == 7))
+	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_9_0)), 
+				8, OnGarrisonMenuChange, nil, (currentMenu == 8))
 	
 	DDM_AddCloseMenu()
 end
