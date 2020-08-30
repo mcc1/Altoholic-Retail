@@ -31,6 +31,7 @@ local AddonDB_Defaults = {
 				QuestTags = {},
 				Emissaries = {},
                 RegularZoneQuests = {},
+                Callings = {}, -- Shadowlands version of Emissaries
 				Rewards = {},
 				Money = {},
 				Dailies = {},
@@ -45,6 +46,7 @@ local AddonDB_Defaults = {
 }
 
 local emissaryQuests = {
+    -- Legion
 	[42420] = true, -- Court of Farondis
 	[42421] = true, -- Nightfallen
 	[42422] = true, -- The Wardens
@@ -408,6 +410,24 @@ local function ScanQuests()
 	addon:SendMessage("DATASTORE_QUESTLOG_SCANNED", char)
 end
 
+local function ScanCallings(callings)
+    if not C_CovenantCallings.AreCallingsUnlocked() then return end
+    
+    local char = addon.ThisCharacter
+    local savedCallings = char.Callings
+    wipe(savedCallings)
+    
+    for i = 1, Constants.Callings.MaxCallings do
+        local calling = callings[index]
+        if calling then
+            local questID = calling.questID
+            local timeRemaining = C_TaskQuest.GetQuestTimeLeftSeconds(calling.questID) or 0
+            
+            savedCallings[questID] = timeRemaining
+        end
+    end
+end
+
 local queryVerbose
 
 -- *** Event Handlers ***
@@ -422,6 +442,10 @@ end
 
 local function OnUnitQuestLogChanged()			-- triggered when accepting/validating a quest .. but too soon to refresh data
 	addon:RegisterEvent("QUEST_LOG_UPDATE", OnQuestLogUpdate)		-- so register for this one ..
+end
+
+local function OnCovenentCallingsUpdated(self, event, ...)
+    ScanCallings(...)
 end
 
 local function RefreshQuestHistory()
@@ -586,6 +610,10 @@ local function _GetRegularZoneQuests()
     return regularZoneQuests
 end
 
+local function _GetCallingQuests(character)
+    return character.Callings
+end
+
 local function _GetEmissaryQuestInfo(character, questID)
 	local quest = character.Emissaries[questID]
 	if not quest then return end
@@ -709,6 +737,7 @@ local PublicMethods = {
 	GetCharactersOnQuest = _GetCharactersOnQuest,
 	IterateQuests = _IterateQuests,
     IsQuestEmissary = _IsQuestEmissary,
+    GetCallingQuests = _GetCallingQuests,
 }
 
 function addon:OnInitialize()
@@ -731,12 +760,14 @@ function addon:OnInitialize()
     DataStore:SetCharacterBasedMethod("GetRegularZoneQuestInfo")
 	DataStore:SetCharacterBasedMethod("IsCharacterOnQuest")
 	DataStore:SetCharacterBasedMethod("IterateQuests")
+    DataStore:SetCharacterBasedMethod("GetCallingQuests")
 end
 
 function addon:OnEnable()
 	addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
 	addon:RegisterEvent("UNIT_QUEST_LOG_CHANGED", OnUnitQuestLogChanged)
     addon:RegisterEvent("WORLD_QUEST_COMPLETED_BY_SPELL", ScanQuests)
+    addon:RegisterEvent("COVENANT_CALLINGS_UPDATED", OnCovenentCallingsUpdated)
 
 	addon:SetupOptions()
 
@@ -766,6 +797,7 @@ function addon:OnDisable()
 	addon:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
 	addon:UnregisterEvent("QUEST_QUERY_COMPLETE")
     addon:UnregisterEvent("WORLD_QUEST_COMPLETED_BY_SPELL")
+    addon:UnregisterEvent("COVENANT_CALLINGS_UPDATED")
 end
 
 -- *** Hooks ***
