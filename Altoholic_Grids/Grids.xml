@@ -15,6 +15,8 @@
     <Script file="Grid_Tasks.lua"/>
     <Script file="Grid_Essences.lua"/>
     <Script file="Grid_WarCampaignFollowers.lua" />
+    <Script file="Grid_Callings.lua"/>
+    <Script file="Grid_CovenantAdventureFollowers.lua"/>
     
 	
 	<Frame name="AltoholicFrameGrids" parent="AltoholicTabGrids" hidden="true">
