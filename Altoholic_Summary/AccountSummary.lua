@@ -1990,7 +1990,7 @@ columns["BindLocation"] = {
 
 columns["ConquestPoints"] = {
 	-- Header
-	headerWidth = 120,
+	headerWidth = 80,
 	headerLabel = "Conquest",
 	tooltipTitle = "Conquest Points",
 	tooltipSubTitle = nil,
@@ -1998,7 +1998,7 @@ columns["ConquestPoints"] = {
 	headerSort = DataStore.GetConquestPoints,
 	
 	-- Content
-	Width = 120,
+	Width = 80,
 	JustifyH = "CENTER",
 	GetText = function(character)
             local count = DataStore:GetConquestPoints(character) or ""
@@ -2006,6 +2006,31 @@ columns["ConquestPoints"] = {
             local color = colors.white
             if count >= 500 then
                 color = colors.red
+            end
+			return format("%s%s", color, count) 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["RenownLevel"] = {
+	-- Header
+	headerWidth = 90,
+	headerLabel = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
+	tooltipTitle = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
+	tooltipSubTitle = nil,
+	headerOnClick = function() SortView("RenownLevel") end,
+	headerSort = DataStore.GetRenownLevel,
+	
+	-- Content
+	Width = 90,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local count = DataStore:GetRenownLevel(character) or 0
+            count = tonumber(count) or 0
+            local color = colors.white
+            if count >= 40 then
+                color = colors.green
             end
 			return format("%s%s", color, count) 
 		end,
@@ -2049,7 +2074,7 @@ local modes = {
     [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
-    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints" },
+    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints", "RenownLevel" },
 }
 
 function ns:SetMode(mode)
