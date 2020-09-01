@@ -411,14 +411,16 @@ local function ScanQuests()
 end
 
 local function ScanCallings(callings)
+    print("Altoholic - debug: Scanning callings isn't working properly. Show this textdump to teelo:")
+	UIParentLoadAddOn('Blizzard_DebugTools')
+    DevTools_Dump(callings)
     if not C_CovenantCallings.AreCallingsUnlocked() then return end
     
     local char = addon.ThisCharacter
     local savedCallings = char.Callings
     wipe(savedCallings)
     
-    for i = 1, Constants.Callings.MaxCallings do
-        local calling = callings[index]
+    for i, calling in pairs(callings) do
         if calling then
             local questID = calling.questID
             local timeRemaining = C_TaskQuest.GetQuestTimeLeftSeconds(calling.questID) or 0
@@ -426,6 +428,7 @@ local function ScanCallings(callings)
             savedCallings[questID] = timeRemaining
         end
     end
+    DevTools_Dump(savedCallings)
 end
 
 local queryVerbose
