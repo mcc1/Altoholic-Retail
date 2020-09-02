@@ -13,7 +13,7 @@
 	<Include file="ScrollFrames.xml"/>
 	<Include file="ToggleButton.xml"/>
 	<Include file="DropDownMenu.xml"/>
-	<Include file="RealmPicker.xml"/>
+	<Include file="AccountPicker.xml"/>
 	
 	<Button name="AltoTabTemplate" inherits="CharacterFrameTabButtonTemplate" virtual="true">
 		<Scripts>

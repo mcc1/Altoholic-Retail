@@ -3,7 +3,7 @@
 	
 	<Button name="AltoTabAchievementsClassIconTemplate" inherits="AltoClassIconTemplate" virtual="true">
 		<KeyValues>
-			<KeyValue key="optionFormat" value="Tabs.Achievements.%s.%s.Column%d" />
+			<KeyValue key="optionFormat" value="Tabs.Achievements.%s.Column%d" />
 		</KeyValues>
 		<Scripts>
 			<OnEnter>
@@ -40,7 +40,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<Frame parentKey="SelectRealm" inherits="AltoRealmPickerTemplate">
+			<Frame parentKey="SelectAccount" inherits="AltoAccountPickerTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.Label1" relativePoint="BOTTOMLEFT" x="-30" y="-2" />
 				</Anchors>

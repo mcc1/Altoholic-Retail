@@ -18,7 +18,6 @@
     <Script file="Grid_Callings.lua"/>
     <Script file="Grid_CovenantAdventureFollowers.lua"/>
     
-	
 	<Frame name="AltoholicFrameGrids" parent="AltoholicTabGrids" hidden="true">
 		<Size x="615" y="306" />
 		<Anchors>

@@ -22,43 +22,45 @@ end
 local function ClassIcon_Initialize(frame, level)
 	local id = frame.menuID
 	local parent = frame:GetParent()
-	local account, realm = parent.SelectRealm:GetCurrentRealm()
+	local account = parent.SelectAccount:GetCurrentAccount()
 		
 	frame:AddTitle(L["Characters"])
 	local nameList = {}		-- we want to list characters alphabetically
-	for _, character in pairs(DataStore:GetCharacters(realm, account)) do
-		table.insert(nameList, character)	-- we can add the key instead of just the name, since they will all be like account.realm.name, where account & realm are identical
-	end
-	table.sort(nameList)
-	
-	-- get the key associated with this button
-	-- ex: "Tabs.Grids.<account>.<realm>.Column5"
-	local option = format(frame.optionFormat, account, realm, id)
-	local key = addon:GetOption(option) or ""
-	
-	for _, character in ipairs(nameList) do
-		local info = frame:CreateInfo()
-		
-		info.text		= DataStore:GetColoredCharacterName(character)
-		info.value		= character
-		info.func		= OnCharacterChange
-		info.checked	= (key == character)
-		info.arg1		= option
-		info.arg2		= parent.ClassIcons
-		frame:AddButtonInfo(info, 1)
-	end
-	
-	frame:AddTitle()
-	
-	local info = frame:CreateInfo()
-	info.text		= (id == 1) and RESET or NONE
-	info.value		= "empty"
-	info.func		= OnCharacterChange
-	info.checked	= (key == "")
-	info.arg1		= option
-	info.arg2		= parent.ClassIcons
-	frame:AddButtonInfo(info, 1)
+	for realm in pairs(DataStore:GetRealms(account)) do
+        for _, character in pairs(DataStore:GetCharacters(realm, account)) do
+            table.insert(nameList, character)	-- we can add the key instead of just the name, since they will all be like account.realm.name, where account & realm are identical
+	    end
+	    table.sort(nameList)
+    end
+    
+  	-- get the key associated with this button
+  	-- ex: "Tabs.Grids.<account>.Column5"
+  	local option = format(frame.optionFormat, account, id)
+  	local key = addon:GetOption(option) or ""
+  	
+  	for _, character in ipairs(nameList) do
+  		local info = frame:CreateInfo()
+  		
+  		info.text		= DataStore:GetColoredCharacterName(character) .. " - " .. DataStore:GetCharacterRealm(character) 
+  		info.value		= character
+  		info.func		= OnCharacterChange
+  		info.checked	= (key == character)
+  		info.arg1		= option
+  		info.arg2		= parent.ClassIcons
+  		frame:AddButtonInfo(info, 1)
+  	end
 
+  	frame:AddTitle()
+  	
+  	local info = frame:CreateInfo()
+  	info.text		= (id == 1) and RESET or NONE
+  	info.value		= "empty"
+  	info.func		= OnCharacterChange
+  	info.checked	= (key == "")
+  	info.arg1		= option
+  	info.arg2		= parent.ClassIcons
+  	frame:AddButtonInfo(info, 1)
+    
 	frame:AddCloseMenu()
 end
 
@@ -75,9 +77,9 @@ addon:Controller("AltoholicUI.ClassIcon", {
 		menu:Toggle(frame, 0, 0)
 
 		-- get the key associated with this button
-		-- ex: "Tabs.Grids.<account>.<realm>.Column5"
-		local account, realm = parent.SelectRealm:GetCurrentRealm()
-		local key = addon:GetOption(format(frame.optionFormat, account, realm, currentMenuID))
+		-- ex: "Tabs.Grids.<account>.Column5"
+		local account = parent.SelectAccount:GetCurrentAccount()
+		local key = addon:GetOption(format(frame.optionFormat, account, currentMenuID))
 		if key then
 			frame:DrawTooltip(key)
 		end
