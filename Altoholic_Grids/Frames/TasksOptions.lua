@@ -41,7 +41,7 @@ local currentTask = nil
 -- > HordeAllowed = BOOLEAN
 -- > AllianceAllowed = BOOLEAN
 
-local expansions = {"Classic", "TBC", "WOTLK", "Cataclysm", "MOP", "WOD", "Legion", "BFA"}
+local expansions = {"Classic", "TBC", "WOTLK", "Cataclysm", "MOP", "WOD", "Legion", "BFA", "Shadowlands"}
 
 -- Disable all the task type / expansion / target / minlvl / faction filter fields
 UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskTypeDropdown)

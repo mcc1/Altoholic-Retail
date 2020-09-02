@@ -35,7 +35,7 @@ local function BuildView()
     			for id, _ in pairs(followers) do
     				-- temporary fix: follower keys have been replaced from their name (string) to their id (numeric)
     				-- fix it here instead of in datastore, which is already ok.
-    				if (type(id) == "number") and (id >= 583) then
+    				if (type(id) == "number") and (id >= 583) and (id < 1062) then
     					collected[id] = true	-- [123] = true
     				end
     			end
@@ -44,7 +44,7 @@ local function BuildView()
     end
 	
 	-- Prepare a list of uncollected followers
-	local followersList = C_Garrison.GetFollowers(LE_FOLLOWER_TYPE_GARRISON_7_0)
+	local followersList = C_Garrison.GetFollowers(Enum.GarrisonFollowerType.FollowerType_7_0)
 	if followersList then 
 		local link
 		for k, follower in pairs(followersList) do

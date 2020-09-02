@@ -194,22 +194,43 @@
 					<KeyValue key="iconFile" value="Interface\Icons\inv_chest_cloth_81" />
 				</KeyValues>
 			</Button>
-            
-            <Button parentKey="Corruption" inherits="AltoTabGridsMenuIconTemplate" id="14">
+
+            <Button parentKey="Tasks" inherits="AltoTabGridsMenuIconTemplate" id="15">
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Sets" relativePoint="BOTTOMRIGHT" x="5" y="0" />
 				</Anchors>
 				<KeyValues>
-					<KeyValue key="iconFile" value="1386548" />
+					<KeyValue key="iconFile" value="Interface\Icons\INV_Misc_Book_17" />
+				</KeyValues>
+			</Button>
+            
+			<Button parentKey="WarCampaignFollowers" inherits="AltoTabGridsMenuIconTemplate" id="17">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Tasks" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="Interface\Icons\INV_Icon_Mission_Complete_Order" />
+					<KeyValue key="text" value="WAR_FOLLOWERS" type="global" />
+				</KeyValues>
+			</Button>
+            
+            <Button parentKey="Callings" inherits="AltoTabGridsMenuIconTemplate" id="18">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="80" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="Interface\Icons\inv_misc_covenant_renown" />
+					<KeyValue key="text" value="CALLINGS_QUESTS" type="global" />
 				</KeyValues>
 			</Button>
 
-            <Button parentKey="Tasks" inherits="AltoTabGridsMenuIconTemplate" id="15">
+			<Button parentKey="CovenantFollowers" inherits="AltoTabGridsMenuIconTemplate" id="19">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Corruption" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.Callings" relativePoint="BOTTOMRIGHT" x="5" y="0" />
 				</Anchors>
 				<KeyValues>
-					<KeyValue key="iconFile" value="Interface\Icons\INV_Misc_Book_17" />
+					<KeyValue key="iconFile" value="Interface\Icons\sanctum_features_missiontable" />
+                    <KeyValue key="text" value="COVENANT_MISSIONS_FOLLOWERS" type="global"/>
 				</KeyValues>
 			</Button>
             			

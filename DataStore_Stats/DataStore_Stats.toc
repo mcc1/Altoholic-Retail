@@ -1,4 +1,4 @@
-## Interface: 80300
+## Interface: 90001
 ## Title: DataStore_Stats
 ## Notes: Stores information about character statistics
 ## Author: Thaoky (EU-Marécages de Zangar)

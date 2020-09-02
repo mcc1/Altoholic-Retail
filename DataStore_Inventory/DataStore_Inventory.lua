@@ -51,8 +51,6 @@ local AddonDB_Defaults = {
 				averageItemLvl = 0,
 				overallAIL = 0,
 				Inventory = {},		-- 19 inventory slots, a simple table containing item id's or full item string if enchanted
-                CorruptionLevel = 0, -- Added: 2020/03/18 tracks the patch 8.3 corruption level of the character
-                CloakLevel = 0, -- tracks the patch 8.3 cloak level
 			}
 		}
 	}
@@ -177,41 +175,6 @@ local function ScanInventorySlot(slot)
 	end
 end
 
-local function ScanCorruption()
-    local link = GetInventoryItemLink("player", 15)
-
-    -- This future-proofs the addon incase corruption gets removed in a future patch.
-    if not GetCorruption then return end
-    
-    addon.ThisCharacter.CloakLevel = 0
-
-    if link then
-        local _,_,_,_, itemID = string.find(link, "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
-
-        if tonumber(itemID) == 169223 then -- is it shroud of resolve?
-            -- Make a virtual tooltip, grab line two of it which should read: Rank ##
-            CreateFrame( "GameTooltip", "ItemRankScanningTooltip", nil, "GameTooltipTemplate" );
-            ItemRankScanningTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
-            ItemRankScanningTooltip:ClearLines()
-            ItemRankScanningTooltip:SetHyperlink(link)
-            local tooltipText = _G["ItemRankScanningTooltipTextLeft2"]:GetText()
-            
-            local itemRank
-            if tooltipText then
-                itemRank = string.match(tooltipText, '.+ (%d+)')
-                if not itemRank then itemRank = 0 end
-            end
-            ItemRankScanningTooltip:Hide()
-            
-            addon.ThisCharacter.CloakLevel = itemRank
-        end
-    end
-    
-    local corruption = GetCorruption() - GetCorruptionResistance()
-    if corruption < 1 then corruption = 0 end
-    addon.ThisCharacter.CorruptionLevel = corruption
-end
-
 local function ScanInventory()
 	for slot = 1, NUM_EQUIPMENT_SLOTS do
 		ScanInventorySlot(slot)
@@ -230,8 +193,12 @@ local function ScanTransmogCollection()
 	local name
 	local collected, total
 
+    local enumSize = 0
+    for enum in pairs(Enum.TransmogCollectionType) do
+        enumSize = enumSize + 1
+    end
 	-- browse all categories
-	for i = 1, NUM_LE_TRANSMOG_COLLECTION_TYPES do
+	for i = 1, enumSize do -- Enum.TransmogCollectionType seems to have its indexes off by 1? Check if Blizzard fixed it.
 		name = C_TransmogCollection.GetCategoryInfo(i)
 		if name then
 			collected = C_TransmogCollection.GetCategoryCollectedCount(i)
@@ -324,7 +291,6 @@ end
 local function OnPlayerEquipmentChanged(event, slot)
 	ScanInventorySlot(slot)
 	ScanAverageItemLevel()
-    ScanCorruption()
 	addon.ThisCharacter.lastUpdate = time()
 end
 
@@ -343,7 +309,6 @@ local function OnTransmogCollectionUpdated()
 end
 
 local function OnEnterWorld()
-    ScanCorruption()
 end
 
 
@@ -368,10 +333,6 @@ local function _GetInventoryItemCount(character, searchedID)
 		end
 	end
 	return count
-end
-
-local function _GetCorruptionInfo(character)
-    return character.CloakLevel, character.CorruptionLevel
 end
 	
 local function _GetAverageItemLevel(character)
@@ -487,7 +448,6 @@ local PublicMethods = {
 	GetInventoryItem = _GetInventoryItem,
 	GetInventoryItemCount = _GetInventoryItemCount,
 	GetAverageItemLevel = _GetAverageItemLevel,
-    GetCorruptionInfo = _GetCorruptionInfo,
 	RequestGuildMemberEquipment = _RequestGuildMemberEquipment,
 	GetGuildMemberInventoryItem = _GetGuildMemberInventoryItem,
 	GetGuildMemberAverageItemLevel = _GetGuildMemberAverageItemLevel,
@@ -548,7 +508,6 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetInventoryItem")
 	DataStore:SetCharacterBasedMethod("GetInventoryItemCount")
 	DataStore:SetCharacterBasedMethod("GetAverageItemLevel")
-    DataStore:SetCharacterBasedMethod("GetCorruptionInfo")
 	DataStore:SetGuildBasedMethod("GetGuildMemberInventoryItem")
 	DataStore:SetGuildBasedMethod("GetGuildMemberAverageItemLevel")
 	
