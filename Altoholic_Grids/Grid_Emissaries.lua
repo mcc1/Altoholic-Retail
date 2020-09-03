@@ -47,7 +47,7 @@ local function BuildView()
         			if timeLeft and timeLeft > 0 then
         				local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
                         if not questName then questName = emissaryQuestName end
-                        if not emissaryQuestName then questName = C_QuestLog.GetQuestInfo(questID) end
+                        if not emissaryQuestName then questName = C_QuestLog.GetTitleForQuestID(questID) end
                         if not questName then questName = "" end
         
         				if not questList[questID] then

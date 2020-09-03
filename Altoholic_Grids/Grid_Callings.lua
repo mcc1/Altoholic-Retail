@@ -30,46 +30,50 @@ local function BuildView()
 	questList = {}
 	view = {}
 	
-	local account, realm = AltoholicTabGrids:GetRealm()
+	local account = AltoholicTabGrids:GetAccount()
 	
-	-- parse the emissary quests, but only the ones that have NOT been completed
-	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
-		for questID, timeLeft in pairs(DataStore:GetCallingQuests(character)) do
-  
-  			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
-            local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
-  			
-      		if timeLeft and timeLeft > 0 then
-      			local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
-                    if not questName then questName = C_QuestLog.GetQuestInfo(questID) end
+	-- parse the calling quests, but only the ones that have NOT been completed
+    for realm in pairs(DataStore:GetRealms(account)) do
+    	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this account
+    		for questID, timeLeft in pairs(DataStore:GetCallingQuests(character)) do
+      
+      			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
+                local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
+      			
+          		if timeLeft and timeLeft > 0 then
+          			local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
+                    if not questName then questName = C_QuestLog.GetTitleForQuestID(questID) end
                     if not questName then questName = "" end
-      
-      			if not questList[questID] then
-      				questList[questID] = {}
-      				questList[questID].title = questName
-      				questList[questID].timeLeft = timeLeft
-      				questList[questID].completionStatus = {}
-      			end				
-      
-                if isOnQuest then
-  			        questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
-                elseif isCompleted then
-                    questList[questID].completionStatus[character] = QUEST_COMPLETE
-                end
-      		end
-		end
-	end
+          
+          			if not questList[questID] then
+          				questList[questID] = {}
+          				questList[questID].title = questName
+          				questList[questID].timeLeft = timeLeft
+          				questList[questID].completionStatus = {}
+          			end				
+          
+                    if isOnQuest then
+      			        questList[questID].completionStatus[character] = QUEST_IN_PROGRESS
+                    elseif isCompleted then
+                        questList[questID].completionStatus[character] = QUEST_COMPLETE
+                    end
+          		end
+    		end
+    	end
+    end
 
-	-- .. and only when the questList table is ready with emissaries info for all alts, loop again on the dailies
-	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this realm
-		local num = DataStore:GetDailiesHistorySize(character) or 0
-		for i = 1, num do
-			local questID = DataStore:GetDailiesHistoryInfo(character, i)
-			if questList[questID] then
-				questList[questID].completionStatus[character] = QUEST_COMPLETE
-			end
-		end
-	end
+	-- .. and only when the questList table is ready with calling info for all alts, loop again on the dailies
+    for realm in pairs(DataStore:GetRealms(account)) do
+    	for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this account
+    		local num = DataStore:GetDailiesHistorySize(character) or 0
+    		for i = 1, num do
+    			local questID = DataStore:GetDailiesHistoryInfo(character, i)
+    			if questList[questID] then
+    				questList[questID].completionStatus[character] = QUEST_COMPLETE
+    			end
+    		end
+    	end
+    end
 	
 	for k, v in pairs(questList) do
 		table.insert(view, k)
