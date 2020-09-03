@@ -41,13 +41,16 @@ local function ClassIcon_Initialize(frame, level)
   	for _, character in ipairs(nameList) do
   		local info = frame:CreateInfo()
   		
-  		info.text		= DataStore:GetColoredCharacterName(character) .. " - " .. DataStore:GetCharacterRealm(character) 
-  		info.value		= character
-  		info.func		= OnCharacterChange
-  		info.checked	= (key == character)
-  		info.arg1		= option
-  		info.arg2		= parent.ClassIcons
-  		frame:AddButtonInfo(info, 1)
+  		local characterName, characterRealm = (DataStore:GetColoredCharacterName(character)), (DataStore:GetCharacterRealm(character))
+        if characterName and characterRealm then
+            info.text		= characterName .. " - " .. characterRealm 
+      		info.value		= character
+      		info.func		= OnCharacterChange
+      		info.checked	= (key == character)
+      		info.arg1		= option
+      		info.arg2		= parent.ClassIcons
+      		frame:AddButtonInfo(info, 1)
+        end
   	end
 
   	frame:AddTitle()
