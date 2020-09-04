@@ -74,7 +74,7 @@ local function ScanContacts()
 	wipe(contacts)
 
 	for i = 1, C_FriendList.GetNumFriends() do	-- only friends, not real id, as they're always visible
-	   local name, level, class, zone, isOnline, note = GetFriendInfo(i);
+	   local name, level, class, zone, isOnline, note = C_FriendList.GetFriendInfoByIndex(i);
 
 		if name then
 			contacts[name] = contacts[name] or {}
