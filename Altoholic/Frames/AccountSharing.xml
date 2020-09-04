@@ -560,7 +560,7 @@
         					<Anchors>
         						<Anchor point="TOPLEFT" relativeTo="AltoAccountSharingName" relativePoint="BOTTOMLEFT" x="10" y="-10" />
         					</Anchors>
-        					<Color r="255" g="255" b="255" />
+        					<Color r="1" g="1" b="1" />
         				</FontString>
         				<FontString name="AltoAccountSharingText2" inherits="GameFontNormal" justifyH="CENTER">
         					<Size x="140" y="18" />
@@ -737,7 +737,7 @@
         			</Button>
                     <Button name="AltoAccountSharing_CloseButton" inherits="UIPanelCloseButton">
         				<Anchors>
-        					<Anchor relativePoint="TOPRIGHT" x="-36" y="-4" />
+        					<Anchor point="LEFT" relativePoint="TOPRIGHT" x="-36" y="-4" />
         				</Anchors>
         				<Scripts>
         					<OnClick>
@@ -795,14 +795,14 @@
         					<Anchors>
         						<Anchor point="TOPLEFT" relativeTo="AltoAccountSharingName" relativePoint="BOTTOMLEFT" x="10" y="-40" />
         					</Anchors>
-        					<Color r="255" g="255" b="255" />
+        					<Color r="1" g="1" b="1" />
         				</FontString>
                         <FontString name="AltoAccountSharingOngoingText5" inherits="GameFontNormal" justifyH="LEFT">
         					<Size x="180" y="18" />
         					<Anchors>
         						<Anchor point="TOPLEFT" relativeTo="AltoAccountSharingOngoingText1" relativePoint="BOTTOMLEFT" x="0" y="-10" />
         					</Anchors>
-        					<Color r="255" g="255" b="255" />
+        					<Color r="1" g="1" b="1" />
         				</FontString>
         				<FontString name="AltoAccountSharingOngoingText2" inherits="GameFontNormal" justifyH="CENTER">
         					<Size x="140" y="18" />
