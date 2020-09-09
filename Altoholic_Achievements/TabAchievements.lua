@@ -62,8 +62,9 @@ end
 
 addon:Controller("AltoholicUI.TabAchievements", {
 	OnBind = function(frame)
-		frame.SelectAccount:RegisterClassEvent("AccountChanged", function(self, account) 
-				frame.ClassIcons:Update(account)
+		frame.SelectAccount:RegisterClassEvent("AccountChanged", function(self)
+				local account, realm = frame.SelectAccount:GetCurrentAccount()
+				frame.ClassIcons:Update(account, realm)
 				frame.Status:SetText("")
 				frame.Achievements:Update()
 			end)
@@ -76,8 +77,8 @@ addon:Controller("AltoholicUI.TabAchievements", {
 			end)
 			
 		frame.ClassIcons.OnCharacterChanged = function(self)
-				local account = frame.SelectAccount:GetCurrentAccount()
-				self:Update(account)
+				local account, realm = frame.SelectAccount:GetCurrentAccount()
+				self:Update(account, realm)
 				frame.Achievements:Update()
 			end
 			
@@ -108,8 +109,8 @@ addon:Controller("AltoholicUI.TabAchievements", {
 		
 	end,
 	Update = function(frame)
-		local account = frame.SelectAccount:GetCurrentAccount()
-		frame.ClassIcons:Update(account)
+		local account, realm = frame.SelectAccount:GetCurrentAccount()
+		frame.ClassIcons:Update(account, realm)
 
 		if not view then
 			BuildView()
@@ -190,7 +191,7 @@ addon:Controller("AltoholicUI.TabAchievements", {
 		scrollFrame:Update(#MenuCache)
 	end,
 	GetAccount = function(frame)
-		local account = frame.SelectAccount:GetCurrentAccount()
-		return account
+		local account, realm = frame.SelectAccount:GetCurrentAccount()
+		return account, realm
 	end,
 })

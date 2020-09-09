@@ -6,13 +6,26 @@ local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local THIS_ACCOUNT = "Default"
 
 local function OnAccountChange(frame, dropDownFrame)
-	local oldAccount = dropDownFrame:GetCurrentAccount()
+	local oldAccount, oldRealm = dropDownFrame:GetCurrentAccount()
 	local newAccount = frame.value
 	
 	dropDownFrame:SetCurrentAccount(newAccount)
 
 	if oldAccount then	-- clear the "select char" drop down if account has changed
-		if oldAccount ~= newAccount then
+		if (oldRealm ~= nil) or (oldAccount ~= newAccount) then
+			dropDownFrame:TriggerClassEvent("AccountChanged", newAccount)
+		end
+	end
+end
+
+local function OnRealmChange(frame, dropDownFrame, newAccount)
+	local oldAccount, oldRealm = dropDownFrame:GetCurrentAccount()
+	local newRealm = frame.value
+	
+	dropDownFrame:SetCurrentAccount(newAccount, newRealm)
+
+	if oldAccount then	-- clear the "select char" drop down if account has changed
+		if (oldAccount ~= newAccount) or (oldRealm ~= newRealm) then
 			dropDownFrame:TriggerClassEvent("AccountChanged", newAccount)
 		end
 	end
@@ -30,14 +43,25 @@ addon:Controller("AltoholicUI.AccountPicker", {
 
 		-- this account first ..
 		frame:AddTitle(colors.gold..L["This account"])
-		local info = frame:CreateInfo()
-
-		info.text = L["This account"]
+		
+        local info = frame:CreateInfo()
+		info.text = colors.green..L["This account"]
 		info.value = THIS_ACCOUNT 
 		info.checked = nil
 		info.func = OnAccountChange
 		info.arg1 = frame
 		frame:AddButtonInfo(info, 1)
+        
+        for realm in pairs(DataStore:GetRealms(THIS_ACCOUNT)) do
+		  local info = frame:CreateInfo()
+		  info.text = realm
+		  info.value = realm 
+		  info.checked = nil
+		  info.func = OnRealmChange
+		  info.arg1 = frame
+          info.arg2 = THIS_ACCOUNT
+		  frame:AddButtonInfo(info, 1)
+        end
 
 		-- .. then all other accounts
 		local accounts = DataStore:GetAccounts()
@@ -49,11 +73,11 @@ addon:Controller("AltoholicUI.AccountPicker", {
 		end
 		
 		if count > 0 then
-			frame:AddTitle()
-			frame:AddTitle(colors.gold..OTHER)
+            for account in pairs(accounts) do
+			    if account ~= THIS_ACCOUNT then
+                    frame:AddTitle()
+			        frame:AddTitle(colors.gold..account)
 			
-			for account in pairs(accounts) do
-				if account ~= THIS_ACCOUNT then
 					local info = frame:CreateInfo()
 					info.text = format("%s%s", colors.green, account)
 					info.value = format("%s", account)
@@ -61,20 +85,38 @@ addon:Controller("AltoholicUI.AccountPicker", {
 					info.func = OnAccountChange
 					info.arg1 = frame
 					frame:AddButtonInfo(info, 1)
+                    
+                    for realm in pairs(DataStore:GetRealms(account)) do
+            		  local info = frame:CreateInfo()
+            		  info.text = realm
+            		  info.value = realm 
+            		  info.checked = nil
+            		  info.func = OnRealmChange
+            		  info.arg1 = frame
+                      info.arg2 = account
+            		  frame:AddButtonInfo(info, 1)
+                    end
 				end
 			end
 		end
 		
 		frame:TriggerClassEvent("DropDownInitialized")
 	end,
-	SetCurrentAccount = function(frame, account)
+	SetCurrentAccount = function(frame, account, realm)
 		account = account or THIS_ACCOUNT
 		frame.currentAccount = account
-		frame:SetSelectedValue(account)
-        if account == THIS_ACCOUNT then account = L["This account"] end
-		frame:SetText(format("%s%s", colors.green, account))
+        frame.currentRealm = realm
+		if realm then
+            frame:SetSelectedValue(realm)
+            if account == THIS_ACCOUNT then account = L["This account"] end
+		    frame:SetText(format("%s%s: %s%s", colors.green, account, colors.white, realm))
+        else
+            frame:SetSelectedValue(account)
+            if account == THIS_ACCOUNT then account = L["This account"] end
+		    frame:SetText(format("%s%s", colors.green, account))
+        end
 	end,
 	GetCurrentAccount = function(frame)
-		return frame.currentAccount
+		return frame.currentAccount, frame.currentRealm
 	end,
 })

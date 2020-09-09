@@ -10,9 +10,9 @@ local function BuildView()
 	essenceList = {}
 	view = {}
 	
-	local account = AltoholicTabGrids:GetAccount()
+	local account, realm = AltoholicTabGrids:GetAccount()
 	
-	for realm in pairs(DataStore:GetRealms(account)) do
+	if realm then
         for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this account
     		local essences = DataStore:GetAzeriteEssences(character)
             if essences then
@@ -31,6 +31,27 @@ local function BuildView()
         		end
             end
     	end
+    else
+        for realm in pairs(DataStore:GetRealms(account)) do
+            for _, character in pairs(DataStore:GetCharacters(realm, account)) do	-- all alts on this account
+        		local essences = DataStore:GetAzeriteEssences(character)
+                if essences then
+            		for name, essence in pairs(essences) do
+            			if not essenceList[name] then
+                            essenceList[name] = {}
+                            essenceList[name].isValidFor = {}
+                            essenceList[name].unlockedBy = {}
+                            essenceList[name].currentRank = {}
+                            essenceList[name].icon = essence.icon
+                        end
+                        
+                        essenceList[name].isValidFor[character] = true
+                        essenceList[name].unlockedBy[character] = essence.unlocked
+                        essenceList[name].currentRank[character] = essence.rank
+            		end
+                end
+        	end
+        end
     end
 	
 	for k, v in pairs(essenceList) do
