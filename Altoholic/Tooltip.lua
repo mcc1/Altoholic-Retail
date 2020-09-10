@@ -858,7 +858,9 @@ end
 local function Hook_SetCurrencyToken(self,index,...)
 	if not index then return end
 
-	local currency = GetCurrencyListInfo(index)
+	local info = C_CurrencyInfo.GetCurrencyListInfo(index)
+    if not info then return end
+    local currency = info.name
 	if not currency then return end
 
 	GameTooltip:AddLine(" ",1,1,1);

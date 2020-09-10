@@ -96,6 +96,8 @@ local factions = {
 	{ id = 922, name = BF["Tranquillien"] },
 	{ id = 589, name = BF["Wintersaber Trainers"] },
 	{ id = 270, name = BF["Zandalar Tribe"] },
+    
+    -- TBC
 	{ id = 1012, name = BF["Ashtongue Deathsworn"] },
 	{ id = 942, name = BF["Cenarion Expedition"] },
 	{ id = 933, name = BF["The Consortium"] },
@@ -115,6 +117,8 @@ local factions = {
 	{ id = 989, name = BF["Keepers of Time"] },
 	{ id = 990, name = BF["The Scale of the Sands"] },
 	{ id = 967, name = BF["The Violet Eye"] },
+    
+    -- WOTLK
 	{ id = 1106, name = BF["Argent Crusade"] },
 	{ id = 1090, name = BF["Kirin Tor"] },
 	{ id = 1073, name = BF["The Kalu'ak"] },
@@ -236,8 +240,13 @@ local factions = {
 	{ id = 2391, name = GetFactionInfoByID(2391) },		-- Rustbolt Resistance
 	{ id = 2415, name = GetFactionInfoByID(2415) },		-- 8.3 Rajani
 	{ id = 2417, name = GetFactionInfoByID(2417) },		-- 8.3 Uldum Accord
-    { id = 2395, name = GetFactionInfoByID(2395) },
- 
+    { id = 2395, name = GetFactionInfoByID(2395) },     -- Honeyback Hive
+    
+    -- Shadowlands
+	{ id = 2410, name = GetFactionInfoByID(2410) },		                  -- Maldraxxus / 
+	{ id = 2422, name = GetFactionInfoByID(2422) },		                  -- Ardenweald /
+	{ id = 2413, name = GetFactionInfoByID(2413) },		                  -- Revendreth /
+    { id = 2407, name = GetFactionInfoByID(2407) or "The Ascended" },	  -- The Ascended
 }
 
 local FactionUIDsRev = {}

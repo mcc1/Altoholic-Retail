@@ -39,7 +39,7 @@ local function BuildView()
                 if (not addon:GetOption(OPTION_TOKEN)) or 
                         ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME6) and questID < 50000) or
                         ((addon:GetOption(OPTION_TOKEN) == EXPANSION_NAME7) and questID > 50000) then
-                        -- TODO: In Badowlands, find the questIDs of emissaries there and extend this out  
+  
         			local isOnQuest, questLogIndex = DataStore:IsCharacterOnQuest(character, questID)
                     local isCompleted = DataStore:IsQuestCompletedBy(character, questID)
         			local _, _, timeLeft, objective, emissaryQuestName = DataStore:GetEmissaryQuestInfo(character, questID)
@@ -47,7 +47,7 @@ local function BuildView()
         			if timeLeft and timeLeft > 0 then
         				local questName = DataStore:GetQuestLogInfo(character, questLogIndex)
                         if not questName then questName = emissaryQuestName end
-                        if not emissaryQuestName then questName = C_QuestLog.GetQuestInfo(questID) end
+                        if not emissaryQuestName then questName = C_QuestLog.GetTitleForQuestID(questID) end
                         if not questName then questName = "" end
         
         				if not questList[questID] then

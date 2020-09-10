@@ -233,7 +233,7 @@ local function CurrencyHeader_OnEnter(frame, currencyID)
 	
 	tt:ClearLines()
 	tt:SetOwner(frame, "ANCHOR_BOTTOM")
-	tt:SetHyperlink(GetCurrencyLink(currencyID,0))
+	tt:SetHyperlink(C_CurrencyInfo.GetCurrencyLink(currencyID,0))
 	tt:Show()
 end
 
@@ -1508,12 +1508,12 @@ columns["MissionTableLastVisit"] = {
 	Width = 65,
 	JustifyH = "RIGHT",
 	GetText = function(character)
-			local numAvail = 	(DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-									(DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
-			local numActive = (DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-									(DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
-			local numCompleted = (DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0) + 
-										(DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0)
+			local numAvail = 	(DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+									(DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
+			local numActive = (DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+									(DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
+			local numCompleted = (DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0) + 
+										(DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0)
 			local text = ""
 			
 			if numCompleted > 0 then		-- add a '*' to show that there are some completed missions
@@ -1547,9 +1547,9 @@ columns["MissionTableLastVisit"] = {
 			
 			-- ** Garrison Missions **
 			
-			local numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
-			local numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
-			local numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_6_0) or 0
+			local numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
+			local numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
+			local numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_6_0) or 0
 			local color = colors.green
 			
 			tt:AddLine(GARRISON_MISSIONS_TITLE)
@@ -1566,9 +1566,9 @@ columns["MissionTableLastVisit"] = {
 			
 			-- ** Order Hall Missions **
 			
-			numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0
-			numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0
-			numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_7_0) or 0			
+			numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0
+			numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0
+			numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_7_0) or 0			
 			color = colors.green
 			
 			tt:AddLine(ORDER_HALL_MISSIONS)
@@ -1640,19 +1640,20 @@ for currencyIndex = 1, 5 do
     	if level == 1 then
             frame:AddTitle("Select Currency:")
             frame:AddTitle()
-            for currencyListIndex = 1, GetCurrencyListSize() do
-                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+            for currencyListIndex = 1, C_CurrencyInfo.GetCurrencyListSize() do
+                local info = C_CurrencyInfo.GetCurrencyListInfo(currencyListIndex)
+                local name, isHeader = info.name, info.isHeader
                 if isHeader then
                     frame:AddCategoryButton(name, currencyListIndex, level)
                 end
             end
             frame:AddCloseMenu()
         elseif level == 2 then
-            for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), GetCurrencyListSize() do
-                local name, isHeader = GetCurrencyListInfo(currencyListIndex)
+            for currencyListIndex = (frame:GetCurrentOpenMenuValue() + 1), C_CurrencyInfo.GetCurrencyListSize() do
+                local info = C_CurrencyInfo.GetCurrencyListInfo(currencyListIndex)  
+                local name, isHeader = info.name, info.isHeader 
                 if not isHeader then
-                --	AddButtonWithArgs = function(frame, text, value, func, arg1, arg2, isChecked)
-                    frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(GetCurrencyListLink(currencyListIndex)), nil, false, level)
+                    frame:AddButtonWithArgs(name, currencyListIndex, CurrencySelected, C_CurrencyInfo.GetCurrencyIDFromLink(C_CurrencyInfo.GetCurrencyListLink(currencyListIndex)), nil, false, level) 
                 else
                     break
                 end
@@ -1989,7 +1990,7 @@ columns["BindLocation"] = {
 
 columns["ConquestPoints"] = {
 	-- Header
-	headerWidth = 120,
+	headerWidth = 80,
 	headerLabel = "Conquest",
 	tooltipTitle = "Conquest Points",
 	tooltipSubTitle = nil,
@@ -1997,7 +1998,7 @@ columns["ConquestPoints"] = {
 	headerSort = DataStore.GetConquestPoints,
 	
 	-- Content
-	Width = 120,
+	Width = 80,
 	JustifyH = "CENTER",
 	GetText = function(character)
             local count = DataStore:GetConquestPoints(character) or ""
@@ -2005,6 +2006,31 @@ columns["ConquestPoints"] = {
             local color = colors.white
             if count >= 500 then
                 color = colors.red
+            end
+			return format("%s%s", color, count) 
+		end,
+	OnEnter = function(frame)
+		end,
+}
+
+columns["RenownLevel"] = {
+	-- Header
+	headerWidth = 90,
+	headerLabel = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
+	tooltipTitle = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
+	tooltipSubTitle = nil,
+	headerOnClick = function() SortView("RenownLevel") end,
+	headerSort = DataStore.GetRenownLevel,
+	
+	-- Content
+	Width = 90,
+	JustifyH = "CENTER",
+	GetText = function(character)
+            local count = DataStore:GetRenownLevel(character) or 0
+            count = tonumber(count) or 0
+            local color = colors.white
+            if count >= 40 then
+                color = colors.green
             end
 			return format("%s%s", color, count) 
 		end,
@@ -2047,8 +2073,8 @@ local modes = {
 	[MODE_ACTIVITY] = { "Name", "Level", "Mails", "LastMailCheck", "Auctions", "Bids", "AHLastVisit", "MissionTableLastVisit" },
     [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
-    [MODE_KEYSTONES] = { "Name", "Level", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
-    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints" },
+    [MODE_KEYSTONES] = { "Name", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
+    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints", "RenownLevel" },
 }
 
 function ns:SetMode(mode)
@@ -2165,12 +2191,8 @@ function addon:AiLTooltip()
 	local tt = AltoTooltip
 	
 	tt:AddLine(" ")
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME0), FormatAiL("1-62"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME1), FormatAiL("63-94"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME2), FormatAiL("95-102"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME3), FormatAiL("103-114"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME4), FormatAiL("115-130"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME5), FormatAiL("131-149"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME6), FormatAiL("150-265"))
-	tt:AddDoubleLine(format("%s%s", colors.teal, EXPANSION_NAME7), FormatAiL("266+"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Intro (1-10)"), FormatAiL("1-44"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Chromie Time (11-49)"), FormatAiL("13-125"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (50-59)"), FormatAiL("59-164"))
+	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (60)"), FormatAiL("165+"))
 end
