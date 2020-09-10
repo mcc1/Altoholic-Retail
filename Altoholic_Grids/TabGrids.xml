@@ -3,7 +3,8 @@
 	
 	<Button name="AltoTabGridsClassIconTemplate" inherits="AltoClassIconTemplate" virtual="true">
 		<KeyValues>
-			<KeyValue key="optionFormat" value="Tabs.Grids.%s.Column%d" />
+			<KeyValue key="optionFormat" value="Tabs.Grids.%s.%s.Column%d" />
+            <KeyValue key="optionFormatAccountWide" value="Tabs.Grids.%s.Column%d" />
 		</KeyValues>
 		<Scripts>
 			<OnEnter>

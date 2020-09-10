@@ -57,12 +57,12 @@ local function BuildView()
 	viewItems = {}
 	wipe(counters)
 	
-	local account = AltoholicTabGrids:GetAccount()
+	local account, realm = AltoholicTabGrids:GetAccount()
 	
 	local currentStats = addon:GetOption(OPTION_STATS)
 	
 	-- Get a list of all collected followers across all alts on this realm
-    for realm in pairs(DataStore:GetRealms(account)) do 
+    if relam then
     	for characterKey, character in pairs(DataStore:GetCharacters(realm, account)) do
     		followers = DataStore:GetFollowers(character)
     		
@@ -90,6 +90,36 @@ local function BuildView()
     			end
     		end
     	end
+    else
+        for realm in pairs(DataStore:GetRealms(account)) do 
+        	for characterKey, character in pairs(DataStore:GetCharacters(realm, account)) do
+        		followers = DataStore:GetFollowers(character)
+        		
+        		if followers then
+        			for id, _ in pairs(followers) do
+        				local _, _, _, ab1, ab2, ab3, ab4, tr1, tr2, tr3, tr4 = DataStore:GetFollowerInfo(character, id)
+        				
+        				-- save known abilities only (id <> 0)
+        				if currentKey == KEY_ABILITIES then
+        					AddIDToView(ab1)
+        					AddIDToView(ab2)
+        					AddIDToView(ab3)
+        					AddIDToView(ab4)
+        				elseif currentKey == KEY_TRAITS then
+        					AddIDToView(tr1)
+        					AddIDToView(tr2)
+        					AddIDToView(tr3)
+        					AddIDToView(tr4)
+        				elseif currentKey == KEY_COUNTERS then
+        					AddIDToView(ab1, true)
+        					AddIDToView(ab2, true)
+        					AddIDToView(ab3, true)
+        					AddIDToView(ab4, true)
+        				end
+        			end
+        		end
+        	end
+        end
     end
 	
 	-- fill the view with view items
