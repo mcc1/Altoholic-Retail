@@ -3,7 +3,8 @@
 	
 	<Button name="AltoTabAchievementsClassIconTemplate" inherits="AltoClassIconTemplate" virtual="true">
 		<KeyValues>
-			<KeyValue key="optionFormat" value="Tabs.Achievements.%s.Column%d" />
+			<KeyValue key="optionFormat" value="Tabs.Achievements.%s.%s.Column%d" />
+            <KeyValue key="optionFormatAccountWide" value="Tabs.Achievements.%s.Column%d" />
 		</KeyValues>
 		<Scripts>
 			<OnEnter>

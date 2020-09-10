@@ -508,7 +508,7 @@ addon:Controller("AltoholicUI.Achievements", {
 		local offset = scrollFrame:GetOffset()
 		
 		local categorySize = GetCategorySize(currentCategoryID)
-		local account = frame:GetParent():GetAccount()
+		local account, realm = frame:GetParent():GetAccount()
 		
 		AltoholicTabAchievements.Status:SetText(format("%s: %s%s", ACHIEVEMENTS, colors.green, categorySize ))
 		
@@ -537,7 +537,7 @@ addon:Controller("AltoholicUI.Achievements", {
 			if line <= categorySize then	-- if the line is visible
 				local allianceID, hordeID = GetAchievementFactionInfo(currentCategoryID, line)
 				
-				rowFrame:Update(account, allianceID, hordeID)
+				rowFrame:Update(account, realm, allianceID, hordeID)
 				rowFrame:Show()
 			else
 				rowFrame:Hide()

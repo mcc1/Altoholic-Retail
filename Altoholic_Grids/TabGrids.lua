@@ -43,8 +43,8 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.currentGridID = gridID
 	end,
 	Update = function(frame)
-		local account = frame.SelectAccount:GetCurrentAccount()
-		frame.ClassIcons:Update(account)
+		local account, realm = frame.SelectAccount:GetCurrentAccount()
+		frame.ClassIcons:Update(account, realm)
 
 		local grids = AltoholicFrameGrids
 		local scrollFrame = grids.ScrollFrame
@@ -95,7 +95,11 @@ addon:Controller("AltoholicUI.TabGrids", {
 					itemButton = rowFrame["Item"..colIndex]
 					itemButton.IconBorder:Hide()
 					
-					character = addon:GetOption(format("Tabs.Grids.%s.Column%d", account, colIndex))
+					if realm then
+                        character = addon:GetOption(format("Tabs.Grids.%s.%s.Column%d", account, realm, colIndex))
+                    else
+                        character = addon:GetOption(format("Tabs.Grids.%s.Column%d", account, colIndex))
+                    end
 					if character then
 						itemButton:SetScript("OnEnter", obj.OnEnter)
 						itemButton:SetScript("OnClick", obj.OnClick)
@@ -176,7 +180,7 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.SelectView:SetText(text)
 	end,
 	GetAccount = function(frame)
-		return frame.SelectAccount:GetCurrentAccount()	-- returns : account
+		return frame.SelectAccount:GetCurrentAccount()	-- returns : account, realm
 	end,
 })
 
