@@ -208,7 +208,6 @@ local function AddRealm(AccountName, RealmName)
 	   } )
     end
     
-    -- Code inserted 13/05/2020: add selected guild bank gold
     for guildName, guild in pairs(DataStore:GetGuilds(RealmName, AccountName)) do
         local altoSavedVariableGuild = addon:GetGuild(guildName, RealmName, AccountName)
         if altoSavedVariableGuild then
@@ -218,9 +217,11 @@ local function AddRealm(AccountName, RealmName)
         end
     end
 
-	totalMoney = totalMoney + realmMoney
-	totalPlayed = totalPlayed + realmPlayed
-	totalLevels = totalLevels + realmLevels
+	if not addon:GetOption(format("UI.Tabs.Summary.ExcludeRealms.%s.%s", AccountName, RealmName)) then
+        totalMoney = totalMoney + realmMoney
+	    totalPlayed = totalPlayed + realmPlayed
+	    totalLevels = totalLevels + realmLevels
+    end
 	realmCount = realmCount + 1
 	
 	-- remove empty realms if no characters have passed filters

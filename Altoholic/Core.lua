@@ -88,6 +88,7 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Summary.SortAscending"] = true,							-- ascending or descending sort order
 			["UI.Tabs.Summary.ShowLevelDecimals"] = true,					-- display character level with decimals or not
 			["UI.Tabs.Summary.ShowILevelDecimals"] = true,					-- display character level with decimals or not
+            --["UI.Tabs.Summary.ExcludeRealms.<Account>.<Realm>"] = true
 			
 			-- ** Character tab options **
 			["UI.Tabs.Characters.ViewBags"] = true,

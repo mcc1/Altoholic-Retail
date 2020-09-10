@@ -337,6 +337,14 @@ local function DeleteRealm(self, characterInfoLine)
 	AltoMessageBox:Show()
 end
 
+local function ExcludeRealm(self, characterInfoLine)
+    local _, realm, account = Characters:GetInfo(characterInfoLine)
+
+    addon:SetOption(format("UI.Tabs.Summary.ExcludeRealms.%s.%s", account, realm), not addon:GetOption(format("UI.Tabs.Summary.ExcludeRealms.%s.%s", account, realm)))
+    addon.Characters.InvalidateView()
+    addon.Summary:Update()
+end
+
 local function NameRightClickMenu_Initialize(frame)
 	local characterInfoLine = ns.CharInfoLine
 	if not characterInfoLine then return end
@@ -352,6 +360,8 @@ local function NameRightClickMenu_Initialize(frame)
 			frame:AddButtonWithArgs(format("Update from %s", colors.green..updatedWith), nil, UpdateRealm, characterInfoLine)
 		end
 		frame:AddButtonWithArgs(L["Delete this Realm"], nil, DeleteRealm, characterInfoLine)
+        frame:AddTitle()
+        frame:AddButtonWithArgs("Exclude this realm from totals", nil, ExcludeRealm, characterInfoLine, nil, addon:GetOption(format("UI.Tabs.Summary.ExcludeRealms.%s.%s", account, realm)))
 		return
 	end
 
@@ -2069,7 +2079,6 @@ local modes = {
 	[MODE_SUMMARY] = { "Name", "Level", "RestXP", "Money", "Played", "AiL", "LastOnline" },
 	[MODE_BAGS] = { "Name", "Level", "BagSlots", "FreeBagSlots", "BankSlots", "FreeBankSlots" },
 	[MODE_SKILLS] = { "Name", "Level", "Prof1", "Prof2", "ProfCooking", "ProfFishing", "ProfArchaeology" },
-	-- [MODE_SKILLS] = { "Name", "Level", "ProfCooking", "ProfFishing", "ProfArchaeology" },
 	[MODE_ACTIVITY] = { "Name", "Level", "Mails", "LastMailCheck", "Auctions", "Bids", "AHLastVisit", "MissionTableLastVisit" },
     [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
