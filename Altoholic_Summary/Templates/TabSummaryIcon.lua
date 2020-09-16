@@ -178,7 +178,17 @@ local function ClassIcon_Initialize(frame, level)
 			key, OnClassFilterChange, nil, (option == key)
 		)
 	end
-	frame:AddCloseMenu()
+    
+    frame:AddTitle()
+    local armorClassNames = {"Cloth", "Leather", "Mail", "Plate"}
+    local armorClassEnums = {LE_ITEM_ARMOR_CLOTH, LE_ITEM_ARMOR_LEATHER, LE_ITEM_ARMOR_MAIL, LE_ITEM_ARMOR_PLATE}
+    for i = 1, 4 do
+        local armorClassName = armorClassNames[i]
+        local armorClassCategoryEnum = armorClassEnums[i]
+        frame:AddButton(GetItemSubClassInfo(LE_ITEM_CLASS_ARMOR, armorClassCategoryEnum), armorClassName, OnClassFilterChange, nil, (option == armorClassName))
+    end
+	
+    frame:AddCloseMenu()
 end
 
 local function AltoholicOptionsIcon_Initialize(frame, level)
