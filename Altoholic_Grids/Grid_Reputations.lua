@@ -353,13 +353,25 @@ end
 local function AddGuildsToFactionsTable(realm, account)
 	-- get the guilds on this realm/account
 	local guilds = {}
-	for guildName, guild in pairs(DataStore:GetGuilds(realm, account)) do
-		if DataStore:GetGuildFaction(guildName, realm, account) == FACTION_ALLIANCE then
-			guilds[guildName] = "inv_misc_tournaments_banner_human"
-		else
-			guilds[guildName] = "inv_misc_tournaments_banner_orc"
-		end
-	end
+    if realm then
+      	for guildName, guild in pairs(DataStore:GetGuilds(realm, account)) do
+      		if DataStore:GetGuildFaction(guildName, realm, account) == FACTION_ALLIANCE then
+      			guilds[guildName] = "inv_misc_tournaments_banner_human"
+      		else
+      			guilds[guildName] = "inv_misc_tournaments_banner_orc"
+      		end
+      	end
+    else
+        for realm in pairs(DataStore:GetRealms(account)) do
+        	for guildName, guild in pairs(DataStore:GetGuilds(realm, account)) do
+        		if DataStore:GetGuildFaction(guildName, realm, account) == FACTION_ALLIANCE then
+        			guilds[guildName] = "inv_misc_tournaments_banner_human"
+        		else
+        			guilds[guildName] = "inv_misc_tournaments_banner_orc"
+        		end
+        	end        
+        end
+    end
 	
 	-- clean the Factions table
 	for k, v in ipairs(Factions[CAT_GUILD][1]) do	-- ipairs ! only touch the array part, leave the hash untouched
@@ -399,7 +411,7 @@ local function OnGuildSelected(self)
 	addon:SetOption(OPTION_XPACK, CAT_GUILD)
 	addon:SetOption(OPTION_FACTION, 1)
 	
-	local account, realm = AltoholicTabGrids:GetRealm()
+	local account, realm = AltoholicTabGrids:GetAccount()
 	
 	if not lastRealm or not lastAccount or lastRealm ~= realm or lastAccount ~= account then	-- realm/account changed ? rebuild view
 		AddGuildsToFactionsTable(realm, account)
@@ -656,7 +668,7 @@ local callbacks = {
 			end
 			
 			if (currentXPack == CAT_GUILD) then
-				local account, realm = AltoholicTabGrids:GetRealm()
+				local account, realm = AltoholicTabGrids:GetAccount()
 				AddGuildsToFactionsTable(realm, account)
 			end
 			
@@ -668,3 +680,14 @@ local callbacks = {
 }
 
 AltoholicTabGrids:RegisterGrid(2, callbacks)
+
+AltoholicTabGrids.RefreshReputations = function()
+	local account, realm = AltoholicTabGrids:GetAccount()
+	
+	if not lastRealm or not lastAccount or lastRealm ~= realm or lastAccount ~= account then	-- realm/account changed ? rebuild view
+		AddGuildsToFactionsTable(realm, account)
+	end
+    
+    isViewValid = nil
+	AltoholicTabGrids:Update()
+end
