@@ -26,6 +26,7 @@ local xPacks = {
 	EXPANSION_NAME5,	-- "Warlords of Draenor"
 	EXPANSION_NAME6,	-- "Legion"
     EXPANSION_NAME7,    -- "BfA"
+    EXPANSION_NAME8,    -- "Shadowlands"
 	L["All-in-one"],
 }
 
@@ -281,25 +282,25 @@ local TransmogSets = {
         
         --[[
         -- Heritage sets:
-        { setID = 1522 },       -- Allied Race: Highmountain
-        { setID = 1523 },       -- Allied Race: Nightbourne
-        { setID = 1524 },       -- Void Elf
-        { setID = 1525 },       -- Lightforged
-        { setID = 1679 },       -- Dark Iron
-        { setID = 1680 },       -- Mag'har?
-        { setID = 1681 },       -- Mag'har?
-        { setID = 1682 },       -- Mag'har?
-        { setID = 1741 },       -- Kul'tiran
-        { setID = 1742 },       -- Zandalari
-        { setID = 1789 },       -- Night Elf?
-        { setID = 1803 },       -- Dwarf
-        { setID = 1804 },       -- Blood Elf
-        { setID = 1828 },       -- Gnomes
-        { setID = 1829 },       -- Tauren
-        { setID = 1976 },       -- Worgen
-        { setID = 1977 },       -- Goblin
-        { setID = 1980 },       -- Mechagnome
-        { setID = 1981 },       -- Vulpera
+        { setID = 1522, tier = "/" },       -- Allied Race: Highmountain
+        { setID = 1523, tier = "/" },       -- Allied Race: Nightbourne
+        { setID = 1524, tier = "/" },       -- Void Elf
+        { setID = 1525, tier = "/" },       -- Lightforged
+        { setID = 1679, tier = "/" },       -- Dark Iron
+        { setID = 1680, tier = "/" },       -- Mag'har?
+        { setID = 1681, tier = "/" },       -- Mag'har?
+        { setID = 1682, tier = "/" },       -- Mag'har?
+        { setID = 1741, tier = "/" },       -- Kul'tiran
+        { setID = 1742, tier = "/" },       -- Zandalari
+        { setID = 1789, tier = "/" },       -- Night Elf?
+        { setID = 1803, tier = "/" },       -- Dwarf
+        { setID = 1804, tier = "/" },       -- Blood Elf
+        { setID = 1828, tier = "/" },       -- Gnomes
+        { setID = 1829, tier = "/" },       -- Tauren
+        { setID = 1976, tier = "/" },       -- Worgen
+        { setID = 1977, tier = "/" },       -- Goblin
+        { setID = 1980, tier = "/" },       -- Mechagnome
+        { setID = 1981, tier = "/" },       -- Vulpera
         ]]--
         
         -- Misc:
@@ -311,6 +312,26 @@ local TransmogSets = {
         --{ setID = 1913},                      -- Eternal Traveler
         
         -- Looks like sets that don't have alternatives don't work. Trial of Style has a cloth/leather/etc alternative, but Eternal Traveler is just one set for every class.
+    },
+    {  -- [9] Shadowlands
+        { setID = 2015, tier = 26 },        -- 9.0 Covenant - Bastion - Cloth - Gold
+        { setID = 2016, tier = 26 },        -- 9.0 Covenant - Bastion - Cloth - White
+        { setID = 2017, tier = 26 },        -- 9.0 Covenant - Bastion - Cloth - Bronze
+        { setID = 2018, tier = 26 },        -- 9.0 Covenant - Bastion - Cloth - Black
+        { setID = 2031, tier = 26 },        -- Rationale of Maldraxxus
+        { setID = 2032, tier = 26 },        -- Rationale of Maldraxxus
+        { setID = 2033, tier = 26 },        -- Rationale of Maldraxxus
+        { setID = 2034, tier = 26 },        -- Rationale of Maldraxxus
+        { setID = 2047, tier = 26 },        -- Faewoven Regalia
+        { setID = 2048, tier = 26 },        -- Night Courtier's Regalia
+        { setID = 2049, tier = 26 },        -- Conservator's Regalia
+        { setID = 2050, tier = 26 },        -- Regalia of the Winter Queen
+        { setID = 2063, tier = 26 },        -- Soulbreaker's Crimson Vestments
+        { setID = 2064, tier = 26 },        -- Soulbreaker's Burnished Vestments
+        { setID = 2065, tier = 26 },        -- Soulbreaker's Court Vestments
+        { setID = 2066, tier = 26 },        -- Soulbreaker's Ebony Vestments
+        --{ setID = 2086, tier = 26 },        -- Night Fae Renown Cloth
+        --{ setID = 2087, tier = 26 },        -- Night Fae Renown Cloth
     },
 }
 

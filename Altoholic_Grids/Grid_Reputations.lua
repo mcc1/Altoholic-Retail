@@ -273,7 +273,25 @@ local Factions = {
 			{ name = DataStore:GetFactionName(2417), icon = "inv_faction_83_uldumaccord" },
 		},
 	},
-	{	-- [8]
+    { -- [9]
+        name = EXPANSION_NAME8, -- "Shadowlands"
+		{	-- [1]
+			name = FACTION_ALLIANCE,
+			--{ name = DataStore:GetFactionName(2159), icon = "Inv_tabard_alliancewareffort" },
+		},
+		{	-- [2]
+			name = FACTION_HORDE,
+			--{ name = DataStore:GetFactionName(2157), icon = "Inv_tabard_hordewareffort" },
+		},
+		{	-- [3]
+			name = OTHER,
+            { name = DataStore:GetFactionName(2410), icon = "inv_tabard_maldraxxus_d_01" },
+            { name = DataStore:GetFactionName(2422), icon = "inv_tabard_ardenweald_d_01" },
+			{ name = DataStore:GetFactionName(2413), icon = "inv_tabard_revendreth_d_01" },
+			{ name = DataStore:GetFactionName(2407), icon = "PLACEHOLDER" }, -- check https://shadowlands.wowhead.com/achievement=14335/the-ascended#criteria-of:0+1+2
+		},
+    },
+	{
 		name = GUILD,
 		{	-- [1]
 			name = GUILD,

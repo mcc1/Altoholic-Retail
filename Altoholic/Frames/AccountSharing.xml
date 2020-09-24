@@ -530,7 +530,19 @@
 			<Anchor point="CENTER" x="0" y="20" />
 		</Anchors>
         <Frames>
-            <Frame name="AltoAccountSharingEntireDatabaseTab" parent="AltoAccountSharing">
+            <Frame name="AltoAccountSharingEntireDatabaseTab" parent="AltoAccountSharing" inherits="BackdropTemplate">
+                <Scripts>
+                    <OnLoad inherit="prepend">
+                        self:SetBackdrop({
+	                        bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+                            edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+                        	tile = true,
+                        	tileSize = 32,
+                        	edgeSize = 32,
+                        	insets = { left = 11, right = 12, top = 12, bottom = 11, },
+                        })
+                    </OnLoad>
+                </Scripts>     
             	<Size x="800" y="300" />
 		        <Anchors>
 			         <Anchor point="TOPLEFT"/>
@@ -548,7 +560,7 @@
         					<Anchors>
         						<Anchor point="TOPLEFT" relativeTo="AltoAccountSharingName" relativePoint="BOTTOMLEFT" x="10" y="-10" />
         					</Anchors>
-        					<Color r="255" g="255" b="255" />
+        					<Color r="1" g="1" b="1" />
         				</FontString>
         				<FontString name="AltoAccountSharingText2" inherits="GameFontNormal" justifyH="CENTER">
         					<Size x="140" y="18" />
@@ -576,17 +588,6 @@
         				</FontString>
         			</Layer>
         		</Layers>
-        		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-        			<BackgroundInsets>
-        				<AbsInset left="11" right="12" top="12" bottom="11" />
-        			</BackgroundInsets>
-        			<TileSize>
-        				<AbsValue val="32" />
-        			</TileSize>
-        			<EdgeSize>
-        				<AbsValue val="32" />
-        			</EdgeSize>
-        		</Backdrop>
         		<Frames>
         			<!-- 	for readability reasons, the scroll frame is in Frames/AccountSharing.xml	-->
 
@@ -736,7 +737,7 @@
         			</Button>
                     <Button name="AltoAccountSharing_CloseButton" inherits="UIPanelCloseButton">
         				<Anchors>
-        					<Anchor relativePoint="TOPRIGHT" x="-36" y="-4" />
+        					<Anchor point="LEFT" relativePoint="TOPRIGHT" x="-36" y="-4" />
         				</Anchors>
         				<Scripts>
         					<OnClick>
@@ -772,10 +773,10 @@
         					</OnClick>
         				</Scripts>
         			</CheckButton>
-                </Frames>
+                </Frames>               
             </Frame> <!-- end of tab1 -->
 
-            <Frame name="AltoAccountSharingOngoingTab" parent="AltoAccountSharing" hidden="true">
+            <Frame name="AltoAccountSharingOngoingTab" parent="AltoAccountSharing" hidden="true" inherits="BackdropTemplate">
             	<Size x="800" y="300" />
 		        <Anchors>
 			         <Anchor point="TOPLEFT"/>
@@ -794,14 +795,14 @@
         					<Anchors>
         						<Anchor point="TOPLEFT" relativeTo="AltoAccountSharingName" relativePoint="BOTTOMLEFT" x="10" y="-40" />
         					</Anchors>
-        					<Color r="255" g="255" b="255" />
+        					<Color r="1" g="1" b="1" />
         				</FontString>
                         <FontString name="AltoAccountSharingOngoingText5" inherits="GameFontNormal" justifyH="LEFT">
         					<Size x="180" y="18" />
         					<Anchors>
         						<Anchor point="TOPLEFT" relativeTo="AltoAccountSharingOngoingText1" relativePoint="BOTTOMLEFT" x="0" y="-10" />
         					</Anchors>
-        					<Color r="255" g="255" b="255" />
+        					<Color r="1" g="1" b="1" />
         				</FontString>
         				<FontString name="AltoAccountSharingOngoingText2" inherits="GameFontNormal" justifyH="CENTER">
         					<Size x="140" y="18" />
@@ -823,18 +824,18 @@
         				</FontString>
         			</Layer>
         		</Layers>
-        		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-        			<BackgroundInsets>
-        				<AbsInset left="11" right="12" top="12" bottom="11" />
-        			</BackgroundInsets>
-        			<TileSize>
-        				<AbsValue val="32" />
-        			</TileSize>
-        			<EdgeSize>
-        				<AbsValue val="32" />
-        			</EdgeSize>
-        		</Backdrop>
-
+                <Scripts>
+                    <OnLoad inherit="prepend">
+                        self:SetBackdrop({
+	                        bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+                            edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+                        	tile = true,
+                        	tileSize = 32,
+                        	edgeSize = 32,
+                        	insets = { left = 11, right = 12, top = 12, bottom = 11, },
+                        })
+                    </OnLoad>
+                </Scripts>
                 <Frames>
                     <Button name="AltoAccountSharing_AddOngoingButton" inherits="UIPanelButtonTemplate">
         				<Size x="140" y="24" />
