@@ -10,6 +10,7 @@
 
 ## Author: Teelo (US-Jubei'thos) + Thaoky (EU-Marécages de Zangar)
 ## Version: 9.0.1.001
+
 ## X-Category: Inventory, Tradeskill, Mail
 ## X-Localizations: enUS, frFR, zhCN, zhTW, deDE, koKR, esES, esMX, ruRU
 ## X-Website: https://www.curseforge.com/wow/addons/altoholic-retail

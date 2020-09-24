@@ -16,6 +16,8 @@ local function OnAccountChange(frame, dropDownFrame)
 			dropDownFrame:TriggerClassEvent("AccountChanged", newAccount)
 		end
 	end
+    
+    AltoholicTabGrids.RefreshReputations()
 end
 
 local function OnRealmChange(frame, dropDownFrame, newAccount)
@@ -29,6 +31,8 @@ local function OnRealmChange(frame, dropDownFrame, newAccount)
 			dropDownFrame:TriggerClassEvent("AccountChanged", newAccount)
 		end
 	end
+    
+    AltoholicTabGrids.RefreshReputations()
 end
 
 addon:Controller("AltoholicUI.AccountPicker", {
