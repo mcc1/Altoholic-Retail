@@ -216,7 +216,7 @@
 
 	<!-- IconList, used by Pets & Achievements -->
 	<Button name="AltoIconListItemTemplate" hidden="true" virtual="true" inherits="BackdropTemplate">
-		<!-- <Size x="34" y="34" /> -->
+        <!-- <Size x="34" y="34" /> -->
 		<Size x="31" y="31" />
 		<Layers> 
 			<Layer level="BACKGROUND"> 
@@ -237,7 +237,7 @@
 					</Anchors>
 				</Texture>
 				<FontString parentKey="Name" inherits="GameFontNormalSmall" justifyH="CENTER" >
-					<Size x="30" y="18" />
+					<Size x="40" y="18" />
 					<Anchors>
 						<Anchor point="BOTTOMRIGHT" x="5" y="0" />
 					</Anchors>
