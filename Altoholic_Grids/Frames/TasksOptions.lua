@@ -119,6 +119,12 @@ local function TaskTargetDropdown_SetSelectedWorldBoss(self, bossID, bossName)
     currentTask.Target = bossName
 end
 
+local function TaskTargetDropdown_SetSelectedRareSpawn(self, questID, rareName)
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, rareName)
+    
+    currentTask.Target = questID
+end
+
 local raidDifficultyIDs = {
     3, -- 10p normal
     4, -- 25p normal
@@ -409,6 +415,23 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             print("Altoholic: The World Bosses dropdown will only list bosses you have actually killed this week on the character you are currently playing.")
         end
     end
+    
+    if category == "Rare Spawn" then
+        local a = false
+        for questID, rareData in pairs(DataStore:GetKilledRares(DataStore:GetCharacter())) do
+            a = true
+            local info = UIDropDownMenu_CreateInfo()
+            info.text = rareData.name
+            info.func = TaskTargetDropdown_SetSelectedRareSpawn
+            info.arg1 = questID
+            info.arg2 = rareData.name
+            UIDropDownMenu_AddButton(info)
+        end
+        
+        if not a then
+            print("Altoholic: The Rare Spawn dropdown will only list rares you have killed today on the character you are currently playing, and must be one that is tied to a daily or weekly quest (generally Legion onwards)")
+        end
+    end
 end
 
 -- Converts the targetID to its associated string, based on the category
@@ -439,6 +462,10 @@ local function getCurrentTargetName()
     end
     
     if category == "World Boss" then
+        return targetID
+    end
+    
+    if category == "Rare Spawn" then
         return targetID
     end        
 end
@@ -489,7 +516,7 @@ local function TaskTypeDropdown_SetSelected(self, categoryName)
     
     -- Daily Quests, Profession Cooldowns, and World Bosses don't need an expansion. 
     -- So, clear the expansion, disable it, and enable the target dropdown
-    if (categoryName == "Daily Quest") or (categoryName == "Profession Cooldown") or (categoryName == "World Boss") then
+    if (categoryName == "Daily Quest") or (categoryName == "Profession Cooldown") or (categoryName == "World Boss") or (categoryName == "Rare Spawn") then
         UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
         UIDropDownMenu_SetText(AltoTasksOptions_TaskExpansionDropdown, "")
         currentTask.Expansion = nil
@@ -512,7 +539,7 @@ end
 local function TaskTypeDropdown_Opened(frame, level, menuList)
     local currentTaskType = currentTask.Category
     
-    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "World Boss"}
+    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "World Boss", "Rare Spawn"}
     
     for _, category in pairs(categories) do
         local info = UIDropDownMenu_CreateInfo()

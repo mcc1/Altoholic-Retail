@@ -195,6 +195,17 @@ local function isTaskComplete(taskID, character)
         end
         return false
     end
+    
+    if task.Category == "Rare Spawn" then
+        if DataStore:GetKilledRares(character) then -- backward compatibility with characters saved before the datastore module was added
+            for questID, rareData in pairs(DataStore:GetKilledRares(character)) do
+                if task.Target == questID then
+                    return true
+                end
+            end
+        end
+        return false
+    end
 end
 
 local function OnDropDownClicked(self)
