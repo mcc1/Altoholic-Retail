@@ -70,9 +70,9 @@ local function ScanRares()
             
             if questID and C_QuestLog.IsQuestFlaggedCompleted(questID) then
                 if resetPeriod == "DAILY" then
-                    rares[questID] = {["resetTime"] = GetQuestResetTime(), ["name"] = creatureName}
+                    rares[creatureID] = {["resetTime"] = GetQuestResetTime(), ["name"] = creatureName}
                 elseif resetPeriod == "WEEKLY" then
-                    rares[questID] = {["resetTime"] = C_DateAndTime.GetSecondsUntilWeeklyReset(), ["name"] = creatureName}
+                    rares[creatureID] = {["resetTime"] = C_DateAndTime.GetSecondsUntilWeeklyReset(), ["name"] = creatureName}
                 end
             end
         end

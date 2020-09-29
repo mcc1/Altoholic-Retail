@@ -13,4 +13,11 @@
 DataStore_Rares.lua
 
 Data/ArathiWarfront.lua
+Data/Argus.lua
+Data/BFABase.lua
+Data/BrokenShore.lua
+Data/DarkshoreWarfront.lua
+Data/LegionBase.lua
+Data/Mechagon.lua
+Data/Nazjatar.lua
 Data/ValeUldum.lua

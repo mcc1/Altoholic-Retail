@@ -134,7 +134,8 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Grids.Garrisons.CurrentStats"] = 1,					-- Current stats (abilities = 1, traits = 2, counters = 3)
 			["UI.Tabs.Grids.Sets.IncludePVE"] = true,							-- Include PVE Sets
 			["UI.Tabs.Grids.Sets.IncludePVP"] = true,							-- Include PVP Sets
-			["UI.Tabs.Grids.Sets.CurrentXPack"] = 1,							-- Current expansion pack 
+			["UI.Tabs.Grids.Sets.CurrentXPack"] = 1,							-- Current expansion pack
+            ["UI.Tabs.Grids.Rares.CurrentRareSet"] = "ArathiWarfront", 
 
 			-- ** Tooltip options **
 			["UI.Tooltip.ShowItemSource"] = true,

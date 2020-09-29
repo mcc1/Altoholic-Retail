@@ -234,6 +234,16 @@
                     <KeyValue key="text" value="COVENANT_MISSIONS_FOLLOWERS" type="global"/>
 				</KeyValues>
 			</Button>
+            
+            <Button parentKey="RareSpawns" inherits="AltoTabGridsMenuIconTemplate" id="20">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.CovenantFollowers" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="Interface\Icons\INV_Inscription_Trinket_Dragon" />
+                    <KeyValue key="text" value="Rare Spawns"/>
+				</KeyValues>
+			</Button>
             			
 			<!-- Tooltip for Garrison Levels, to avoid messing with Blizzard's own -->
 			<Frame parentKey="BuildingLevelTooltip" inherits="TooltipBorderedFrameTemplate" hidden="true" frameStrata="TOOLTIP" clampedToScreen="true">

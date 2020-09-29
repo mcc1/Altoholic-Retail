@@ -119,10 +119,10 @@ local function TaskTargetDropdown_SetSelectedWorldBoss(self, bossID, bossName)
     currentTask.Target = bossName
 end
 
-local function TaskTargetDropdown_SetSelectedRareSpawn(self, questID, rareName)
+local function TaskTargetDropdown_SetSelectedRareSpawn(self, creatureID, rareName)
     UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, rareName)
     
-    currentTask.Target = questID
+    currentTask.Target = creatureID
 end
 
 local raidDifficultyIDs = {
@@ -417,19 +417,35 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
     end
     
     if category == "Rare Spawn" then
-        local a = false
-        for questID, rareData in pairs(DataStore:GetKilledRares(DataStore:GetCharacter())) do
-            a = true
-            local info = UIDropDownMenu_CreateInfo()
-            info.text = rareData.name
-            info.func = TaskTargetDropdown_SetSelectedRareSpawn
-            info.arg1 = questID
-            info.arg2 = rareData.name
-            UIDropDownMenu_AddButton(info)
-        end
-        
-        if not a then
-            print("Altoholic: The Rare Spawn dropdown will only list rares you have killed today on the character you are currently playing, and must be one that is tied to a daily or weekly quest (generally Legion onwards)")
+    
+        if level == 1 then    
+            -- Get all the rare spawn zone names
+            local rares = DataStore:GetRareList()
+            for _, zoneList in pairs(rares) do
+                local zoneName = zoneList[1]
+                local zoneDetails = zoneList[2]
+                local frequency = zoneList[3]
+                local info = UIDropDownMenu_CreateInfo()
+                info.hasArrow = true
+                info.text = zoneName
+                info.menuList = zoneDetails
+                UIDropDownMenu_AddButton(info)
+            end
+        else
+            local zoneDetails = menuList
+            for _, rareDetails in pairs(zoneDetails) do
+                local creatureID = rareDetails[1]
+                local questID = rareDetails[2]
+                local allianceQuestID = rareDetails[3]
+                local hordeQuestID = rareDetails[4]
+                local creatureName = rareDetails[5]
+                local info = UIDropDownMenu_CreateInfo()
+                info.func = TaskTargetDropdown_SetSelectedRareSpawn
+                info.arg1 = creatureID
+                info.arg2 = creatureName
+                info.text = creatureName
+                UIDropDownMenu_AddButton(info, level)
+            end
         end
     end
 end
@@ -596,7 +612,7 @@ local function TaskNameDropdown_SetSelected(self, id)
 
     -- Target Dropdown should only be enabled if there is a category and expansion selected
     -- OR the selected category is a category that doesn't require an expansion
-    if currentTask.Category and ((currentTask.Category == "Daily Quest") or (currentTask.Category == "Profession Cooldown") or currentTask.Category == "World Boss") then 
+    if currentTask.Category and ((currentTask.Category == "Daily Quest") or (currentTask.Category == "Profession Cooldown") or (currentTask.Category == "World Boss") or (currentTask.Category == "Rare Spawn")) then 
         UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
         UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)
     elseif currentTask.Category and currentTask.Expansion then
