@@ -26,14 +26,27 @@ UIDropDownMenu_SetWidth(AltoTasksOptions_TaskNameDropdown, 200, 0)
 if not Altoholic.db.global.Tasks then
     Altoholic.db.global.Tasks = {}
 end
-local tasks = Altoholic.db.global.Tasks
+
+-- Update: 30/september/2020
+-- As I am adding a "profile" system, the data structure needs to be altered a bit
+-- To maintain backward compatibility, I will now continue to use db.global.Tasks for Profile 1
+-- Profile 2 and 3 and so on will now use db.global.Tasks2, .Tasks3, etc
+for i = 2, addon:GetOption("UI.Tabs.Grids.Tasks.MaxProfiles") do
+    if not Altoholic.db.global["Tasks"..i] then
+        Altoholic.db.global["Tasks"..i] = {}
+    end
+end
+
+local selectedTaskID = addon:GetOption("UI.Tabs.Grids.Tasks.SelectedProfile")
+if (tostring(selectedTaskID) == "1") then selectedTaskID = "" end
+local tasks = Altoholic.db.global["Tasks"..selectedTaskID]
 local currentTask = nil
 
 -- Data Structure:
 -- array Tasks
 -- > Name = STRING
 -- > ID = NUMBER UNIQUE PRIMARY KEY
--- > Category = ENUM {Daily Quest / Dungeon / Raid / Dungeon Boss / Raid Boss / Profession Cooldown / Rare Spawn}
+-- > Category = ENUM {Daily Quest / Dungeon / Raid / Dungeon Boss / Raid Boss / Profession Cooldown / Rare Spawn / Paragon}
 -- > Expansion = ENUM {Classic / TBC / WOTLK / Cataclysm / MOP / WOD / Legion / BFA / Shadowlands}
 -- > Target = NUMBER variable {instanceID / questID / bossID / recipeID}
 -- > (INTERNAL) Difficulty = ENUM {heroic / mythic} - for dungeons only
@@ -123,6 +136,12 @@ local function TaskTargetDropdown_SetSelectedRareSpawn(self, creatureID, rareNam
     UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, rareName)
     
     currentTask.Target = creatureID
+end
+
+local function TaskTargetDropdown_SetSelectedParagon(self, reputationID, reputationName)
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, reputationName)
+    
+    currentTask.Target = reputationID
 end
 
 local raidDifficultyIDs = {
@@ -417,7 +436,6 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
     end
     
     if category == "Rare Spawn" then
-    
         if level == 1 then    
             -- Get all the rare spawn zone names
             local rares = DataStore:GetRareList()
@@ -447,6 +465,24 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
                 UIDropDownMenu_AddButton(info, level)
             end
         end
+    end
+    
+    if category == "Paragon" then
+        local paragons = {
+                    ["Legion"] = {1900, 1883, 1828, 1948, 1859, 1894, 2045, 2165, 2170},
+                    ["BFA"] = {2159, 2160, 2161, 2162, 2400, 2395, 2157, 2103, 2156, 2158, 2373, 2164, 2163, 2391, 2415, 2417},
+                    ["Shadowlands"] = {2410, 2422, 2413, 2407},
+                }
+        paragons = paragons[expansion]
+        if not paragons then return end
+        for _, reputationID in pairs(paragons) do
+            local info = UIDropDownMenu_CreateInfo()
+            info.func = TaskTargetDropdown_SetSelectedParagon
+            info.arg1 = reputationID
+            info.arg2 = DataStore:GetFactionName(reputationID)
+            info.text = DataStore:GetFactionName(reputationID)
+            UIDropDownMenu_AddButton(info)
+        end 
     end
 end
 
@@ -482,6 +518,10 @@ local function getCurrentTargetName()
     end
     
     if category == "Rare Spawn" then
+        return targetID
+    end
+    
+    if category == "Paragon" then
         return targetID
     end        
 end
@@ -555,7 +595,7 @@ end
 local function TaskTypeDropdown_Opened(frame, level, menuList)
     local currentTaskType = currentTask.Category
     
-    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "World Boss", "Rare Spawn"}
+    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "World Boss", "Rare Spawn", "Paragon"}
     
     for _, category in pairs(categories) do
         local info = UIDropDownMenu_CreateInfo()

@@ -135,7 +135,10 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Grids.Sets.IncludePVE"] = true,							-- Include PVE Sets
 			["UI.Tabs.Grids.Sets.IncludePVP"] = true,							-- Include PVP Sets
 			["UI.Tabs.Grids.Sets.CurrentXPack"] = 1,							-- Current expansion pack
-            ["UI.Tabs.Grids.Rares.CurrentRareSet"] = "ArathiWarfront", 
+            ["UI.Tabs.Grids.Rares.CurrentRareSet"] = "ArathiWarfront",
+            ["UI.Tabs.Grids.Tasks.Profile1Name"] = "Profile 1",
+            ["UI.Tabs.Grids.Tasks.MaxProfiles"] = 5,
+            ["UI.Tabs.Grids.Tasks.SelectedProfile"] = 1, 
 
 			-- ** Tooltip options **
 			["UI.Tooltip.ShowItemSource"] = true,
@@ -194,6 +197,10 @@ local AddonDB_Defaults = {
 		},
 	}
 }
+
+for i = 2, AddonDB_Defaults.global.options["UI.Tabs.Grids.Tasks.MaxProfiles"] do
+    AddonDB_Defaults.global.options["UI.Tabs.Grids.Tasks.Profile"..i.."Name"] = "Profile " .. i
+end
 
 addon.Colors = {
 	white	= "|cFFFFFFFF",
