@@ -44,5 +44,6 @@ addon.RareList.Nazjatar = {
 		{152568, 56299, nil, nil, "Urduu"},
 		{151719, 56300, nil, nil, "Voice in the Deeps"},
 		{150468, 55603, nil, nil, "Vor'koth"},
-	}
+	},
+    "DAILY",
 }
