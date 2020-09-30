@@ -143,7 +143,7 @@ local function SaveAttachments(character, index, sender, days, wasReturned)
 	
 	local item, icon, count, link, itemID
 	
-	for attachmentIndex = 1, ATTACHMENTS_MAX_SEND do		-- mandatory, loop through all 12 slots, since attachments could be anywhere (ex: slot 4,5,8)
+	for attachmentIndex = 1, ATTACHMENTS_MAX_RECEIVE do		-- mandatory, loop through all 16 slots, since attachments could be anywhere (ex: slot 4,5,8)
 		if isSentMail then
 			item, itemID, icon, count = GetSendMailItem(attachmentIndex)
 			link = GetSendMailItemLink(attachmentIndex)
@@ -270,6 +270,11 @@ local function OnMailShow()
 
 	-- create a temporary table to hold the attachments that will be sent, keep it local since the event is rare
 	addon.isOpen = true
+end
+
+local sendMailLock = false
+local function OnMailSendComplete()
+    sendMailLock = false
 end
 
 -- ** Mixins **
@@ -502,6 +507,9 @@ end
 function addon:OnEnable()
 	addon:RegisterEvent("MAIL_SHOW", OnMailShow)
 	addon:RegisterEvent("BAG_UPDATE", OnBagUpdate)
+    addon:RegisterEvent("MAIL_SEND_SUCCESS", OnMailSendComplete)
+    addon:RegisterEvent("MAIL_FAILED", OnMailSendComplete)
+    addon:RegisterEvent("MAIL_CLOSED", OnMailSendComplete)
 	
 	addon:SetupOptions()
 	if GetOption("CheckMailExpiry") then
@@ -512,6 +520,9 @@ end
 function addon:OnDisable()
 	addon:UnregisterEvent("MAIL_SHOW")
 	addon:UnregisterEvent("BAG_UPDATE")
+    addon:UnregisterEvent("MAIL_SEND_SUCCESS")
+    addon:UnregisterEvent("MAIL_FAILED")
+    addon:UnregisterEvent("MAIL_CLOSED")
 end
 
 
@@ -549,6 +560,9 @@ local function SendOwnMail(characterKey, subject, body)
 end
 
 hooksecurefunc("SendMail", function(recipient, subject, body, ...)
+    if sendMailLock then return end
+    sendMailLock = true
+    
 	-- this function takes care of saving mails sent to alts directly into their mailbox, so that client addons don't have to take care about it
 	local isRecipientAnAlt
 
