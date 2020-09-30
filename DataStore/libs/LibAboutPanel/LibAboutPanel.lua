@@ -30,9 +30,7 @@ local L = {
 }
 
 local GAME_LOCALE = GetLocale()
-if GAME_LOCALE == "frFR" then
-	L["About"] = "à propos de"
-elseif GAME_LOCALE == "deDE" then
+if GAME_LOCALE == "deDE" then
 	L["About"] = "Über"
 	L["Author"] = "Autor"
 	L["Category"] = "Kategorie"

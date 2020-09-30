@@ -82,12 +82,13 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Summary.CurrentFactions"] = 3,							-- 1 = Alliance, 2 = Horde, 3 = Both
 			["UI.Tabs.Summary.CurrentLevels"] = 1,								-- 1 = All
 			["UI.Tabs.Summary.CurrentLevelsMin"] = 1,							
-			["UI.Tabs.Summary.CurrentLevelsMax"] = 120,					
+			["UI.Tabs.Summary.CurrentLevelsMax"] = 60,					
 			["UI.Tabs.Summary.CurrentClasses"] = 0,							-- 0 = All
 			["UI.Tabs.Summary.CurrentTradeSkill"] = 0,						-- 0 = All
 			["UI.Tabs.Summary.SortAscending"] = true,							-- ascending or descending sort order
 			["UI.Tabs.Summary.ShowLevelDecimals"] = true,					-- display character level with decimals or not
 			["UI.Tabs.Summary.ShowILevelDecimals"] = true,					-- display character level with decimals or not
+            --["UI.Tabs.Summary.ExcludeRealms.<Account>.<Realm>"] = true
 			
 			-- ** Character tab options **
 			["UI.Tabs.Characters.ViewBags"] = true,
@@ -133,7 +134,11 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Grids.Garrisons.CurrentStats"] = 1,					-- Current stats (abilities = 1, traits = 2, counters = 3)
 			["UI.Tabs.Grids.Sets.IncludePVE"] = true,							-- Include PVE Sets
 			["UI.Tabs.Grids.Sets.IncludePVP"] = true,							-- Include PVP Sets
-			["UI.Tabs.Grids.Sets.CurrentXPack"] = 1,							-- Current expansion pack 
+			["UI.Tabs.Grids.Sets.CurrentXPack"] = 1,							-- Current expansion pack
+            ["UI.Tabs.Grids.Rares.CurrentRareSet"] = "ArathiWarfront",
+            ["UI.Tabs.Grids.Tasks.Profile1Name"] = "Profile 1",
+            ["UI.Tabs.Grids.Tasks.MaxProfiles"] = 5,
+            ["UI.Tabs.Grids.Tasks.SelectedProfile"] = 1, 
 
 			-- ** Tooltip options **
 			["UI.Tooltip.ShowItemSource"] = true,
@@ -192,6 +197,10 @@ local AddonDB_Defaults = {
 		},
 	}
 }
+
+for i = 2, AddonDB_Defaults.global.options["UI.Tabs.Grids.Tasks.MaxProfiles"] do
+    AddonDB_Defaults.global.options["UI.Tabs.Grids.Tasks.Profile"..i.."Name"] = "Profile " .. i
+end
 
 addon.Colors = {
 	white	= "|cFFFFFFFF",

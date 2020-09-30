@@ -273,7 +273,25 @@ local Factions = {
 			{ name = DataStore:GetFactionName(2417), icon = "inv_faction_83_uldumaccord" },
 		},
 	},
-	{	-- [8]
+    { -- [9]
+        name = EXPANSION_NAME8, -- "Shadowlands"
+		{	-- [1]
+			name = FACTION_ALLIANCE,
+			--{ name = DataStore:GetFactionName(2159), icon = "Inv_tabard_alliancewareffort" },
+		},
+		{	-- [2]
+			name = FACTION_HORDE,
+			--{ name = DataStore:GetFactionName(2157), icon = "Inv_tabard_hordewareffort" },
+		},
+		{	-- [3]
+			name = OTHER,
+            { name = DataStore:GetFactionName(2410), icon = "inv_tabard_maldraxxus_d_01" },
+            { name = DataStore:GetFactionName(2422), icon = "inv_tabard_ardenweald_d_01" },
+			{ name = DataStore:GetFactionName(2413), icon = "inv_tabard_revendreth_d_01" },
+			{ name = DataStore:GetFactionName(2407), icon = "PLACEHOLDER" }, -- check https://shadowlands.wowhead.com/achievement=14335/the-ascended#criteria-of:0+1+2
+		},
+    },
+	{
 		name = GUILD,
 		{	-- [1]
 			name = GUILD,
@@ -537,6 +555,7 @@ local callbacks = {
 	RowOnEnter = function()	end,
 	RowOnLeave = function() end,
 	ColumnSetup = function(self, button, dataRowID, character)
+            button.Background:SetVertexColor(1, 1, 1)
 			local faction = currentFaction
 			
 			if faction.left then		-- if it's not a full texture, use tcoords
@@ -547,46 +566,39 @@ local callbacks = {
 				button.Background:SetTexCoord(0, 1, 0, 1)
 			end		
 			
-			button.Name:SetFontObject("GameFontNormalSmall")
+			button.Name:SetFontObject("GameFontNormal")
 			button.Name:SetJustifyH("CENTER")
-			button.Name:SetPoint("BOTTOMRIGHT", 5, 0)
+			button.Name:SetPoint("BOTTOMRIGHT", 0, 0)
 			button.Background:SetDesaturated(false)
 			
-			local status, _, _, rate = DataStore:GetReputationInfo(character, faction.name)
+			local status, amount, _, rate = DataStore:GetReputationInfo(character, faction.name)
+
 			if status and rate then 
 				local text
 				if status == FACTION_STANDING_LABEL8 then
 					text = icons.ready
 				elseif status == PARAGON_LABEL then
 					if rate >= 100 then
-						text = icons.waiting
-					else
-						button.Name:SetFontObject("NumberFontNormalSmall")
-						button.Name:SetJustifyH("RIGHT")
-						button.Name:SetPoint("BOTTOMRIGHT", 0, 0)
-						text = format("%2d%%", floor(rate))
+                        button.Background:SetTexture("Interface\\LFGFrame\\LFGIcon-Quest")
 					end
+					button.Name:SetFontObject("NumberFontNormalLarge")
+					button.Name:SetJustifyH("RIGHT")
+					button.Name:SetPoint("BOTTOMRIGHT", 0, 0)
+                    text = math.floor(amount/1000) .. "K"
 				else
 					button.Background:SetDesaturated(true)
-					button.Name:SetFontObject("NumberFontNormalSmall")
+					button.Name:SetFontObject("NumberFontNormal")
 					button.Name:SetJustifyH("RIGHT")
 					button.Name:SetPoint("BOTTOMRIGHT", 0, 0)
 					text = format("%2d", floor(rate)) .. "%"
 				end
 
 				local vc = VertexColors[status]
-				button.Background:SetVertexColor(vc.r, vc.g, vc.b);
-				
-				local color = colors.white
-				if status == FACTION_STANDING_LABEL1 or status == FACTION_STANDING_LABEL2 then
-					color = colors.darkred
-				elseif status == PARAGON_LABEL then
-					color = colors.epic
-				end
 
 				button.key = character
 				button:SetID(dataRowID)
-				button.Name:SetText(color..text)
+				button.Name:SetText(text)
+                button.Name:SetTextColor(vc.r, vc.g, vc.b)
 			else
 				button.Background:SetVertexColor(0.3, 0.3, 0.3);	-- greyed out
 				button.Name:SetText(icons.notReady)
@@ -627,8 +639,7 @@ local callbacks = {
 			AltoTooltip:AddLine(FACTION_STANDING_LABEL5, 0.0, 1.0, 0.0)
 			AltoTooltip:AddLine(FACTION_STANDING_LABEL6, 0.0, 1.0, 0.8)
 			AltoTooltip:AddLine(FACTION_STANDING_LABEL7, 1.0, 0.4, 1.0)
-			AltoTooltip:AddLine(format("%s = %s", icons.ready, FACTION_STANDING_LABEL8), 1, 1, 1)
-			AltoTooltip:AddLine(format("%s = %s%s", icons.waiting, colors.epic, PARAGON_LABEL), 1, 1, 1)
+			AltoTooltip:AddLine(format("%s = %s/%s", icons.ready, FACTION_STANDING_LABEL8, PARAGON_LABEL), 1, 1, 1)
 			
 			AltoTooltip:AddLine(" ",1,1,1)
 			AltoTooltip:AddLine(colors.green .. L["Shift+Left click to link"])
@@ -662,7 +673,11 @@ local callbacks = {
 			local currentFactionGroup = addon:GetOption(OPTION_FACTION)
 			
 			if (currentXPack ~= CAT_ALLINONE) then
-				currentDDMText = Factions[currentXPack][currentFactionGroup].name
+                if currentFactionGroup then
+				    currentDDMText = Factions[currentXPack][currentFactionGroup].name
+                else
+                    currentDDMText = Factions[currentXPack].name
+                end
 			else
 				currentDDMText = L["All-in-one"]
 			end

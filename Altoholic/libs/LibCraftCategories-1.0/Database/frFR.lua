@@ -135,6 +135,6 @@ LibStub("LibCraftCategories-1.0").frFR = {
   [1055]={["Name_lang"]="Shadowlands Designs - Header",["HordeName_lang"]="",["ID"]=1417,["ParentTradeSkillCategoryID"]=0,["SkillLineID"]=755,["OrderIndex"]=920,["Flags"]=0},
   [1065]={["Name_lang"]="Shadowlands Herbalism - Header",["HordeName_lang"]="",["ID"]=1442,["ParentTradeSkillCategoryID"]=0,["SkillLineID"]=182,["OrderIndex"]=920,["Flags"]=0},
   [1067]={["Name_lang"]="Cryptogrammes d’âmes",["HordeName_lang"]="",["ID"]=1444,["ParentTradeSkillCategoryID"]=0,["SkillLineID"]=2777,["OrderIndex"]=0,["Flags"]=0},
-  [1080]={["Name_lang"]="Couture abominable",["HordeName_lang"]="",["ID"]=1478,["ParentTradeSkillCategoryID"]=0,["SkillLineID"]=2787,["OrderIndex"]=0,["Flags"]=0},
+  [1080]={["Name_lang"]="Suture abominable",["HordeName_lang"]="",["ID"]=1478,["ParentTradeSkillCategoryID"]=0,["SkillLineID"]=2787,["OrderIndex"]=0,["Flags"]=0},
   [1085]={["Name_lang"]="Artisanat de l’Ascension",["HordeName_lang"]="",["ID"]=1485,["ParentTradeSkillCategoryID"]=0,["SkillLineID"]=2791,["OrderIndex"]=0,["Flags"]=0},
 }

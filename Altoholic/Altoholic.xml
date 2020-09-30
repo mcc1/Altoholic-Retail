@@ -106,7 +106,7 @@
 					<Anchors>
 						<Anchor point="TOPLEFT" x="80" y="-35" />
 					</Anchors>
-					<Color r="255" g="255" b="255" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
 			</Layer>
 		</Layers>

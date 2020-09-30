@@ -21,7 +21,7 @@
 					<Anchors>
 						<Anchor point="BOTTOMLEFT" x="190" y="13" />
 					</Anchors>
-					<Color r="255" g="255" b="255" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
 			</Layer>
 		</Layers>

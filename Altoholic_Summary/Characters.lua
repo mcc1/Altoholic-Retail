@@ -134,7 +134,28 @@ local function AddRealm(AccountName, RealmName)
     		elseif (factions == 2) and (characterFaction ~= "Horde") then
     			shouldAddCharacter = false
     		end
-    		if (class ~= 0) and CLASS_SORT_ORDER[class] ~= characterClass then shouldAddCharacter = false end
+    		if (class ~= 0) then
+                if type(class) == "number" then
+                    if CLASS_SORT_ORDER[class] ~= characterClass then 
+                        shouldAddCharacter = false
+                    end 
+                else
+                    local armorClasses = {
+                        ["Cloth"] = {"MAGE", "PRIEST", "WARLOCK"},
+                        ["Leather"] = {"DRUID", "ROGUE", "DEMONHUNTER", "MONK"},
+                        ["Mail"] = {"HUNTER", "SHAMAN"},
+                        ["Plate"] = {"PALADIN", "WARRIOR", "DEATHKNIGHT"},
+                    }
+                    local classes = armorClasses[class]
+                    local found = false
+                    for _, class in pairs(classes) do
+                        if class == characterClass then
+                            found = true
+                        end
+                    end
+                    if not found then shouldAddCharacter = false end
+                end
+            end
     		if (tradeskill ~= 0) then 
     
     			-- primary profession
@@ -208,7 +229,6 @@ local function AddRealm(AccountName, RealmName)
 	   } )
     end
     
-    -- Code inserted 13/05/2020: add selected guild bank gold
     for guildName, guild in pairs(DataStore:GetGuilds(RealmName, AccountName)) do
         local altoSavedVariableGuild = addon:GetGuild(guildName, RealmName, AccountName)
         if altoSavedVariableGuild then
@@ -218,9 +238,11 @@ local function AddRealm(AccountName, RealmName)
         end
     end
 
-	totalMoney = totalMoney + realmMoney
-	totalPlayed = totalPlayed + realmPlayed
-	totalLevels = totalLevels + realmLevels
+	if not addon:GetOption(format("UI.Tabs.Summary.ExcludeRealms.%s.%s", AccountName, RealmName)) then
+        totalMoney = totalMoney + realmMoney
+	    totalPlayed = totalPlayed + realmPlayed
+	    totalLevels = totalLevels + realmLevels
+    end
 	realmCount = realmCount + 1
 	
 	-- remove empty realms if no characters have passed filters
