@@ -62,12 +62,13 @@ local function SaveHeaders()
 	headersState = {}
 	headerCount = 0		-- use a counter to avoid being bound to header names, which might not be unique.
 	
-	for i = GetCurrencyListSize(), 1, -1 do		-- 1st pass, expand all categories
-		local _, isHeader, isExpanded = GetCurrencyListInfo(i)
+	for i = C_CurrencyInfo.GetCurrencyListSize(), 1, -1 do		-- 1st pass, expand all categories
+        local info = C_CurrencyInfo.GetCurrencyListInfo(i)
+		local isHeader, isExpanded = info.isHeader, info.isHeaderExpanded
 		if isHeader then
 			headerCount = headerCount + 1
 			if not isExpanded then
-				ExpandCurrencyList(i, 1)
+				C_CurrencyInfo.ExpandCurrencyList(i, 1)
 				headersState[headerCount] = true
 			end
 		end
@@ -76,12 +77,12 @@ end
 
 local function RestoreHeaders()
 	headerCount = 0
-	for i = GetCurrencyListSize(), 1, -1 do
-		local _, isHeader = GetCurrencyListInfo(i)
+	for i = C_CurrencyInfo.GetCurrencyListSize(), 1, -1 do
+		local isHeader = C_CurrencyInfo.GetCurrencyListInfo(i).isHeader
 		if isHeader then
 			headerCount = headerCount + 1
 			if headersState[headerCount] then
-				ExpandCurrencyList(i, 0)		-- collapses the header
+				C_CurrencyInfo.ExpandCurrencyList(i, 0)		-- collapses the header
 			end
 		end
 	end
@@ -94,7 +95,8 @@ local function ScanCurrencyTotals(id, divWeekly, divTotal)
 	local denomWeekly = divWeekly or 1
 	local denomTotal = divTotal or 1
 	
-	local _, amount, _, earnedThisWeek, weeklyMax, totalMax = GetCurrencyInfo(id)
+    local info = C_CurrencyInfo.GetCurrencyInfo(id) 
+    local amount, earnedThisWeek, weeklyMax, totalMax = info.quantity, info.quantityEarnedThisWeek, info.maxWeeklyQuantity, info.maxQuantity
 	
 	weeklyMax = math.floor(weeklyMax / denomWeekly)
 	totalMax = math.floor(totalMax / denomTotal)
@@ -114,28 +116,20 @@ local function ScanCurrencies()
 	wipe(currencies)
 	
 	local refIndex
-	      
-	for i = 1, GetCurrencyListSize() do
-		local name, isHeader, _, _, _, count, icon = GetCurrencyListInfo(i)
+
+	for i = 1, C_CurrencyInfo.GetCurrencyListSize() do
+        local info = C_CurrencyInfo.GetCurrencyListInfo(i)
+		local name, isHeader, count, icon = info.name, info.isHeader, info.quantity, info.iconFileID
 		
 		if not ref.CurrencyTextRev[name] then		-- currency does not exist yet in our reference table
 			table.insert(ref.Currencies, format("%s|%s", name, icon or "") )			-- ex; [3] = "PVP"
 			ref.CurrencyTextRev[name] = #ref.Currencies		-- ["PVP"] = 3
 		end
-
-        -- Update 2020/03/28: This is the old system
-        -- It was stored as a number directly under: Currencies[index] = number
-        -- bit 0 : isHeader
-		-- bits 1-6 : index in the reference table (up to 64 values, should leave room for some time)
-		-- bits 7- : count
-        --
-        -- Now, this is the new system:
-        -- Currencies[index] = { isHeader = false, index = 1, count = 400 }
 		
 		if isHeader then
 			count = 0
         else
-            local currencyLink = GetCurrencyListLink(i)
+            local currencyLink = C_CurrencyInfo.GetCurrencyListLink(i)
             if currencyLink then
                 ScanCurrencyTotals(C_CurrencyInfo.GetCurrencyIDFromLink(currencyLink))
             end        

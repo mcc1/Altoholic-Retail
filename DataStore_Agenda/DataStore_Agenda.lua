@@ -73,8 +73,8 @@ local function ScanContacts()
 
 	wipe(contacts)
 
-	for i = 1, GetNumFriends() do	-- only friends, not real id, as they're always visible
-	   local name, level, class, zone, isOnline, note = GetFriendInfo(i);
+	for i = 1, C_FriendList.GetNumFriends() do	-- only friends, not real id, as they're always visible
+	   local name, level, class, zone, isOnline, note = C_FriendList.GetFriendInfoByIndex(i);
 
 		if name then
 			contacts[name] = contacts[name] or {}
@@ -204,7 +204,7 @@ local function ScanCalendar()
 	-- Save the current month
 	local CurDateInfo = C_Calendar.GetMonthInfo()
 	local currentMonth, currentYear = CurDateInfo.month, CurDateInfo.year
-	local DateInfo = C_Calendar.GetDate()
+	local DateInfo = C_DateAndTime.GetCurrentCalendarTime()
 	local thisMonth, thisDay, thisYear = DateInfo.month, DateInfo.monthDay, DateInfo.year
 	C_Calendar.SetAbsMonth(thisMonth, thisYear)
 
@@ -517,7 +517,7 @@ local function SetClientServerTimeGap()
 	lastServerMinute = nil	-- won't be needed anymore
 	timerHandle = nil
 
-	local DateInfo = C_Calendar.GetDate()
+	local DateInfo = C_DateAndTime.GetCurrentCalendarTime()
 	local ServerMonth, ServerDay, ServerYear = DateInfo.month, DateInfo.monthDay, DateInfo.year
 	timeTable.year = ServerYear
 	timeTable.month = ServerMonth
@@ -696,7 +696,7 @@ function addon:OnEnable()
 	ClearExpiredDungeons()
 	
 	-- Calendar (only register after setting the current month)
-	local DateInfo = C_Calendar.GetDate()
+	local DateInfo = C_DateAndTime.GetCurrentCalendarTime()
 	local thisMonth,thisYear = DateInfo.month, DateInfo.year
 
 	C_Calendar.SetAbsMonth(thisMonth, thisYear)

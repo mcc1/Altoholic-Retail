@@ -884,3 +884,12 @@ function addon:GetRealmsConnectedWith(realm)
 	
 	return out
 end
+
+-- *** Utility ***
+function addon:GetSecondsUntilDailyReset()
+    local seconds = C_DateAndTime.GetSecondsUntilWeeklyReset()
+    while seconds > 86400 do
+        seconds = seconds - 86400
+    end
+    return seconds
+end

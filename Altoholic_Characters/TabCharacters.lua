@@ -484,7 +484,7 @@ local function BagsIcon_Initialize(self, level)
 	local rarity = addon:GetOption("UI.Tabs.Characters.ViewBagsRarity")
 	DDM_Add(L["Any"], 0, OnRarityChange, nil, (rarity == 0))
 	
-	for i = LE_ITEM_QUALITY_UNCOMMON, LE_ITEM_QUALITY_HEIRLOOM do		-- Quality: 0 = poor .. 5 = legendary
+	for i = Enum.ItemQuality.Uncommon, Enum.ItemQuality.Heirloom do		-- Quality: 0 = poor .. 5 = legendary
 		DDM_Add(format("|c%s%s", select(4, GetItemQualityColor(i)), _G["ITEM_QUALITY"..i.."_DESC"]), i, OnRarityChange, nil, (rarity == i))
 	end
 	
@@ -816,22 +816,28 @@ local function GarrisonIcon_Initialize(self, level)
 	local currentMenu = addon:GetOption("UI.Tabs.Characters.GarrisonMissions")
 	
 	DDM_AddTitle(GARRISON_MISSIONS_TITLE)
-	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, LE_FOLLOWER_TYPE_GARRISON_6_0)), 
+	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_6_0)), 
 				1, OnGarrisonMenuChange, nil, (currentMenu == 1))
-	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, LE_FOLLOWER_TYPE_GARRISON_6_0)), 
+	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_6_0)), 
 				2, OnGarrisonMenuChange, nil, (currentMenu == 2))
 	DDM_AddTitle(" ")
 	DDM_AddTitle(ORDER_HALL_MISSIONS)
-	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, LE_FOLLOWER_TYPE_GARRISON_7_0)), 
+	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_7_0)), 
 				3, OnGarrisonMenuChange, nil, (currentMenu == 3))
-	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, LE_FOLLOWER_TYPE_GARRISON_7_0)), 
+	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_7_0)), 
 				4, OnGarrisonMenuChange, nil, (currentMenu == 4))
 	DDM_AddTitle(" ")
 	DDM_AddTitle(WAR_CAMPAIGN)
-	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, LE_FOLLOWER_TYPE_GARRISON_8_0)), 
+	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_8_0)), 
 				5, OnGarrisonMenuChange, nil, (currentMenu == 5))
-	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, LE_FOLLOWER_TYPE_GARRISON_8_0)), 
+	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_8_0)), 
 				6, OnGarrisonMenuChange, nil, (currentMenu == 6))
+	DDM_AddTitle(" ")
+	DDM_AddTitle(COVENANT_MISSIONS_COVENANT_ADVENTURE)
+	DDM_Add(format(GARRISON_LANDING_AVAILABLE, DataStore:GetNumAvailableMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_9_0)), 
+				7, OnGarrisonMenuChange, nil, (currentMenu == 7))
+	DDM_Add(format(GARRISON_LANDING_IN_PROGRESS, DataStore:GetNumActiveMissions(currentCharacterKey, Enum.GarrisonFollowerType.FollowerType_9_0)), 
+				8, OnGarrisonMenuChange, nil, (currentMenu == 8))
 	
 	DDM_AddCloseMenu()
 end
