@@ -27,7 +27,11 @@ move-folders:
  Altoholic/DataStore_Reputations: DataStore_Reputations
  Altoholic/DataStore_Spells: DataStore_Spells
  Altoholic/DataStore_Stats: DataStore_Stats
- Altoholic/DataStore_Talents: DataStore_Talents
+
+externals:
+  DataStore_Talents:
+    url: https://github.com/teelolws/DataStore_Talents
+    tag: latest
 
 ignore:
  - LICENCE.md
