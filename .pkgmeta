@@ -1,0 +1,91 @@
+package-as: Altoholic
+
+move-folders:
+ Altoholic/Altoholic: Altoholic
+ Altoholic/Altoholic_Achievements: Altoholic_Achievements
+ Altoholic/Altoholic_Agenda: Altoholic_Agenda
+ Altoholic/Altoholic_Characters: Altoholic_Characters
+ Altoholic/Altoholic_Grids: Altoholic_Grids
+ Altoholic/Altoholic_Guild: Altoholic_Guild
+ Altoholic/Altoholic_Search: Altoholic_Search
+ Altoholic/Altoholic_Summary: Altoholic_Summary
+ Altoholic/DataStore/DataStore: DataStore
+ Altoholic/DataStore_Achievements/DataStore_Achievements: DataStore_Achievements
+ Altoholic/DataStore_Agenda/DataStore_Agenda: DataStore_Agenda
+ Altoholic/DataStore_Auctions/DataStore_Auctions: DataStore_Auctions
+ Altoholic/DataStore_Characters/DataStore_Characters: DataStore_Characters
+ Altoholic/DataStore_Containers/DataStore_Containers: DataStore_Containers
+ Altoholic/DataStore_Crafts/DataStore_Crafts: DataStore_Crafts
+ Altoholic/DataStore_Currencies/DataStore_Currencies: DataStore_Currencies
+ Altoholic/DataStore_Garrisons/DataStore_Garrisons: DataStore_Garrisons
+ Altoholic/DataStore_Inventory/DataStore_Inventory: DataStore_Inventory
+ Altoholic/DataStore_Keystones/DataStore_Keystones: DataStore_Keystones
+ Altoholic/DataStore_Mails/DataStore_Mails: DataStore_Mails
+ Altoholic/DataStore_Rares/DataStore_Rares: DataStore_Rares
+ Altoholic/DataStore_Pets/DataStore_Pets: DataStore_Pets
+ Altoholic/DataStore_Quests/DataStore_Quests: DataStore_Quests
+ Altoholic/DataStore_Reputations/DataStore_Reputations: DataStore_Reputations
+ Altoholic/DataStore_Spells/DataStore_Spells: DataStore_Spells
+ Altoholic/DataStore_Stats/DataStore_Stats: DataStore_Stats
+ Altoholic/DataStore_Talents/DataStore_Talents: DataStore_Talents
+
+externals:
+  DataStore:
+    url: https://github.com/teelolws/DataStore
+    tag: latest
+  DataStore_Achievements:
+    url: https://github.com/teelolws/DataStore_Achievements
+    tag: latest
+  DataStore_Agenda:
+    url: https://github.com/teelolws/DataStore_Agenda
+    tag: latest
+  DataStore_Characters:
+    url: https://github.com/teelolws/DataStore_Characters
+    tag: latest
+  DataStore_Containers:
+    url: https://github.com/teelolws/DataStore_Containers
+    tag: latest
+  DataStore_Crafts:
+    url: https://github.com/teelolws/DataStore_Crafts
+    tag: latest
+  DataStore_Currencies:
+    url: https://github.com/teelolws/DataStore_Currencies
+    tag: latest
+  DataStore_Garrisons:
+    url: https://github.com/teelolws/DataStore_Garrisons
+    tag: latest
+  DataStore_Inventory:
+    url: https://github.com/teelolws/DataStore_Inventory
+    tag: latest
+  DataStore_Keystones:
+    url: https://github.com/teelolws/DataStore_Keystones
+    tag: latest
+  DataStore_Mails:
+    url: https://github.com/teelolws/DataStore_Mails
+    tag: latest
+  DataStore_Rares:
+    url: https://github.com/teelolws/DataStore_Rares
+    tag: latest
+  DataStore_Pets:
+    url: https://github.com/teelolws/DataStore_Pets
+    tag: latest
+  DataStore_Quests:
+    url: https://github.com/teelolws/DataStore_Quests
+    tag: latest
+  DataStore_Reputations:
+    url: https://github.com/teelolws/DataStore_Reputations
+    tag: latest
+  DataStore_Spells:
+    url: https://github.com/teelolws/DataStore_Spells
+    tag: latest
+  DataStore_Stats:
+    url: https://github.com/teelolws/DataStore_Stats
+    tag: latest
+  DataStore_Talents:
+    url: https://github.com/teelolws/DataStore_Talents
+    tag: latest
+
+ignore:
+ - LICENCE.md
+ - README.md
+ - Utils
