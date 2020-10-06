@@ -135,8 +135,10 @@ addon:Controller("AltoholicUI.TabGrids", {
 	UpdateMenuIcons = function(frame)
 		if DataStore_Inventory then
 			frame.Equipment:EnableIcon()
+            frame.Sets:EnableIcon()
 		else
 			frame.Equipment:DisableIcon()
+            frame.Sets:DisableIcon()
 		end
 
 		if DataStore_Reputations then
@@ -153,24 +155,54 @@ addon:Controller("AltoholicUI.TabGrids", {
 
 		if DataStore_Quests then
 			frame.Dailies:EnableIcon()
+            frame.Emissaries:EnableIcon()
+            frame.Callings:EnableIcon()
 		else
 			frame.Dailies:DisableIcon()
+            frame.Emissaries:DisableIcon()
+            frame.Callings:DisableIcon()
 		end
 		
+        if DataStore_Talents then
+            frame.Essences:EnableIcon()
+        else
+            frame.Essences:DisableIcon()
+        end
+        
 		if DataStore_Agenda then
 			frame.Dungeons:EnableIcon()
 		else
 			frame.Dungeons:DisableIcon()
 		end
+        
+        if DataStore_Crafts then
+            frame.TradeSkills:EnableIcon()
+            frame.Archeology:EnableIcon()
+        else
+            frame.TradeSkills:DisableIcon()
+            frame.Archeology:DisableIcon()
+        end
+        
+        if DataStore_Rares then
+            frame.RareSpawns:EnableIcon()
+        else
+            frame.RareSpawns:DisableIcon()
+        end
 		
 		if DataStore_Garrisons then
 			frame.GarrisonArchitect:EnableIcon()
 			frame.GarrisonFollowers:EnableIcon()
 			frame.FollowerAbilities:EnableIcon()
+            frame.OrderHallFollowers:EnableIcon()
+            frame.WarCampaignFollowers:EnableIcon()
+            frame.CovenantFollowers:EnableIcon()
 		else
 			frame.GarrisonArchitect:DisableIcon()
 			frame.GarrisonFollowers:DisableIcon()
 			frame.FollowerAbilities:DisableIcon()
+            frame.OrderHallFollowers:DisableIcon()
+            frame.WarCampaignFollowers:DisableIcon()
+            frame.CovenantFollowers:DisableIcon()
 		end
 	end,
 	SetStatus = function(frame, text)

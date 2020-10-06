@@ -1244,7 +1244,7 @@ columns["ProfArchaeology"] = {
 	Width = 60,
 	JustifyH = "CENTER",
 	GetText = function(character)
-			local rank = DataStore:GetArchaeologyRank(character)
+			local rank = DataStore:GetArchaeologyRank(character) or 0
 			return format("%s%s", GetSkillRankColor(rank), rank)
 		end,
 	OnEnter = function(frame)

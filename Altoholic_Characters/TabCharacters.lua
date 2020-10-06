@@ -77,6 +77,11 @@ local function EnableIcon(frame)
 	frame.Icon:SetDesaturated(false)
 end
 
+local function DisableIcon(frame)
+    frame:Disable()
+    frame.Icon:SetDesaturated(true)
+end
+
 local DDM_Add = addon.Helpers.DDM_Add
 local DDM_AddTitle = addon.Helpers.DDM_AddTitle
 local DDM_AddCloseMenu = addon.Helpers.DDM_AddCloseMenu
@@ -243,13 +248,13 @@ local function OnCharacterChange(self)
 	
 	local menuIcons = parent.MenuIcons
 	EnableIcon(menuIcons.BagsIcon)
-	EnableIcon(menuIcons.QuestsIcon)
-	EnableIcon(menuIcons.TalentsIcon)
-	EnableIcon(menuIcons.AuctionIcon)
-	EnableIcon(menuIcons.MailIcon)
-	EnableIcon(menuIcons.SpellbookIcon)
-	EnableIcon(menuIcons.ProfessionsIcon)
-	EnableIcon(menuIcons.GarrisonIcon)
+	if DataStore_Quests then EnableIcon(menuIcons.QuestsIcon) else DisableIcon(menuIcons.QuestsIcon) end
+	if DataStore_Talents then EnableIcon(menuIcons.TalentsIcon) else DisableIcon(menuIcons.TalentsIcon) end
+	if DataStore_Auctions then EnableIcon(menuIcons.AuctionIcon) else DisableIcon(menuIcons.AuctionIcon) end
+	if DataStore_Mails then EnableIcon(menuIcons.MailIcon) else DisableIcon(menuIcons.MailIcon) end
+	if DataStore_Spells then EnableIcon(menuIcons.SpellbookIcon) else DisableIcon(menuIcons.SpellbookIcon) end
+	if DataStore_Crafts then EnableIcon(menuIcons.ProfessionsIcon) else DisableIcon(menuIcons.ProfessionsIcon) end
+	if DataStore_Garrisons then EnableIcon(menuIcons.GarrisonIcon) else DisableIcon(menuIcons.GarrisonIcon) end
 	
 	DropDownList1:Hide()
 	
@@ -496,6 +501,10 @@ local function QuestsIcon_Initialize(self, level)
 	if not currentCharacterKey then return end
 	
 	local questLog = AltoholicTabCharacters.QuestLog
+    
+    if not DataStore_Quests then
+        return
+    end
 	
 	DDM_AddTitle(format("%s / %s", QUESTS_LABEL, DataStore:GetColoredCharacterName(currentCharacterKey)))
 	DDM_Add(ALL, 0, OnQuestHeaderChange, nil, (questLog:GetCategory() == 0))
@@ -904,6 +913,13 @@ function ns:OnLoad()
 	local menuIcons = parent.MenuIcons
 	menuIcons.CharactersIcon.Icon:SetTexture(addon:GetCharacterIcon())
 	menuIcons.BagsIcon.Icon:SetTexture(bagIcon)
+    if DataStore_Quests then EnableIcon(menuIcons.QuestsIcon) else DisableIcon(menuIcons.QuestsIcon) end
+	if DataStore_Talents then EnableIcon(menuIcons.TalentsIcon) else DisableIcon(menuIcons.TalentsIcon) end
+	if DataStore_Auctions then EnableIcon(menuIcons.AuctionIcon) else DisableIcon(menuIcons.AuctionIcon) end
+	if DataStore_Mails then EnableIcon(menuIcons.MailIcon) else DisableIcon(menuIcons.MailIcon) end
+	if DataStore_Spells then EnableIcon(menuIcons.SpellbookIcon) else DisableIcon(menuIcons.SpellbookIcon) end
+	if DataStore_Crafts then EnableIcon(menuIcons.ProfessionsIcon) else DisableIcon(menuIcons.ProfessionsIcon) end
+	if DataStore_Garrisons then EnableIcon(menuIcons.GarrisonIcon) else DisableIcon(menuIcons.GarrisonIcon) end
 	
 	addon:RegisterMessage("DATASTORE_RECIPES_SCANNED")
 	addon:RegisterMessage("DATASTORE_QUESTLOG_SCANNED")
