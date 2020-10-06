@@ -17,6 +17,10 @@ local function OnAccountChange(frame, dropDownFrame)
 		end
 	end
     
+    if newAccount == THIS_ACCOUNT then
+        addon:SetOption("UI.Tabs.Grids.CurrentAccountRealmScope", "Account")
+    end
+    
     AltoholicTabGrids.RefreshReputations()
 end
 
@@ -32,6 +36,10 @@ local function OnRealmChange(frame, dropDownFrame, newAccount)
 		end
 	end
     
+    if newRealm == GetNormalizedRealmName() then
+        addon:SetOption("UI.Tabs.Grids.CurrentAccountRealmScope", "Realm")
+    end
+    
     AltoholicTabGrids.RefreshReputations()
 end
 
@@ -40,10 +48,16 @@ addon:Controller("AltoholicUI.AccountPicker", {
 		frame:SetMenuWidth(frame.menuWidth) 
 		frame:SetButtonWidth(20)
 		frame:Initialize(frame.DropDownAccount_Initialize)
-		frame:SetCurrentAccount("Default")
+		if addon:GetOption("UI.Tabs.Grids.CurrentAccountRealmScope") == "Account" then
+            frame:SetCurrentAccount("Default")
+        else
+            frame:SetCurrentAccount("Default", GetNormalizedRealmName())
+        end
 	end,
 	DropDownAccount_Initialize = function(frame)
 		if not frame.currentAccount then return end
+        
+        local scope = addon:GetOption("UI.Tabs.Grids.CurrentAccountRealmScope")
 
 		-- this account first ..
 		frame:AddTitle(colors.gold..L["This account"])
@@ -59,8 +73,8 @@ addon:Controller("AltoholicUI.AccountPicker", {
         for realm in pairs(DataStore:GetRealms(THIS_ACCOUNT)) do
 		  local info = frame:CreateInfo()
 		  info.text = realm
-		  info.value = realm 
-		  info.checked = nil
+		  info.value = realm
+          info.checked = nil
 		  info.func = OnRealmChange
 		  info.arg1 = frame
           info.arg2 = THIS_ACCOUNT

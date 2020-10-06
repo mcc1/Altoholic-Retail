@@ -138,7 +138,8 @@ local AddonDB_Defaults = {
             ["UI.Tabs.Grids.Rares.CurrentRareSet"] = "ArathiWarfront",
             ["UI.Tabs.Grids.Tasks.Profile1Name"] = "Profile 1",
             ["UI.Tabs.Grids.Tasks.MaxProfiles"] = 5,
-            ["UI.Tabs.Grids.Tasks.SelectedProfile"] = 1, 
+            ["UI.Tabs.Grids.Tasks.SelectedProfile"] = 1,
+            ["UI.Tabs.Grids.CurrentAccountRealmScope"] = "Realm", -- whether to default to current account or current realm 
 
 			-- ** Tooltip options **
 			["UI.Tooltip.ShowItemSource"] = true,
