@@ -64,13 +64,12 @@ local function isTaskComplete(taskID, character)
     if (task.Category == nil) or (task.Target == nil) then return false end
     
     if task.Category == "Daily Quest" then
-        local completed = false
-        for _, daily in pairs(DataStore:GetDailiesHistory(character)) do
-            if daily.id == task.Target then
-                return true
-            end 
-        end
-        return false
+        --for _, daily in pairs(DataStore:GetDailiesHistory(character)) do
+        --    if daily.id == task.Target then
+        --        return true
+        --    end 
+        --end
+        return DataStore:IsQuestCompletedBy(DataStore:GetCharacter(), task.Target)
     end
     
     if task.Category == "Dungeon" then
