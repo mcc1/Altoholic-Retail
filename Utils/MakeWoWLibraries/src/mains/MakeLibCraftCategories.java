@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
 public class MakeLibCraftCategories {
-	private static final String WORK_DIRECTORY = "F:\\World of Warcraft\\_retail_\\Interface\\AddOns\\Altoholic\\libs\\LibCraftCategories-1.0\\Database";
+	private static final String WORK_DIRECTORY = "D:\\Program Files\\World of Warcraft Beta\\_beta_\\Interface\\AddOns\\Altoholic\\libs\\LibCraftCategories-1.0\\Database";
 
 	private static void saveLuaLine(FileOutputStream stream, ExtractedCSV csv, int i) {
 		// output like:
@@ -59,9 +59,7 @@ public class MakeLibCraftCategories {
 
 			stream.write("LibStub(\"LibCraftCategories-1.0\").".concat(locale).concat(" = {\n").getBytes());
 			for (int lineNum = 1; lineNum < csv.values.length; lineNum++) {
-				if (csv.values[lineNum][3].equals("0")) {
-					saveLuaLine(stream, csv, lineNum);
-				}
+				saveLuaLine(stream, csv, lineNum);
 			}
 			stream.write(("}").getBytes());
 			stream.flush();

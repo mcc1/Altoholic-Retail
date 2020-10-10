@@ -11,7 +11,7 @@ import libs.DownloadCSV;
 import libs.ExtractedCSV;
 
 public class MakeLibCraftLevels {
-	private static final String WORK_DIRECTORY = "F:\\World of Warcraft\\_retail_\\Interface\\AddOns\\Altoholic\\libs\\LibCraftLevels-1.0\\Database";
+	private static final String WORK_DIRECTORY = "D:\\Program Files\\World of Warcraft Beta\\_beta_\\Interface\\AddOns\\Altoholic\\libs\\LibCraftLevels-1.0\\Database";
 	
 	private static Comparator<String[]> comparator = new Comparator<String[]>() {
 		public int compare(String[] a, String[] b) {
