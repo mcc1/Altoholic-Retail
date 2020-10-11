@@ -1,0 +1,14 @@
+## Interface: 90001
+## Title: Library - Gathering Nodes
+
+## Notes: Get the item ID of a Gathering Node when given its name.
+## Should not be run as a separate addon. Embed the .xml file as a library.
+
+## Author: Teelo (US-Jubei'thos)
+## Version: 1.0
+
+## X-Github: https://github.com/teelolws/Altoholic-Retail
+## X-Donate: https://www.patreon.com/teelojubeithos
+## X-Curse-Project-ID: 384785
+
+## X-Category: Libraries
