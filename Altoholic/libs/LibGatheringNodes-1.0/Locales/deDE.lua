@@ -69,6 +69,7 @@ LibStub("LibGatheringNodes-1.0").deDE = {
 	["Teufelsschiefervorkommen"]                = 123919, -- Felslate
 	["Teufelsschieferflöz"]                   = 123919, -- Felslate
 	["Reiches Teufelsschiefervorkommen"]           = 123919, -- Felslate
+    
 	["Empyriumvorkommen"]                = 151564, -- Empyrium
 	["Empyriumflöz"]                   = 151564, -- Empyrium
 	["Reiches Empyriumvorkommen"]           = 151564, -- Empyrium	

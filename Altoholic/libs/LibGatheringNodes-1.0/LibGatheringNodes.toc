@@ -7,8 +7,8 @@
 ## Author: Teelo (US-Jubei'thos)
 ## Version: 1.0
 
-## X-Github: https://github.com/teelolws/Altoholic-Retail
+## X-Github: https://github.com/teelolws/LibGatheringNodes
 ## X-Donate: https://www.patreon.com/teelojubeithos
-## X-Curse-Project-ID: 384785
+## X-Curse-Project-ID: 412373
 
 ## X-Category: Libraries

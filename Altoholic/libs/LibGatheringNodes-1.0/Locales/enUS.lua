@@ -69,7 +69,7 @@ LibStub("LibGatheringNodes-1.0").enUS = {
 	["Felslate Deposit"]                = 123919, -- Felslate
 	["Felslate Seam"]                   = 123919, -- Felslate
 	["Rich Felslate Deposit"]           = 123919, -- Felslate
-	
+    
 	["Empyrium Deposit"]                = 151564, -- Empyrium
 	["Empyrium Seam"]                   = 151564, -- Empyrium
 	["Rich Empyrium Deposit"]           = 151564, -- Empyrium	
