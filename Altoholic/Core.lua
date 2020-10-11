@@ -4,10 +4,7 @@ _G[addonName] = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "A
 
 local addon = _G[addonName]
 
-addon.VersionNum = GetAddOnMetadata("Altoholic", "Version")
-local pattern = ".*(%d+).*(%d+).*(%d).*(%d%d%d).*"
-local expansionID, patchID, subpatchID, versionID = addon.VersionNum:match(pattern)
-addon.Version = "v"..expansionID.."."..patchID.."."..subpatchID.."."..versionID
+addon.Version = GetAddOnMetadata("Altoholic", "Version")
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local commPrefix = addonName
