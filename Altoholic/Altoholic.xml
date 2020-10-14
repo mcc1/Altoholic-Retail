@@ -19,11 +19,16 @@
 		</Scripts>
 	</GameTooltip>
 
-	<Frame name="AltoholicFrame" toplevel="true" parent="UIParent" movable="true" enableMouse="true" hidden="true">
+	<Frame name="AltoholicFrame" toplevel="true" parent="UIParent" movable="true" resizable="true" enableMouse="true" hidden="true">
 		<Size x="832" y="447" />
 		<Anchors>
 			<Anchor point="TOPLEFT" x="0" y="-104" />
 		</Anchors>
+		<ResizeBounds>
+			<minResize>
+				<AbsDimension x="832" y="447"/>
+			</minResize>
+		</ResizeBounds>
 		<Scripts>
 			<OnLoad>
 				self:RegisterForDrag("LeftButton")
@@ -72,25 +77,25 @@
 				<Texture name="$parentTopRight" file="Interface\AuctionFrame\UI-AuctionFrame-Browse-TopRight">
 					<Size x="256" y="256" />
 					<Anchors>
-						<Anchor point="TOPLEFT" relativeTo="$parentTop" relativePoint="TOPRIGHT" x="0" y="0" />
+						<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="0" y="0" />
 					</Anchors>
 				</Texture>
 				<Texture name="$parentBotLeft" file="Interface\AuctionFrame\UI-AuctionFrame-Browse-BotLeft">
 					<Size x="256" y="256" />
 					<Anchors>
-						<Anchor point="TOPLEFT" x="0" y="-256" />
+						<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="0" y="-65" />
 					</Anchors>
 				</Texture>
 				<Texture name="$parentBot" file="Interface\AuctionFrame\UI-AuctionFrame-Auction-Bot">
 					<Size x="320" y="256" />
 					<Anchors>
-						<Anchor point="TOPLEFT" x="256" y="-256" />
+						<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="256" y="-65" />
 					</Anchors>
 				</Texture>
 				<Texture name="$parentBotRight" file="Interface\AuctionFrame\UI-AuctionFrame-Bid-BotRight">
 					<Size x="256" y="256" />
 					<Anchors>
-						<Anchor point="TOPLEFT" relativeTo="$parentBot" relativePoint="TOPRIGHT" x="0" y="0" />
+						<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="0" y="-65" />
 					</Anchors>
 				</Texture>
 			</Layer>
@@ -159,6 +164,41 @@
 				<Anchors>
 					<Anchor point="TOPRIGHT" x="3" y="-8" />
 				</Anchors>
+			</Button>
+			<Button name="$parentResizeButton" parentKey="ResizeButton">
+				<Size x="16" y="16"/>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+				</Anchors>
+				<Scripts>
+					<OnMouseDown>
+						local chatFrame = self:GetParent();
+						self:SetButtonState("PUSHED", true);
+
+						self:GetHighlightTexture():Hide();
+
+						if( self:GetParent().isDocked ) then
+							GENERAL_CHAT_DOCK.primary:StartSizing("BOTTOMRIGHT");
+						else
+							self:GetParent():StartSizing("BOTTOMRIGHT");
+						end
+					</OnMouseDown>
+					<OnMouseUp>
+						self:SetButtonState("NORMAL", false);
+
+						self:GetHighlightTexture():Show();
+
+						if( self:GetParent().isDocked ) then
+							GENERAL_CHAT_DOCK.primary:StopMovingOrSizing();
+						else
+							self:GetParent():StopMovingOrSizing();
+						end
+						FCF_SavePositionAndDimensions(self:GetParent());
+					</OnMouseUp>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up"/>
+				<HighlightTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Highlight"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Down"/>
 			</Button>
 		</Frames>
 	</Frame>
