@@ -21,7 +21,7 @@ local function OnAccountChange(frame, dropDownFrame)
         addon:SetOption("UI.Tabs.Grids.CurrentAccountRealmScope", "Account")
     end
     
-    AltoholicTabGrids.RefreshReputations()
+    if AltoholicTabGrids then AltoholicTabGrids.RefreshReputations() end
 end
 
 local function OnRealmChange(frame, dropDownFrame, newAccount)
