@@ -40,7 +40,7 @@ local function OnRealmChange(frame, dropDownFrame, newAccount)
         addon:SetOption("UI.Tabs.Grids.CurrentAccountRealmScope", "Realm")
     end
     
-    AltoholicTabGrids.RefreshReputations()
+    if AltoholicTabGrids then AltoholicTabGrids.RefreshReputations() end
 end
 
 addon:Controller("AltoholicUI.AccountPicker", {
