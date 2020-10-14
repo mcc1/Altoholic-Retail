@@ -533,7 +533,7 @@ columns["Name"] = {
 
 columns["Level"] = {
 	-- Header
-	headerWidth = 60,
+	headerWidth = 50,
 	headerLabel = L["COLUMN_LEVEL_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_LEVEL_TITLE"],
 	tooltipSubTitle = L["COLUMN_LEVEL_SUBTITLE"],
@@ -581,7 +581,7 @@ columns["Level"] = {
 
 columns["RestXP"] = {
 	-- Header
-	headerWidth = 65,
+	headerWidth = 60,
 	headerLabel = L["COLUMN_RESTXP_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_RESTXP_TITLE"],
 	tooltipSubTitle = L["COLUMN_RESTXP_SUBTITLE"],
@@ -598,7 +598,7 @@ columns["RestXP"] = {
 	headerSort = DataStore.GetRestXPRate,
 	
 	-- Content
-	Width = 65,
+	Width = 60,
 	JustifyH = "CENTER",
 	GetText = function(character) 
 		if DataStore:GetCharacterLevel(character) == MAX_PLAYER_LEVEL then
@@ -645,7 +645,7 @@ columns["RestXP"] = {
 
 columns["Money"] = {
 	-- Header
-	headerWidth = 115,
+	headerWidth = 120,
 	headerLabel = L["COLUMN_MONEY_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_MONEY_TITLE"],
 	tooltipSubTitle = L["COLUMN_MONEY_SUBTITLE_"..random(5)],
@@ -730,7 +730,7 @@ columns["AiL"] = {
 
 columns["LastOnline"] = {
 	-- Header
-	headerWidth = 90,
+	headerWidth = 80,
 	headerLabel = L["COLUMN_LASTONLINE_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_LASTONLINE_TITLE"],
 	tooltipSubTitle = L["COLUMN_LASTONLINE_SUBTITLE"],
@@ -790,7 +790,7 @@ columns["BagSlots"] = {
 	
 	-- Content
 	Width = 100,
-	JustifyH = "LEFT",
+	JustifyH = "CENTER",
 	GetText = function(character)
 				if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
 					return UNKNOWN
@@ -883,7 +883,7 @@ columns["BankSlots"] = {
 	
 	-- Content
 	Width = 160,
-	JustifyH = "LEFT",
+	JustifyH = "CENTER",
 	GetText = function(character)
 			if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
 				return UNKNOWN
@@ -982,26 +982,51 @@ columns["FreeBankSlots"] = {
 	GetTotal = function(line) return format("%s%s", colors.white, Characters:GetField(line, "freeBankSlots")) end,
 }
 
-columns["FreeReagentBankSlots"] = {	-- TO DO 
+columns["FreeReagentBankSlots"] = { 
 	-- Header
-	headerWidth = 50,
-	headerLabel = LASTONLINE,
-	-- headerOnClick = function(frame) 
-		-- SortView("FreeReagentBankSlots") 
-	-- end,
-	--headerSort = DataStore.xxx,
+	headerWidth = 80,
+	headerLabel = L["COLUMN_FREEREAGENTBANKSLOTS_TITLE_SHORT"],
+	tooltipTitle = L["COLUMN_FREEREAGENTBANKSLOTS_TITLE"],
+	tooltipSubTitle = L["COLUMN_FREEREAGENTBANKSLOTS_SUBTITLE"],
+	headerOnClick = function(frame)	SortView("FreeReagentBankSlots") end,
+	headerSort = DataStore.GetNumFreeReagentBankSlots,
 	
 	-- Content
-	Width = 50,
+	Width = 80,
 	JustifyH = "CENTER",
 	GetText = function(character)
 			if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
 				return 0
 			end
 			
-			-- TO DO : problem to workaround GetContainerNumFreeSlots returns 0 when the bag (-3) is scanned when not at the bank..
+			local numFree = DataStore:GetNumFreeReagentBankSlots(character) or 0
+			local color = ((numFree / 98) <= 0.1) and colors.red or colors.green
 			
-			return 0
+			return format("%s%s|r/%s%s", color, numFree, colors.cyan, 98)
+		end,
+}
+
+columns["FreeVoidStorageSlots"] = {
+	-- Header
+	headerWidth = 120,
+	headerLabel = L["COLUMN_FREEVOIDSTORAGESLOTS_TITLE_SHORT"],
+	tooltipTitle = L["COLUMN_FREEVOIDSTORAGESLOTS_TITLE"],
+	tooltipSubTitle = L["COLUMN_FREEVOIDSTORAGESLOTS_SUBTITLE"],
+	headerOnClick = function(frame)	SortView("FreeVoidStorageSlots") end,
+	headerSort = DataStore.GetNumFreeVoidStorageSlots,
+	
+	-- Content
+	Width = 80,
+	JustifyH = "CENTER",
+	GetText = function(character)
+			if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
+				return 0
+			end
+			
+			local numFree = DataStore:GetNumFreeVoidStorageSlots(character) or 0
+			local color = ((numFree / 160) <= 0.1) and colors.red or colors.green
+			
+			return format("%s%s|r/%s%s", color, numFree, colors.cyan, 160)
 		end,
 }
 
@@ -2083,7 +2108,7 @@ local modes = {
     [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
-    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints", "RenownLevel" },
+    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints", "RenownLevel", "FreeReagentBankSlots", "FreeVoidStorageSlots" },
 }
 
 function ns:SetMode(mode)
