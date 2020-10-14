@@ -39,6 +39,9 @@ externals:
   DataStore_Agenda:
     url: https://github.com/teelolws/DataStore_Agenda
     tag: latest
+  DataStore_Auctions:
+    url: https://github.com/teelolws/DataStore_Auctions
+    tag: latest
   DataStore_Characters:
     url: https://github.com/teelolws/DataStore_Characters
     tag: latest
