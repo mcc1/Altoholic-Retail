@@ -402,6 +402,18 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             end
         end
         
+        for questID in pairs(DataStore:GetManuallyTrackedQuests()) do
+            if DataStore:IsQuestCompletedBy(DataStore:GetCharacter(), questID) then
+                a = true
+                local info = UIDropDownMenu_CreateInfo()
+                info.text = C_QuestLog.GetTitleForQuestID(questID) or "(Loading...)"
+                info.func = TaskTargetDropdown_SetSelectedDailyQuest
+                info.arg1 = questID
+                info.arg2 = C_QuestLog.GetTitleForQuestID(questID) or "(Loading...)"
+                UIDropDownMenu_AddButton(info)
+            end
+        end
+        
         if not a then
             print("Altoholic: The Daily Quest dropdown will only list Daily Quests you have completed today on the character you are currently playing.")
         end

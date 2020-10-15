@@ -69,7 +69,7 @@ local function isTaskComplete(taskID, character)
         --        return true
         --    end 
         --end
-        return DataStore:IsQuestCompletedBy(DataStore:GetCharacter(), task.Target)
+        return DataStore:IsQuestCompletedBy(character, task.Target)
     end
     
     if task.Category == "Dungeon" then
