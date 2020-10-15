@@ -566,8 +566,6 @@ local function ProcessTooltip(tooltip, link)
 	
 	local _, _, _, _, _, itemType, itemSubType = GetItemInfo(itemID)
 	
-	-- 25/01/2015: Removed the code that displayed the pet owners, since they have been account wide for a while now..
-	
 	if itemType == GetItemClassInfo(LE_ITEM_CLASS_GLYPH) then
 		AddGlyphOwners(itemID, tooltip)
 		return
