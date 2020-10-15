@@ -1620,9 +1620,9 @@ columns["MissionTableLastVisit"] = {
             
             -- **War Campaign Missions **
             
-			numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_8_0) or 0
-			numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_8_0) or 0
-			numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_8_0) or 0			
+			numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_8_0) or 0
+			numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_8_0) or 0
+			numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_8_0) or 0			
 			color = colors.green
 			
 			tt:AddLine(L["War Campaign Missions"]) -- Couldn't find a GlobalString for "War Campaign Missions". How long until someone playing in another language complains?
