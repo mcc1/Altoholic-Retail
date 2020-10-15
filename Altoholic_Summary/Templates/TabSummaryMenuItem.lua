@@ -22,5 +22,12 @@ addon:Controller("AltoholicUI.TabSummaryMenuItem", {
 		
 		addon.Summary:SetMode(frame:GetID())
 		addon.Summary:Update()
+        
+        local _, excessPixels = AltoholicFrame:GetExcessSize()
+        local rowHeight = AltoholicFrameSummary.ScrollFrame.rowHeight
+        local rowsToAdd = math.floor(excessPixels / rowHeight) - 1
+        if rowsToAdd < 0 then rowsToAdd = 0 end
+        AltoholicFrameSummary.ScrollFrame.numRows = 14 + rowsToAdd
+        addon.Summary:Update()
 	end,
 })

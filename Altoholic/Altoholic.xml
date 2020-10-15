@@ -28,6 +28,9 @@
 			<minResize>
 				<AbsDimension x="832" y="447"/>
 			</minResize>
+            <maxResize>
+                <AbsDimension x="1152" y="602"/>
+            </maxResize>
 		</ResizeBounds>
 		<Scripts>
 			<OnLoad>
@@ -35,6 +38,26 @@
 				self.elapsed = 0
 				Altoholic:SetupTabs(self)
 				PanelTemplates_SetTab(self, 1)
+                
+                local resizeEvents = {}
+                function AltoholicFrame:RegisterResizeEvent(event)
+                    table.insert(resizeEvents, event)
+                end
+                
+                function AltoholicFrame:GetExcessSize()
+                    local x, y = AltoholicFrame:GetSize()
+                    x = math.floor(x)
+                    y = math.floor(y)
+                    x = x - 832
+                    y = y - 447
+                    return x, y
+                end
+                
+                AltoholicFrame:HookScript("OnSizeChanged", function()
+                    for _, event in ipairs(resizeEvents) do
+                        event()
+                    end
+                end)
 			</OnLoad>
 			<OnDragStart>
 				self:StartMoving()
@@ -61,7 +84,7 @@
 					</Anchors>
 				</Texture>
 			</Layer>
-			<Layer level="ARTWORK">
+			<Layer level="ARTWORK" textureSubLevel="4">
 				<Texture name="$parentTopLeft" file="Interface\AuctionFrame\UI-AuctionFrame-Browse-TopLeft">
 					<Size x="256" y="256" />
 					<Anchors>
@@ -99,11 +122,51 @@
 					</Anchors>
 				</Texture>
 			</Layer>
+			<Layer level="ARTWORK" textureSubLevel="3">
+                <Texture name="$parentMiddleLeft" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-MiddleLeft">
+                    <Size x="256" y="256" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativeTo="$parentBotLeft" relativePoint="TOPLEFT" y="-100"/>
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentTop2" file="Interface\AuctionFrame\UI-AuctionFrame-Browse-Top">
+					<Size x="320" y="256" />
+					<Anchors>
+						<Anchor point="TOPRIGHT" relativeTo="$parentTopRight" relativePoint="TOPLEFT" />
+					</Anchors>
+				</Texture>
+				<Texture name="$parentBot2" file="Interface\AuctionFrame\UI-AuctionFrame-Auction-Bot">
+					<Size x="320" y="256" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" relativeTo="$parentBotRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+				</Texture>
+                <Texture name="$parentMiddleRight" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-MiddleRight">
+                    <Size x="256" y="256" />
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" relativeTo="$parentBotRight" relativePoint="TOPRIGHT" y="-100"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK" textureSubLevel="2">
+                <Texture name="$parentCenter1" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-Center">
+					<Size x="320" y="256" />
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentTop" relativePoint="BOTTOMLEFT" y="100"/>
+					</Anchors>
+				</Texture>
+                <Texture name="$parentCenter2" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-Center">
+					<Size x="320" y="256" />
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parentTop2" relativePoint="BOTTOMLEFT" y="100"/>
+					</Anchors>
+				</Texture>
+            </Layer>
 			<Layer level="OVERLAY">
 				<FontString name="$parentName" inherits="GameFontNormal" justifyH="CENTER">
 					<Size x="300" y="18" />
 					<Anchors>
-						<Anchor point="TOPLEFT" x="300" y="-16" />
+						<Anchor point="TOP" y="-15" />
 					</Anchors>
 				</FontString>
 				<FontString name="$parentSearchLabel" inherits="GameFontNormalSmall" justifyH="LEFT">
@@ -170,7 +233,7 @@
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
 				</Anchors>
-				<Scripts>
+				<Scripts><!-- this code taken from blizzards chatframe code-->
 					<OnMouseDown>
 						local chatFrame = self:GetParent();
 						self:SetButtonState("PUSHED", true);
