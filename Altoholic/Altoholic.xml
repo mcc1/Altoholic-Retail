@@ -228,13 +228,14 @@
 					<Anchor point="TOPRIGHT" x="3" y="-8" />
 				</Anchors>
 			</Button>
-			<Button name="$parentResizeButton" parentKey="ResizeButton">
+			<Button name="$parentResizeButton" parentKey="ResizeButton" hidden="true">
 				<Size x="16" y="16"/>
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
 				</Anchors>
-				<Scripts><!-- this code taken from blizzards chatframe code-->
+				<Scripts>
 					<OnMouseDown>
+                        -- This code taken from Blizzards chat frame
 						local chatFrame = self:GetParent();
 						self:SetButtonState("PUSHED", true);
 
