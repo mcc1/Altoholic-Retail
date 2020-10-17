@@ -144,8 +144,6 @@ local function GuildIcon_Initialize(frame, level)
         
         for _, key in pairs(DataStore:GetSavedGuildKeys()) do
             local account, realm, guildName = strsplit(".", key)
-            print(key)
-            print(realm)
     		local text = format("%s%s / %s%s", colors.white, realm, colors.green, guildName)
     
     		if account ~= "Default" then
