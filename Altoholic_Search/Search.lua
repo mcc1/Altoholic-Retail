@@ -1004,3 +1004,5 @@ function ns:FindEquipmentUpgrade()
 
 	ns:Update()
 end
+
+AltoholicFrame:RegisterResizeEvent("AltoholicFrameSearch", 7, ns)
