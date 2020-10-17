@@ -116,6 +116,8 @@ function ns:ViewCharInfo(index)
 	HideAll()
 	ns:SetMode(index)
 	ns:ShowCharInfo(index)
+    AltoholicFrame:TriggerResizeEvents()
+    ns:ShowCharInfo(index)
 end
 
 function ns:ShowCharInfo(view)
@@ -126,7 +128,7 @@ function ns:ShowCharInfo(view)
         
 	elseif view == VIEW_QUESTS then
 		AltoholicTabCharacters.QuestLog:Update()
-        
+        AltoholicTabCharacters.QuestLog:Show()
 	elseif view == VIEW_TALENTS then
 		AltoholicTabCharacters.Talents:Update()
         
@@ -156,6 +158,7 @@ function ns:ShowCharInfo(view)
 
 	elseif view == VIEW_PROFESSION then
 		AltoholicTabCharacters.Recipes:Update()
+        AltoholicTabCharacters.Recipes:Show()
 				
 	elseif view == VIEW_GARRISONS then
 		AltoholicTabCharacters.GarrisonMissions:Update()
@@ -358,6 +361,7 @@ local function OnProfessionCategoryChange(self)
 	recipes:SetMainCategory(tonumber(mainCategory))
 	recipes:SetSubCategory(tonumber(subCategory))
 	recipes:Update()
+    recipes:Show()
 end
 
 local function OnShowLearned(self)

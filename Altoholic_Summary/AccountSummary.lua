@@ -2210,7 +2210,7 @@ function ns:Update()
 		end
 	end
 	
-	while rowIndex <= 21 do
+	while rowIndex <= 35 do
 		local rowFrame = scrollFrame:GetRow(rowIndex) 
 		
 		rowFrame:SetID(0)
@@ -2231,12 +2231,4 @@ function addon:AiLTooltip()
 	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (60)"), FormatAiL("165+"))
 end
 
-local function onAltoFrameResized()
-    local _, excessPixels = AltoholicFrame:GetExcessSize()
-    local rowHeight = AltoholicFrameSummary.ScrollFrame.rowHeight
-    local rowsToAdd = math.floor(excessPixels / rowHeight) - 1
-    if rowsToAdd < 0 then rowsToAdd = 0 end
-    AltoholicFrameSummary.ScrollFrame.numRows = 14 + rowsToAdd
-    ns:Update()
-end
-AltoholicFrame:RegisterResizeEvent(onAltoFrameResized)
+AltoholicFrame:RegisterResizeEvent("AltoholicFrameSummary", 14, ns)

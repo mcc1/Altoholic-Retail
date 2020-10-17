@@ -24,7 +24,7 @@
 					</OnVerticalScroll>
 				</Scripts>
 				<KeyValues>
-					<KeyValue key="numRows" value="21" type="number" />
+					<KeyValue key="numRows" value="35" type="number" />
 					<KeyValue key="rowHeight" value="18" type="number" />
 					<KeyValue key="rowTemplate" value="AltoSummaryPaneRowTemplate" />
 				</KeyValues>

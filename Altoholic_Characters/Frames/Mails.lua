@@ -76,9 +76,9 @@ function ns:BuildView(field, ascending)
 end
 
 function ns:Update()
-	local VisibleLines = 7
 	local frame = "AltoholicFrameMail"
-	local scrollFrame = _G[ frame.."ScrollFrame" ]
+	local scrollFrame = _G[frame].ScrollFrame
+    local VisibleLines = scrollFrame.numRows
 	
 	local entry = frame.."Entry"
 	
@@ -132,6 +132,10 @@ function ns:Update()
 			_G[ entry..i ]:Hide()
 		end
 	end
+    
+    for i = VisibleLines, 18 do
+        _G[entry..i]:Hide()
+    end
 	
 	if numMails < VisibleLines then
 		scrollFrame:Update(VisibleLines, VisibleLines, 41)
@@ -188,3 +192,5 @@ function ns:OnClick(self, button)
 		end
 	end
 end
+
+--AltoholicFrame:RegisterResizeEvent("GarrisonMissions", 7, ns)
