@@ -502,9 +502,13 @@ addon:Controller("AltoholicUI.Achievements", {
 		-- print(categoryID)
 		currentCategoryID = categoryID
 	end,
+    OnBind = function(frame)
+        AltoholicFrame:RegisterResizeEvent("AltoholicTabAchievementsAchievements", 9, AltoholicTabAchievements.Achievements, 12)
+    end,
 	Update = function(frame)
 		local scrollFrame = frame.ScrollFrame
 		local numRows = scrollFrame.numRows
+        local numCols = scrollFrame.numCols
 		local offset = scrollFrame:GetOffset()
 		
 		local categorySize = GetCategorySize(currentCategoryID)
@@ -517,7 +521,7 @@ addon:Controller("AltoholicUI.Achievements", {
         for i = 1, 50 do
             local icon = classIcons["Icon"..i]
             icon:ClearAllPoints()
-            if (i < current_start_col) or (i >= (current_start_col + 12)) then
+            if (i < current_start_col) or (i >= (current_start_col + numCols)) then
                 icon:SetShown(false)
             else
                 if (i == current_start_col) then
@@ -543,6 +547,10 @@ addon:Controller("AltoholicUI.Achievements", {
 				rowFrame:Hide()
 			end
 		end
+
+        for rowIndex = numRows, 20 do
+            scrollFrame:GetRow(rowIndex):Hide()
+        end
 
 		scrollFrame:Update(categorySize)
 		frame:Show()

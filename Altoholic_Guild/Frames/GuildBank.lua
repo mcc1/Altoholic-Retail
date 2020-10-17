@@ -83,16 +83,20 @@ addon:Controller("AltoholicUI.GuildBank", { "AltoholicUI.Formatter", function(fo
 				local from = mod(row:GetID(), numGuildBankRows)
 				if from == 0 then from = numGuildBankRows end
 			
-				for _, itemButton in pairs(row.Items) do
-					local itemIndex = from + ((itemButton:GetID() - 1) * numGuildBankRows)
-					local itemID, itemLink, itemCount, isBattlePet = DataStore:GetSlotInfo(tab, itemIndex)
+				for itemIndex, itemButton in pairs(row.Items) do
+                    if itemIndex > 14 then
+                        itemButton:Hide()
+                    else
+					   local itemIndex = from + ((itemButton:GetID() - 1) * numGuildBankRows)
+					   local itemID, itemLink, itemCount, isBattlePet = DataStore:GetSlotInfo(tab, itemIndex)
 					
-					itemButton:SetItem(itemID, itemLink, rarity)
-					itemButton:SetCount(itemCount)
+					   itemButton:SetItem(itemID, itemLink, rarity)
+					   itemButton:SetCount(itemCount)
 					-- if isBattlePet then
 						-- itemButton:SetIcon(itemID)	-- override the icon if one is returned by datastore
 					-- end
-					itemButton:Show()
+					   itemButton:Show()
+                    end
 				end
 				row:Show()
 			end

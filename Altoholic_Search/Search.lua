@@ -13,7 +13,9 @@ local ns = addon.Search		-- ns = namespace
 local updateHandler
 
 function ns:Update()
-	ns[updateHandler](ns)
+	if updateHandler then
+        ns[updateHandler](ns)
+    end
 end
 
 function ns:SetUpdateHandler(h)
@@ -117,7 +119,7 @@ end
 -- that way, a function called GetXXX can be used to display this info regardless of the line type, but can also be reused by sort functions
 
 local RealmScrollFrame_Desc = {
-	NumLines = 7,
+	NumLines = 18,
 	Frame = "AltoholicFrameSearch",
 	GetSize = function() return ns:GetNumResults() end,
 	Update = Realm_UpdateEx,
@@ -260,7 +262,7 @@ local function ScrollFrameUpdate(desc)
 	local rowFrame
 
 	-- hide all lines and set their id to 0, the update function is responsible for showing and setting id's of valid lines	
-	for rowIndex = 1, numRows do
+	for rowIndex = 1, 18 do
 		rowFrame = frame["Entry"..rowIndex]
 		rowFrame:SetID(0)
 		rowFrame:Hide()
@@ -1005,4 +1007,9 @@ function ns:FindEquipmentUpgrade()
 	ns:Update()
 end
 
-AltoholicFrame:RegisterResizeEvent("AltoholicFrameSearch", 7, ns)
+local resizeHandler = {}
+function resizeHandler:Update()
+    RealmScrollFrame_Desc.NumLines = AltoholicFrameSearch.ScrollFrame.numRows
+    ns:Update()
+end
+AltoholicFrame:RegisterResizeEvent("AltoholicFrameSearch", 7, resizeHandler)

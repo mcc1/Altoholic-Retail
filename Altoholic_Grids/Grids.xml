@@ -23,6 +23,7 @@
 		<Size x="615" y="306" />
 		<Anchors>
 			<Anchor point="TOPRIGHT" x="39" y="-105" />
+            <Anchor point="BOTTOMLEFT" x="180"/>
 		</Anchors>
 		<Frames>
 			<Frame name="$parentRightClickMenu" inherits="UIDropDownMenuTemplate" id="1" hidden="true">
@@ -36,9 +37,10 @@
 					</OnVerticalScroll>
 				</Scripts>
 				<KeyValues>
-					<KeyValue key="numRows" value="8" type="number" />
+					<KeyValue key="numRows" value="20" type="number" />
 					<KeyValue key="rowHeight" value="41" type="number" />
 					<KeyValue key="rowTemplate" value="AltoIconListEntryTemplate" />
+                    <KeyValue key="colWidth" value="35" type="number" />
 					<KeyValue key="xOffset" value="3" type="number" />
 					<KeyValue key="yOffset" value="3" type="number" />
 				</KeyValues>
@@ -66,5 +68,10 @@
 				</Scripts>
 			</Button>
 		</Frames>
+        <Scripts>
+            <OnLoad>
+                AltoholicFrame:TriggerResizeEvents()
+            </OnLoad>
+        </Scripts>
 	</Frame>
 </Ui>

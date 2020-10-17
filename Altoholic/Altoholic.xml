@@ -41,7 +41,7 @@
                 
                 local resizeEvents = {}
                 local initialRun = {}
-                function AltoholicFrame:RegisterResizeEvent(frame, minRows, ns)
+                function AltoholicFrame:RegisterResizeEvent(frame, minRows, ns, minCols)
                     local function event()
                         if not _G[frame]:IsVisible() then 
                             if not initialRun[frame] then
@@ -50,11 +50,20 @@
                                 return 
                             end
                         end
-                        local _, excessPixels = self:GetExcessSize()
+                        local excessXPixels, excessYPixels = self:GetExcessSize()
+                        
                         local rowHeight = _G[frame].ScrollFrame.rowHeight
-                        local rowsToAdd = math.floor(excessPixels / rowHeight)
+                        local rowsToAdd = math.floor(excessYPixels / rowHeight)
                         if rowsToAdd &lt; 0 then rowsToAdd = 0 end
                         _G[frame].ScrollFrame.numRows = minRows + rowsToAdd
+                        
+                        local colWidth = _G[frame].ScrollFrame.colWidth 
+                        if colWidth then
+                            local colsToAdd = math.floor(excessXPixels / colWidth)
+                            if colsToAdd &lt; 0 then colsToAdd = 0 end
+                            _G[frame].ScrollFrame.numCols = colsToAdd + minCols
+                        end
+                            
                         if ns.UpdateCache then
                             ns:UpdateCache()
                         end

@@ -32,6 +32,8 @@ addon:Controller("AltoholicUI.TabGrids", {
 			
 		frame.Equipment:StartAutoCastShine()
 		frame.currentGridID = 1
+        
+        AltoholicFrame:RegisterResizeEvent("AltoholicFrameGrids", 9, AltoholicTabGrids, 12)
 	end,
 	RegisterGrid = function(frame, gridID, callbacks)
 		gridCallbacks[gridID] = callbacks
@@ -49,6 +51,8 @@ addon:Controller("AltoholicUI.TabGrids", {
 		local grids = AltoholicFrameGrids
 		local scrollFrame = grids.ScrollFrame
 		local numRows = scrollFrame.numRows
+        CHARS_PER_FRAME = scrollFrame.numCols
+        if not CHARS_PER_FRAME then CHARS_PER_FRAME = 12 end
 		grids:Show()
 			
 		local offset = scrollFrame:GetOffset()
@@ -129,6 +133,10 @@ addon:Controller("AltoholicUI.TabGrids", {
 				rowFrame:Hide()
 			end
 		end
+        
+        for rowIndex = numRows, 20 do
+            scrollFrame:GetRow(rowIndex):Hide()
+        end
 
 		scrollFrame:Update(size)
 	end,
