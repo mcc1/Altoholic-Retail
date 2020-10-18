@@ -36,7 +36,7 @@ local function OnRealmChange(frame, dropDownFrame, newAccount)
 		end
 	end
     
-    if newRealm == GetNormalizedRealmName() then
+    if newRealm == GetRealmName() then
         addon:SetOption("UI.Tabs.Grids.CurrentAccountRealmScope", "Realm")
     end
     
@@ -51,7 +51,7 @@ addon:Controller("AltoholicUI.AccountPicker", {
 		if addon:GetOption("UI.Tabs.Grids.CurrentAccountRealmScope") == "Account" then
             frame:SetCurrentAccount("Default")
         else
-            frame:SetCurrentAccount("Default", GetNormalizedRealmName())
+            frame:SetCurrentAccount("Default", GetRealmName())
         end
 	end,
 	DropDownAccount_Initialize = function(frame)
