@@ -288,8 +288,6 @@
 						self:GetHighlightTexture():Show();
 
 						self:GetParent():StopMovingOrSizing();
-
-						FCF_SavePositionAndDimensions(self:GetParent());
 					</OnMouseUp>
 				</Scripts>
 				<NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up"/>
