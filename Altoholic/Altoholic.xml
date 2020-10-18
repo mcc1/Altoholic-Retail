@@ -269,34 +269,26 @@
 				</Anchors>
 			</Button>
 			<Button name="$parentResizeButton" parentKey="ResizeButton" hidden="false">
-				<Size x="16" y="16"/>
+				<Size x="20" y="20"/>
 				<Anchors>
-					<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+					<Anchor point="BOTTOMRIGHT" x="0" y="5"/>
 				</Anchors>
 				<Scripts>
 					<OnMouseDown>
                         -- This code taken from Blizzards chat frame
-						local chatFrame = self:GetParent();
 						self:SetButtonState("PUSHED", true);
 
 						self:GetHighlightTexture():Hide();
 
-						if( self:GetParent().isDocked ) then
-							GENERAL_CHAT_DOCK.primary:StartSizing("BOTTOMRIGHT");
-						else
-							self:GetParent():StartSizing("BOTTOMRIGHT");
-						end
+						self:GetParent():StartSizing("BOTTOMRIGHT");
 					</OnMouseDown>
 					<OnMouseUp>
 						self:SetButtonState("NORMAL", false);
 
 						self:GetHighlightTexture():Show();
 
-						if( self:GetParent().isDocked ) then
-							GENERAL_CHAT_DOCK.primary:StopMovingOrSizing();
-						else
-							self:GetParent():StopMovingOrSizing();
-						end
+						self:GetParent():StopMovingOrSizing();
+
 						FCF_SavePositionAndDimensions(self:GetParent());
 					</OnMouseUp>
 				</Scripts>
