@@ -128,6 +128,30 @@ local function GetRealmsList()
 	return realms
 end
 
+local function GetGuildRealmsList()
+    if not addon:GetOption("UI.Tooltip.ShowMergedRealmsCount") then
+        return GetRealmsList()
+    end
+    
+    -- same as GetRealmsList except also include known guilds on connected servers
+    local realms = GetRealmsList()
+    for characterName, character in pairs(DataStore:GetCharacters(THIS_REALM, THIS_ACCOUNT)) do
+        local _, _, _, guildRealm = DataStore:GetGuildInfo(character)
+        if guildRealm then
+            local exists = false
+            for _, realm in pairs(realms) do
+                if guildRealm == realm then
+                    exists = true
+                end
+            end
+            if not exists then
+                table.insert(realms, guildRealm)
+            end
+        end
+    end
+    return realms
+end
+
 local function GetCharacterItemCount(character, searchedID)
 	itemCounts[1], itemCounts[2], itemCounts[3], itemCounts[4] = DataStore:GetContainerItemCount(character, searchedID)
 	itemCounts[5] = DataStore:GetAuctionHouseItemCount(character, searchedID)
@@ -211,9 +235,9 @@ local function GetItemCount(searchedID)
 	end
 	
 	local showCrossFaction = addon:GetOption("UI.Tooltip.ShowCrossFactionCount")
-	
+    
 	if addon:GetOption("UI.Tooltip.ShowGuildBankCount") then
-		for _, realm in pairs(GetRealmsList()) do
+		for _, realm in pairs(GetGuildRealmsList()) do
 			for guildName, guildKey in pairs(DataStore:GetGuilds(realm)) do
 				local altoGuild = addon:GetGuild(guildName)
 				local bankFaction = DataStore:GetGuildBankFaction(guildKey)
