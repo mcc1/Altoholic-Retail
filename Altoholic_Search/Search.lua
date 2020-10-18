@@ -811,6 +811,16 @@ end
 
 local ongoingSearch
 
+local function GetAllRealms(account)
+    local realms = DataStore:GetRealms(account)
+    local guildKeys = DataStore:GetSavedGuildKeys()
+    for _, guildKey in pairs(guildKeys) do
+        local account, realm, guildName = strsplit(".", guildKey)
+        realms[realm] = true
+    end
+    return realms
+end
+
 function ns:FindItem(searchType, searchSubType)
 	if ongoingSearch then
 		return		-- if a search is already happening .. then exit
@@ -874,19 +884,19 @@ function ns:FindItem(searchType, searchSubType)
 	elseif searchLocation == SEARCH_THISREALM_THISFACTION or	searchLocation == SEARCH_THISREALM_BOTHFACTIONS then
 		BrowseRealm(GetRealmName(), THIS_ACCOUNT, (searchLocation == SEARCH_THISREALM_BOTHFACTIONS))
 	elseif searchLocation == SEARCH_ALLREALMS then
-		for realm in pairs(DataStore:GetRealms()) do
+		for realm in pairs(GetAllRealms()) do
 			BrowseRealm(realm, THIS_ACCOUNT, true)
 		end
 	elseif searchLocation == SEARCH_ALLACCOUNTS then
 		-- this account first ..
-		for realm in pairs(DataStore:GetRealms()) do
+		for realm in pairs(GetAllRealms()) do
 			BrowseRealm(realm, THIS_ACCOUNT, true)
 		end
 		
 		-- .. then all other accounts
 		for account in pairs(DataStore:GetAccounts()) do
 			if account ~= THIS_ACCOUNT then
-				for realm in pairs(DataStore:GetRealms(account)) do
+				for realm in pairs(GetAllRealms(account)) do
 					BrowseRealm(realm, account, true)
 				end
 			end
