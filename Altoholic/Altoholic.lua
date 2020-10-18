@@ -844,7 +844,6 @@ local slotTypeInfo = {
 	{ color = colors.classHunter, name = INVTYPE_CLOAK },
 	{ color = colors.yellow, name = INVTYPE_WEAPONMAINHAND },
 	{ color = colors.yellow, name = INVTYPE_WEAPONOFFHAND },
-	{ color = colors.classHunter, name = INVTYPE_RANGED },
 	{ color = colors.white, name = INVTYPE_TABARD }
 }
 
