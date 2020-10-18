@@ -40,19 +40,19 @@
 				PanelTemplates_SetTab(self, 1)
                 
                 local resizeEvents = {}
-                local initialRun = {}
+                --local initialRun = {}
                 function AltoholicFrame:RegisterResizeEvent(frame, minRows, ns, minCols)
                     local function event()
-                        if not _G[frame]:IsVisible() then 
-                            if not initialRun[frame] then
-                                initialRun[frame] = true
-                            else
-                                return 
-                            end
-                        end
+                        --if not _G[frame]:IsVisible() then 
+                        --    if not initialRun[frame] then
+                        --        initialRun[frame] = true
+                        --    else
+                        --        return 
+                        --    end
+                        --end
                         local excessXPixels, excessYPixels = self:GetExcessSize()
                         
-                        local rowHeight = _G[frame].ScrollFrame.rowHeight
+                        local rowHeight = _G[frame].ScrollFrame.rowHeight + 8
                         local rowsToAdd = math.floor(excessYPixels / rowHeight)
                         if rowsToAdd &lt; 0 then rowsToAdd = 0 end
                         _G[frame].ScrollFrame.numRows = minRows + rowsToAdd
