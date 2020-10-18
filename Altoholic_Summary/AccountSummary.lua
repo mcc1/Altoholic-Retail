@@ -2210,7 +2210,7 @@ function ns:Update()
 		end
 	end
 	
-	while rowIndex <= 35 do
+	while rowIndex <= 50 do
 		local rowFrame = scrollFrame:GetRow(rowIndex) 
 		
 		rowFrame:SetID(0)
