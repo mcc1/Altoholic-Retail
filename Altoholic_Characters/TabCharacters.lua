@@ -415,10 +415,10 @@ end
 
 local function GetCharacterLoginText(character)
 	local last = DataStore:GetLastLogout(character)
-	local _, _, name = strsplit(".", character)
+	local _, realm, name = strsplit(".", character)
 	
 	if last then
-		if name == UnitName("player") then
+		if (realm == GetRealmName()) and (name == UnitName("player")) then
 			last = colors.green..GUILD_ONLINE_LABEL
 		else
 			last = format("%s: %s", LASTONLINE, colors.yellow..date("%m/%d/%Y %H:%M", last))
@@ -431,7 +431,9 @@ end
 
 -- ** Menu Icons **
 local function CharactersIcon_Initialize(self, level)
-	
+	local currentCharacterKey = ns:GetAltKey()
+    local currentAccount, currentRealm, currentName = strsplit(".", currentCharacterKey)
+    
 	if level == 1 then
 		DDM_AddTitle(L["Characters"])
 		
@@ -442,7 +444,7 @@ local function CharactersIcon_Initialize(self, level)
 
 				info.text = realm
 				info.hasArrow = 1
-				info.checked = nil
+				info.checked = (currentRealm == realm)
 				info.value = format("%s.%s", account, realm)
 				info.func = nil
 				UIDropDownMenu_AddButton(info, level)
@@ -460,7 +462,7 @@ local function CharactersIcon_Initialize(self, level)
 		end
 		table.sort(nameList)
 		
-		local currentCharacterKey = ns:GetAltKey()
+
 		for _, character in ipairs(nameList) do
 			
 			local info = UIDropDownMenu_CreateInfo()
@@ -470,7 +472,6 @@ local function CharactersIcon_Initialize(self, level)
 			info.func		= OnCharacterChange
 			info.icon		= nil
 			info.checked	= (currentCharacterKey == character)
-			
 			UIDropDownMenu_AddButton(info, level)
 		end
 	end
