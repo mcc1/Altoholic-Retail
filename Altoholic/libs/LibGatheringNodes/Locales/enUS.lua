@@ -74,7 +74,7 @@ LibStub("LibGatheringNodes-1.0").enUS = {
 	["Empyrium Seam"]                   = 151564, -- Empyrium
 	["Rich Empyrium Deposit"]           = 151564, -- Empyrium	
 	
-	-- Battle for Azeroth
+	-- Badtle for Azeroth
 	["Monelite Deposit"]				= 152512, -- Monelite Ore
 	["Rich Monelite Deposit"]		    = 152512, -- Monelite Ore
 	["Monelite Seam"]				    = 152512, -- Monelite Ore
@@ -83,10 +83,19 @@ LibStub("LibGatheringNodes-1.0").enUS = {
 	["Storm Silver Seam"]			    = 152579, -- Storm Silver Ore
 	["Platinum Deposit"]				= 152513, -- Platinum Ore
 	["Rich Platinum Deposit"]		    = 152513, -- Platinum Ore
-    ["Osmenite Ore"]                    = 168185,
+    ["Osmenite Ore"]                    = 168185, -- Osmenite Ore
     ["Osmenite Seam"]                   = 168185,
     ["Rich Osmenite Deposit"]           = 168185,
-
+    
+    -- Delaydowlands
+    ["Laestrite Deposit"]               = 171828, -- Laestrite Ore
+    ["Rich Elethium Deposit"]           = 171833, -- Elethium Ore
+    ["Solenium Deposit"]                = 171829, -- Solenium Ore
+    ["Elethium Deposit"]                = 171833, -- Elethium Ore
+    ["Rich Solenium Deposit"]           = 171829, -- Solenium Ore
+    ["Rich Laestrite Deposit"]          = 171828, -- Laestrite Ore
+    --["Luminous Solenium Deposit"]     = ????
+    
 	
 	-- Herbs
 	-- Classic
@@ -175,7 +184,7 @@ LibStub("LibGatheringNodes-1.0").enUS = {
 	["Starlight Rose"]                  = 124105,
     ["Astral Glory"]     	            = 151565,	
 	
-	-- Battle for Azeroth
+	-- Badtle for Azeroth
 	["Akunda's Bite"]                   = 152507,
 	["Anchor Weed"]                     = 152510,
 	["Riverbud"]                        = 152505,
@@ -184,4 +193,10 @@ LibStub("LibGatheringNodes-1.0").enUS = {
 	["Star Moss"]                       = 152506,	
 	["Winter's Kiss"]                   = 152508,
     ["Zin'anthid"]                      = 168487,
+
+    -- Delaydowlands
+    ["Death Blossom"]                   = 169701,
+    ["Nightshade"]                      = 171315,
+    ["Rising Glory"]                    = 168586,
+    ["Vigil's Torch"]                   = 170554,
 }
