@@ -308,14 +308,8 @@ local GuildCommCallbacks = {
 }
 
 local tabList = {}
-local frameToID = {}
 
-function addon:OnInitialize()
-    tabList = addon:GetTabList()
-    for index, name in ipairs(tabList) do
-	   frameToID[name] = index
-    end
-    
+function addon:OnInitialize()    
 	addon.db = LibStub("AceDB-3.0"):New(addonName .. "DB", AddonDB_Defaults)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable(addonName, options)
 
@@ -415,6 +409,12 @@ function addon.Tabs:HideAll()
 end
 
 function addon.Tabs:OnClick(index)
+    tabList = addon:GetEnglishTabList()
+    local frameToID = {}
+    for i, name in ipairs(tabList) do
+	   frameToID[name] = i
+    end
+
 	if type(index) == "string" then
 		index = frameToID[index]
 	end
