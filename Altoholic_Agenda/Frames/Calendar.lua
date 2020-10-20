@@ -111,7 +111,7 @@ addon:Controller("AltoholicUI.Calendar", {
 		while ( day <= numDays ) do
 			local button = frame["Day"..buttonIndex]
             button:Update(day, month, year, isDarkened)
-            if day == presentDay then
+            if day == presentDay and month==presentMonth and year==presentYear then
                 button.Shine:ShineStart()
             else 
                 button.Shine:ShineStop()
