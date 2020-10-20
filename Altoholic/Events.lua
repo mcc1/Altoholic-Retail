@@ -43,6 +43,7 @@ local CALENDAR_LINE = 3
 local CONNECTMMO_LINE = 4
 local TIMER_LINE = 5
 local SHARED_CD_LINE = 6		-- this type is used for shared cooldowns (alchemy, etc..) among others.
+local EXPIRED_CALENDAR_LINE = 7
 
 local WARNING_TYPE_PROFESSION_CD = 1
 local WARNING_TYPE_DUNGEON_RESET = 2
@@ -56,6 +57,7 @@ local eventToWarningType = {
 	[CONNECTMMO_LINE] = WARNING_TYPE_CALENDAR_EVENT,
 	[TIMER_LINE] = WARNING_TYPE_ITEM_TIMER,
 	[SHARED_CD_LINE] = WARNING_TYPE_PROFESSION_CD,
+    [EXPIRED_CALENDAR_LINE] = WARNING_TYPE_CALENDAR_EVENT,
 }
 
 local eventTypes = {
@@ -104,6 +106,38 @@ local eventTypes = {
 		GetInfo = function(self, event)
 				local character = DataStore:GetCharacter(event.char, event.realm)
 				local _, _, title, eventType, inviteStatus = DataStore:GetCalendarEventInfo(character, event.parentID)
+
+				inviteStatus = tonumber(inviteStatus)
+				
+				local desc
+				if type(inviteStatus) == "number" and (inviteStatus > 1) and (inviteStatus < 8) then
+					local StatusText = {
+						CALENDAR_STATUS_INVITED,		-- CALENDAR_INVITESTATUS_INVITED   = 1
+						CALENDAR_STATUS_ACCEPTED,		-- CALENDAR_INVITESTATUS_ACCEPTED  = 2
+						CALENDAR_STATUS_DECLINED,		-- CALENDAR_INVITESTATUS_DECLINED  = 3
+						CALENDAR_STATUS_CONFIRMED,		-- CALENDAR_INVITESTATUS_CONFIRMED = 4
+						CALENDAR_STATUS_OUT,				-- CALENDAR_INVITESTATUS_OUT       = 5
+						CALENDAR_STATUS_STANDBY,		-- CALENDAR_INVITESTATUS_STANDBY   = 6
+						CALENDAR_STATUS_SIGNEDUP,		-- CALENDAR_INVITESTATUS_SIGNEDUP     = 7
+						CALENDAR_STATUS_NOT_SIGNEDUP	-- CALENDAR_INVITESTATUS_NOT_SIGNEDUP = 8
+					}
+				
+					desc = format("%s: %s", STATUS, colors.white..StatusText[inviteStatus]) 
+				else 
+					desc = format("%s", STATUS) 
+				end
+		
+				return title, desc
+			end,
+	},
+	[EXPIRED_CALENDAR_LINE] = {
+		GetReadyNowWarning = function(self, event)
+			end,
+		GetReadySoonWarning = function(self, event, minutes)
+			end,
+		GetInfo = function(self, event)
+				local character = DataStore:GetCharacter(event.char, event.realm)
+				local _, _, title, eventType, inviteStatus = DataStore:GetExpiredCalendarEventInfo(character, event.parentID)
 
 				inviteStatus = tonumber(inviteStatus)
 				
@@ -452,6 +486,14 @@ function ns:BuildList()
 				
 				-- TODO: do not add declined invitations
 				AddEvent(CALENDAR_LINE, eventDate, eventTime, characterName, realm, i)
+			end
+            
+            -- Expired Calendar Events
+            num = DataStore:GetNumExpiredCalendarEvents(character) or 0
+            for i = 1, num do
+				local eventDate, eventTime = DataStore:GetCalendarEventInfo(character, i)
+				
+				AddEvent(EXPIRED_CALENDAR_LINE, eventDate, eventTime, characterName, realm, i)
 			end
 			
 			-- Other timers (like mysterious egg, etc..)
