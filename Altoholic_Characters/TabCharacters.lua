@@ -116,7 +116,7 @@ function ns:ViewCharInfo(index)
 	HideAll()
 	ns:SetMode(index)
 	ns:ShowCharInfo(index)
-    AltoholicFrame:TriggerResizeEvents()
+    --AltoholicFrame:TriggerResizeEvents()
     ns:ShowCharInfo(index)
 end
 

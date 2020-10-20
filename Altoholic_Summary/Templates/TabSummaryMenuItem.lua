@@ -23,7 +23,7 @@ addon:Controller("AltoholicUI.TabSummaryMenuItem", {
 		addon.Summary:SetMode(frame:GetID())
 		addon.Summary:Update()
         
-        AltoholicFrame:TriggerResizeEvents()
+        --AltoholicFrame:TriggerResizeEvents()
         addon.Summary:Update()
 	end,
 })

@@ -48,7 +48,7 @@
 		<Scripts>
 			<OnLoad>
 				Altoholic:BindViewToController(self, "AltoholicUI.Achievements")
-                AltoholicFrame:TriggerResizeEvents()
+                --AltoholicFrame:TriggerResizeEvents()
 			</OnLoad>
 		</Scripts>
 	</Frame>

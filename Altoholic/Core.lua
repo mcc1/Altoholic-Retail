@@ -390,6 +390,7 @@ local function ShowTab(name)
 	local tab = _G[addonName.."Tab" .. name]
 	if tab then
 		tab:Show()
+        AltoholicFrame:TriggerResizeEvents()
 	end
 end
 
