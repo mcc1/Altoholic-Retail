@@ -5,7 +5,7 @@ Author: Teelo
 This library contains a database of gathering nodes with the associated item ID of the main item gathered from it.
 --]]
 
-local LIB_VERSION_MAJOR, LIB_VERSION_MINOR = "LibGatheringNodes-1.0", 1
+local LIB_VERSION_MAJOR, LIB_VERSION_MINOR = "LibGatheringNodes-1.0", 2
 local lib = LibStub:NewLibrary(LIB_VERSION_MAJOR, LIB_VERSION_MINOR)
 
 if not lib then return end -- No upgrade needed
