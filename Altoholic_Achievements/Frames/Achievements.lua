@@ -503,7 +503,7 @@ addon:Controller("AltoholicUI.Achievements", {
 		currentCategoryID = categoryID
 	end,
     OnBind = function(frame)
-        AltoholicFrame:RegisterResizeEvent("AltoholicTabAchievementsAchievements", 9, AltoholicTabAchievements.Achievements, 12)
+        AltoholicFrame:RegisterResizeEvent("AltoholicTabAchievementsAchievements", 8, AltoholicTabAchievements.Achievements, 12)
     end,
 	Update = function(frame)
 		local scrollFrame = frame.ScrollFrame
@@ -548,7 +548,7 @@ addon:Controller("AltoholicUI.Achievements", {
 			end
 		end
 
-        for rowIndex = numRows, 20 do
+        for rowIndex = numRows + 1, 20 do
             scrollFrame:GetRow(rowIndex):Hide()
         end
 
