@@ -56,7 +56,9 @@ local function SetStatus(character, professionName, mainCategory, subCategory, n
 	end
 
 	local status = format("%s|r / %s (%d %s)", DataStore:GetColoredCharacterName(character), text, numRecipes, TRADESKILL_SERVICE_LEARN)
-	AltoholicTabCharacters.Status:SetText(status)
+	if AltoholicFrameRecipes:IsVisible() then
+        AltoholicTabCharacters.Status:SetText(status)
+    end
 end
 
 local function RecipePassesColorFilter(color)

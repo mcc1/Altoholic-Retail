@@ -79,8 +79,10 @@ function ns:Update(frame)
 	local mode = addon:GetOption("UI.Tabs.Characters.GarrisonMissions")
 	local api = modes[mode]
 	
-	AltoholicTabCharacters.Status:SetText(format("%s|r / %s", DataStore:GetColoredCharacterName(character),
-		format(api.GetName(), api.GetNumMissions(character))))
+	if AltoholicFrameGarrisonMissions:IsVisible() then
+        AltoholicTabCharacters.Status:SetText(format("%s|r / %s", DataStore:GetColoredCharacterName(character),
+		  format(api.GetName(), api.GetNumMissions(character))))
+    end
 
 	BuildView()
 

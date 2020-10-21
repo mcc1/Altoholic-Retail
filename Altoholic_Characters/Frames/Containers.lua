@@ -49,7 +49,9 @@ local function UpdateSpread()
 	local DS = DataStore
 	local offset = scrollFrame:GetOffset()
 	
-	AltoholicTabCharacters.Status:SetText(format("%s|r / %s", DataStore:GetColoredCharacterName(character), L["Containers"]))
+	if AltoholicFrameContainers:IsVisible() then
+        AltoholicTabCharacters.Status:SetText(format("%s|r / %s", DataStore:GetColoredCharacterName(character), L["Containers"]))
+    end
 	
 	local rowFrame
 	local itemButton
@@ -177,7 +179,10 @@ local function UpdateAllInOne()
 	local numRows = scrollFrame.numRows
 	
 	local character = Altoholic.Tabs.Characters:GetAltKey()
-	AltoholicTabCharacters.Status:SetText(format("%s|r / %s / %s", DataStore:GetColoredCharacterName(character), L["Containers"], L["All-in-one"]))
+
+    if AltoholicFrameContainers:IsVisible() then
+	   AltoholicTabCharacters.Status:SetText(format("%s|r / %s / %s", DataStore:GetColoredCharacterName(character), L["Containers"], L["All-in-one"]))
+    end
 
 	local offset = scrollFrame:GetOffset()
 	

@@ -20,7 +20,9 @@ local function SetStatus(character, category, numQuests)
 
 	local status = format("%s|r / %s (%s%d|r)", DataStore:GetColoredCharacterName(character), text, colors.green, numQuests)
 
-	AltoholicTabCharacters.Status:SetText(status)
+	if AltoholicFrameQuests:IsVisible() then
+        AltoholicTabCharacters.Status:SetText(status)
+    end
 end
 
 local function GetQuestList(character, category)
