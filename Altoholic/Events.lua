@@ -215,6 +215,18 @@ local function AddEvent(eventType, eventDate, eventTime, char, realm, index, ext
 		source = externalTable})
 end
 
+local expiredEventList = {}
+local function AddExpiredEvent(eventType, eventDate, eventTime, char, realm, index, externalTable)
+	table.insert(expiredEventList, {
+		eventType = eventType, 
+		eventDate = eventDate, 
+		eventTime = eventTime, 
+		char = char,
+		realm = realm,
+		parentID = index,
+		source = externalTable})
+end
+
 local function SortEvents()
 	table.sort(eventList, function(a, b)
 		if (a.eventDate ~= b.eventDate) then			-- sort by date first ..
@@ -222,6 +234,16 @@ local function SortEvents()
 		elseif (a.eventTime ~= b.eventTime) then		-- .. then by hour
 			return a.eventTime < b.eventTime
 		elseif (a.char ~= b.char) then					-- .. then by alt
+			return a.char < b.char
+		end
+	end)
+    
+	table.sort(expiredEventList, function(a, b)
+		if (a.eventDate ~= b.eventDate) then
+			return a.eventDate < b.eventDate
+		elseif (a.eventTime ~= b.eventTime) then
+			return a.eventTime < b.eventTime
+		elseif (a.char ~= b.char) then
 			return a.char < b.char
 		end
 	end)
@@ -350,8 +372,28 @@ function ns:GetList()
 	return eventList
 end
 
+function ns:GetExpiredList()
+    return expiredEventList
+end
+
 function ns:GetInfo(index)
 	local event = ns:Get(index)		-- dereference event
+	if not event then return end
+	
+	local character = DataStore:GetCharacter(event.char, event.realm)
+	local char = DataStore:GetColoredCharacterName(character)
+	
+	if event.realm ~= GetRealmName() then	-- different realm ?
+		char = format("%s %s(%s)", char, colors.green, event.realm)
+	end
+	
+	local title, desc = eventTypes[event.eventType]:GetInfo(event)
+
+	return char, event.eventTime, title, desc
+end
+
+function ns:GetExpiredInfo(index)
+	local event = expiredEventList[index]
 	if not event then return end
 	
 	local character = DataStore:GetCharacter(event.char, event.realm)
@@ -376,6 +418,11 @@ function ns:GetDayCount(year, month, day)
 			count = count + 1
 		end
 	end
+    for k, v in pairs(expiredEventList) do
+        if v.eventDate == eventDate then
+            count = count + 1
+        end
+    end
 	return count
 end
 
@@ -432,6 +479,7 @@ end
 function ns:BuildList()
 	eventList = eventList or {}
 	wipe(eventList)
+    wipe(expiredEventList)
 
 	local timeGap = DataStore:GetClientServerTimeGap() or 0
 	
@@ -483,7 +531,7 @@ function ns:BuildList()
 			local num = DataStore:GetNumCalendarEvents(character) or 0 
 			for i = 1, num do
 				local eventDate, eventTime = DataStore:GetCalendarEventInfo(character, i)
-				
+
 				-- TODO: do not add declined invitations
 				AddEvent(CALENDAR_LINE, eventDate, eventTime, characterName, realm, i)
 			end
@@ -491,9 +539,9 @@ function ns:BuildList()
             -- Expired Calendar Events
             num = DataStore:GetNumExpiredCalendarEvents(character) or 0
             for i = 1, num do
-				local eventDate, eventTime = DataStore:GetCalendarEventInfo(character, i)
-				
-				AddEvent(EXPIRED_CALENDAR_LINE, eventDate, eventTime, characterName, realm, i)
+				local eventDate, eventTime = DataStore:GetExpiredCalendarEventInfo(character, i)
+
+				AddExpiredEvent(EXPIRED_CALENDAR_LINE, eventDate, eventTime, characterName, realm, i)
 			end
 			
 			-- Other timers (like mysterious egg, etc..)
