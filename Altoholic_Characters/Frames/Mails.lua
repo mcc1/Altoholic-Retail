@@ -79,16 +79,17 @@ function ns:Update()
 	local frame = "AltoholicFrameMail"
 	local scrollFrame = _G[frame].ScrollFrame
     local VisibleLines = scrollFrame.numRows
-	
 	local entry = frame.."Entry"
 	
 	local DS = DataStore
 	local character = addon.Tabs.Characters:GetAltKey()
 	
 	local numMails = DS:GetNumMails(character) or 0
-	AltoholicTabCharacters.Status:SetText(format("%s|r / %s", DataStore:GetColoredCharacterName(character), format(L["Mails %s(%d)"], colors.green, numMails)))
+	if AltoholicFrameMail:IsVisible() then 
+        AltoholicTabCharacters.Status:SetText(format("%s|r / %s", DataStore:GetColoredCharacterName(character), format(L["Mails %s(%d)"], colors.green, numMails)))
+    end
 	if numMails == 0 then		-- make sure the scroll frame is cleared !
-		for i=1, VisibleLines do					-- Hides all entries of the scrollframe, and updates it accordingly
+		for i=1, 18 do					-- Hides all entries of the scrollframe, and updates it accordingly
 			_G[ entry..i ]:Hide()
 		end
 
@@ -193,4 +194,4 @@ function ns:OnClick(self, button)
 	end
 end
 
---AltoholicFrame:RegisterResizeEvent("GarrisonMissions", 7, ns)
+AltoholicFrame:RegisterResizeEvent("AltoholicFrameMail", 8, ns)

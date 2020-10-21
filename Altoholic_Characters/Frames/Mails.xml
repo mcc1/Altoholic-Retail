@@ -69,7 +69,7 @@
 				<KeyValues>
 					<KeyValue key="numRows" value="18" type="number" />
                     <KeyValue key="rowHeight" value="41" type="number" />
-					<KeyValue key="rowTemplate" value="AltoMailEntryTemplate" />
+					<!--KeyValue key="rowTemplate" value="AltoMailEntryTemplate" /-->
 				</KeyValues>
 			</ScrollFrame>
 			
