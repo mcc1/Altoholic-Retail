@@ -173,11 +173,11 @@ LibStub("LibGatheringNodes-1.0").deDE = {
 	["Fuchsblume"]                       = 124103,
 	["Fjarnskaggl"]                     = 124104,
 	["Sternlichtrose"]                  = 124105,
-    ["Astral Glory"]     	            = 151565,	
+    ["Astralwinde"]     	            = 151565,	
 	
 	-- Battle for Azeroth
 	["Akundas Biss"]                   = 152507,
-	["Anchor Weed"]                     = 152510,
+	["Ankerkraut"]                     = 152510,
 	["Flussknospe"]                        = 152505,
 	["Meeresstängel"]                       = 152511,
 	["Sirenendorn"]                  = 152509,	
