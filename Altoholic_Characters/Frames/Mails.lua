@@ -102,32 +102,34 @@ function ns:Update()
 	for i=1, VisibleLines do
 		local line = i + offset
 		if line <= numMails then
-			local index = ns.view[line]
-			
-			local icon, count, link, _, _, wasReturned = DS:GetMailInfo(character, index)
-			
-			_G[ entry..i.."Name" ]:SetText(link or DS:GetMailSubject(character, index))
-			_G[ entry..i.."Character" ]:SetText(DS:GetMailSender(character, index))
-			
-			local msg
-			if not wasReturned then
-				msg = format(L["Will be %sreturned|r in"], colors.green, colors.white)
-			else
-				msg = format(L["Will be %sdeleted|r in"], colors.red, colors.white)
-			end
-			
-			local _, seconds = DataStore:GetMailExpiry(character, index)
-			_G[ entry..i.."Expiry" ]:SetText(format("%s:\n%s", msg, colors.white .. SecondsToTime(seconds)))
-			
-			_G[ entry..i.."ItemIconTexture" ]:SetTexture(icon);
-			if count and count > 1 then
-				_G[ entry..i.."ItemCount" ]:SetText(count)
-				_G[ entry..i.."ItemCount" ]:Show()
-			else
-				_G[ entry..i.."ItemCount" ]:Hide()
-			end
-			-- trick: pass the index of the current item in the results table, required for the tooltip
-			_G[ entry..i.."Item" ]:SetID(index)
+            if ns.view then
+    			local index = ns.view[line]
+    			
+    			local icon, count, link, _, _, wasReturned = DS:GetMailInfo(character, index)
+    			
+    			_G[ entry..i.."Name" ]:SetText(link or DS:GetMailSubject(character, index))
+    			_G[ entry..i.."Character" ]:SetText(DS:GetMailSender(character, index))
+    			
+    			local msg
+    			if not wasReturned then
+    				msg = format(L["Will be %sreturned|r in"], colors.green, colors.white)
+    			else
+    				msg = format(L["Will be %sdeleted|r in"], colors.red, colors.white)
+    			end
+    			
+    			local _, seconds = DataStore:GetMailExpiry(character, index)
+    			_G[ entry..i.."Expiry" ]:SetText(format("%s:\n%s", msg, colors.white .. SecondsToTime(seconds)))
+    			
+    			_G[ entry..i.."ItemIconTexture" ]:SetTexture(icon);
+    			if count and count > 1 then
+    				_G[ entry..i.."ItemCount" ]:SetText(count)
+    				_G[ entry..i.."ItemCount" ]:Show()
+    			else
+    				_G[ entry..i.."ItemCount" ]:Hide()
+    			end
+    			-- trick: pass the index of the current item in the results table, required for the tooltip
+    			_G[ entry..i.."Item" ]:SetID(index)
+            end
 			_G[ entry..i ]:Show()
 		else
 			_G[ entry..i ]:Hide()
