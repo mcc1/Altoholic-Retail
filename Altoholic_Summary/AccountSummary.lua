@@ -577,6 +577,10 @@ columns["Level"] = {
 			addon.Summary:Update()
 		end,
 	GetTotal = function(line) return Characters:GetField(line, "level") end,
+    OnTotalClick = function(frame, button)
+            addon:ToggleOption(nil, "UI.Tabs.Summary.ShowLevelTotalAverage")
+            addon.Summary:Update()
+        end,
 }
 
 columns["RestXP"] = {

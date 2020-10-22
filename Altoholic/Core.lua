@@ -87,6 +87,7 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Summary.ShowLevelDecimals"] = true,					-- display character level with decimals or not
 			["UI.Tabs.Summary.ShowILevelDecimals"] = true,					-- display character level with decimals or not
             --["UI.Tabs.Summary.ExcludeRealms.<Account>.<Realm>"] = true
+            ["UI.Tabs.Summary.ShowLevelTotalAverage"] = nil,                -- Display level totals as their average instead
 			
 			-- ** Character tab options **
 			["UI.Tabs.Characters.ViewBags"] = true,
