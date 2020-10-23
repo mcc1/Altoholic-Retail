@@ -86,7 +86,7 @@ local callbacks = {
 				        button.Name:SetJustifyH("CENTER")
 				        button.Name:SetPoint("BOTTOMRIGHT", 5, 0)
 				        button.Name:SetFontObject("GameFontNormalSmall")
-				        button.Name:SetText(icons.ready)
+				        button.Name:SetText(colors.green..DataStore:GetRareKills(character, creatureID))
                         return
                     end
                 end
