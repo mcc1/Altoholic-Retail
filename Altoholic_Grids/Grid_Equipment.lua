@@ -374,6 +374,8 @@ local callbacks = {
 	RowOnEnter = function()	end,
 	RowOnLeave = function() end,
 	ColumnSetup = function(self, button, dataRowID, character)
+            if dataRowID == 18 then dataRowID = 19 end -- Blizzard removed slot 18 (Ranged) without squashing the array. Reeee.
+            
 			button.Background:SetDesaturated(false)
 			button.Background:SetVertexColor(1.0, 1.0, 1.0)
 			button.Background:SetTexCoord(0, 1, 0, 1)

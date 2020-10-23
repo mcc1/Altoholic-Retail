@@ -823,7 +823,7 @@ local slotNames = {
 	[15] = INVTYPE_WEAPONMAINHAND,
 	[16] = INVTYPE_WEAPONOFFHAND,
 	[17] = INVTYPE_SHIELD,
-	[18] = INVTYPE_RANGED
+	[18] = INVTYPE_TABARD,
 }
 
 local slotTypeInfo = {

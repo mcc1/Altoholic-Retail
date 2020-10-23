@@ -33,7 +33,7 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.Equipment:StartAutoCastShine()
 		frame.currentGridID = 1
         
-        AltoholicFrame:RegisterResizeEvent("AltoholicFrameGrids", 9, AltoholicTabGrids, 12)
+        AltoholicFrame:RegisterResizeEvent("AltoholicFrameGrids", 8, AltoholicTabGrids, 12)
 	end,
 	RegisterGrid = function(frame, gridID, callbacks)
 		gridCallbacks[gridID] = callbacks
