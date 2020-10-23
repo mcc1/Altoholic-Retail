@@ -134,7 +134,7 @@ addon:Controller("AltoholicUI.TabGrids", {
 			end
 		end
         
-        for rowIndex = numRows, 20 do
+        for rowIndex = numRows + 1, 20 do
             scrollFrame:GetRow(rowIndex):Hide()
         end
 
