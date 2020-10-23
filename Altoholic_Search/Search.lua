@@ -325,26 +325,33 @@ function ns:Loots_Update()
 			itemButton = rowFrame.Item
 			itemButton.IconBorder:Hide()
 			
-			local itemName, _, itemRarity, itemLevel = GetItemInfo(itemID)
-			local r, g, b, hex = GetItemQualityColor(itemRarity)
-			
-			if itemRarity >= 2 then
-				itemButton.IconBorder:SetVertexColor(r, g, b, 0.5)
-				itemButton.IconBorder:Show()
-			end
-			
-			itemButton.Icon:SetTexture(GetItemIcon(itemID));
+            local item = Item:CreateFromItemID(itemID)
+            item:ContinueOnItemLoad(function()
+                local itemName = item:GetItemName()
+                local itemRarity = item:GetItemQuality()
+                local colorInfo = item:GetItemQualityColor()
+                local r, g, b, hex = colorInfo.color.r, colorInfo.color.g, colorInfo.color.b, colorInfo.hex
+                local itemLevel = item:GetCurrentItemLevel()
 
-			rowFrame.Stat2:SetText(colors.yellow .. itemLevel)
-			rowFrame.Name:SetText("|c" .. hex .. itemName)
-			rowFrame.Source.Text:SetText(colors.teal .. result.dropLocation)
-			rowFrame.Source:SetID(0)
-			
-			rowFrame.Stat1:SetText(colors.green .. result.bossName)
-
-			itemButton:SetInfo(itemID)
-			itemButton:SetCount(result.count)
-			rowFrame:Show()
+                if itemRarity >= 2 then
+    				itemButton.IconBorder:SetVertexColor(r, g, b, 0.5)
+    				itemButton.IconBorder:Show()
+    			end
+    			
+    			itemButton.Icon:SetTexture(item:GetItemIcon());
+    
+    			rowFrame.Stat2:SetText(colors.yellow .. itemLevel)
+    			rowFrame.Name:SetText(hex .. itemName)
+    			rowFrame.Source.Text:SetText(colors.teal .. result.dropLocation)
+    			rowFrame.Source:SetID(0)
+    			
+    			rowFrame.Stat1:SetText(colors.green .. (result.bossName or "bossName"))
+    
+    			itemButton:SetInfo(itemID)
+    			itemButton:SetCount(result.count)
+    			rowFrame:Show()
+            
+            end)
 		else
 			rowFrame:Hide()
 		end
@@ -396,7 +403,7 @@ function ns:Upgrade_Update()
 		rowFrame.Stat1:SetPoint("LEFT", rowFrame.Name, "RIGHT", 0, 0)
 		rowFrame.Stat2:SetWidth(50)
 		rowFrame.Stat2:SetPoint("LEFT", rowFrame.Stat1, "RIGHT", 0, 0)
-		rowFrame:SetScript("OnEnter", function(self) ns:TooltipStats(self) end)
+		rowFrame:SetScript("OnEnter", function(self) addon.Tabs.Search:TooltipStats(self) end)
 		rowFrame:SetScript("OnLeave", function(self) AltoTooltip:Hide() end)
 		
 		local line = rowIndex + offset
