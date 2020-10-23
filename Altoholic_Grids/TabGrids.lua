@@ -14,11 +14,11 @@ addon:Controller("AltoholicUI.TabGrids", {
 		frame.Equipment.text = L["Equipment"]
 		frame.Factions.text = L["Reputations"]
 		frame.Archeology.text = GetSpellInfo(78670)
-		frame.Dailies.text = "Daily Quests"
+		frame.Dailies.text = L["Daily Quests"]
 		frame.FollowerAbilities.text = format("Garrison %s/%s", GARRISON_RECRUIT_ABILITIES, GARRISON_RECRUIT_TRAITS)
 		frame.Sets.text = WARDROBE_SETS
-        frame.Tasks.text = "Tasks"
-        frame.Essences.text = "Azerite Essences"
+        frame.Tasks.text = L["Tasks"]
+        frame.Essences.text = L["Azerite Essences"]
         AltoholicTabGrids.SelectAccount.Middle:SetSize(140, 64)
 		
 		frame.SelectAccount:RegisterClassEvent("AccountChanged", function()

@@ -867,3 +867,5 @@ end
 function ns:GetInventoryTypeName(inv)
 	return slotNames[ inventoryTypes[inv] ]
 end
+
+Item:CreateFromItemID(6948)

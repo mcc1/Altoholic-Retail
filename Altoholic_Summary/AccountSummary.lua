@@ -1771,7 +1771,7 @@ columns["FollowersLV100"] = {
 
 columns["FollowersEpic"] = {
 	-- Header
-	headerWidth = 55,
+	headerWidth = 85,
 	headerLabel = L["COLUMN_FOLLOWERS_RARITY_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_FOLLOWERS_RARITY_TITLE"],
 	tooltipSubTitle = L["COLUMN_FOLLOWERS_RARITY_SUBTITLE"],
@@ -1779,7 +1779,7 @@ columns["FollowersEpic"] = {
 	headerSort = GetRarityLevel,
 	
 	-- Content
-	Width = 55,
+	Width = 85,
 	JustifyH = "CENTER",
 	GetText = function(character)
 			local numRare = DataStore:GetNumRareFollowers(character) or 0
@@ -2007,11 +2007,17 @@ columns["HighestKeystoneTime"] = {
 		end,
 }
 
+local hearthstoneName = "" 
+local item = Item:CreateFromItemID(6948)
+item:ContinueOnItemLoad(function()
+	hearthstoneName = item:GetItemName()
+end)
+
 columns["BindLocation"] = {
 	-- Header
 	headerWidth = 120,
-	headerLabel = "Hearthstone",
-	tooltipTitle = "Bind Location",
+	headerLabel = hearthstoneName,
+	tooltipTitle = L["Bind Location"],
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("BindLocation") end,
 	headerSort = DataStore.GetHearthstone,
@@ -2030,8 +2036,8 @@ columns["BindLocation"] = {
 columns["ConquestPoints"] = {
 	-- Header
 	headerWidth = 80,
-	headerLabel = "Conquest",
-	tooltipTitle = "Conquest Points",
+	headerLabel = PVP_CONQUEST,
+	tooltipTitle = L["Conquest Points"],
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("ConquestPoints") end,
 	headerSort = DataStore.GetConquestPoints,
@@ -2055,8 +2061,8 @@ columns["ConquestPoints"] = {
 columns["RenownLevel"] = {
 	-- Header
 	headerWidth = 90,
-	headerLabel = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
-	tooltipTitle = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
+	headerLabel = COVENANT_SANCTUM_TAB_RENOWN,
+	tooltipTitle = COVENANT_SANCTUM_TAB_RENOWN,
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("RenownLevel") end,
 	headerSort = DataStore.GetRenownLevel,
@@ -2133,6 +2139,8 @@ function ns:SetMode(mode)
 end
 
 function ns:Update()
+    AltoholicTabSummary_DesMephistoButton:SetText(L["Reset Filters"]) -- TODO: find a better home for this
+    
 	local frame = AltoholicFrameSummary
 	local scrollFrame = frame.ScrollFrame
 	local numRows = scrollFrame.numRows

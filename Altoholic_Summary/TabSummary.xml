@@ -114,7 +114,7 @@
 				</Scripts>
 			</Button>
             
-            <Button name="$parent_DesMephistoButton" inherits="UIPanelButtonTemplate" text="Reset Filters"> <!-- Reset All Filters button -->
+            <Button name="$parent_DesMephistoButton" inherits="UIPanelButtonTemplate"> <!-- Reset All Filters button -->
             	<Size x="100" y="20" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.ClassIcon" relativePoint="TOPRIGHT" x="10" y="-8"/>
