@@ -1,5 +1,5 @@
 ## Interface: 90001
-## Title: Altoholic - |cFF69CCF0Teelos Fork|r
+## Title: Altoholic |TInterface\Icons\INV_Drink_13:0|t
 ## Title-zhCN: |cffeedd99 [物品] |r: 全角色统计 Altoholic
 
 ## Notes: Provides information about your alts
