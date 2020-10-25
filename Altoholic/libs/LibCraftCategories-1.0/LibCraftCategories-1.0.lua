@@ -32,6 +32,8 @@ C_Timer.After(1, initialize)
 local outputErrorOnce = false
 -- pass in localized category name, get the expansionID
 function lib.categoryNameToExpansionID(categoryName)
+    if not categoryName then return end
+    
     local expansionID = GetClientDisplayExpansionLevel() + 1
     local professionCategoryTable = lib[GAME_LOCALE]
 
@@ -56,6 +58,6 @@ function lib.categoryNameToExpansionID(categoryName)
     end
 
     if outputErrorOnce then return end
-    print("Error in LibCraftCategories: failed to find category name")
+    print("Error in LibCraftCategories: failed to find category name:", categoryName)
     outputErrorOnce = true
 end
