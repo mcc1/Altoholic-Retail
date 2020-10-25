@@ -52,7 +52,7 @@
                         --end
                         local excessXPixels, excessYPixels = self:GetExcessSize()
                         
-                        local rowHeight = _G[frame].ScrollFrame.rowHeight + 8
+                        local rowHeight = _G[frame].ScrollFrame.rowHeight + 4
                         local rowsToAdd = math.floor(excessYPixels / rowHeight)
                         if rowsToAdd &lt; 0 then rowsToAdd = 0 end
                         _G[frame].ScrollFrame.numRows = minRows + rowsToAdd
@@ -162,46 +162,30 @@
                     <TexCoords left="0" right="1" top="0" bottom="0.71875" />
 				</Texture>
 			</Layer>
-			<!--Layer level="ARTWORK" textureSubLevel="3">
-                <Texture name="$parentMiddleLeft" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-MiddleLeft">
-                    <Size x="256" y="256" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" relativeTo="$parentBotLeft" relativePoint="TOPLEFT" y="-100"/>
-                    </Anchors>
-                </Texture>
-                <Texture name="$parentTop2" file="Interface\AuctionFrame\UI-AuctionFrame-Browse-Top">
+			<Layer level="ARTWORK" textureSubLevel="5">
+				<Texture name="$parentBotLeftCover" file="Interface\AuctionFrame\UI-AuctionFrame-Browse-BotLeft">
+					<Size x="256" y="256" />
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="0" y="0" />
+					</Anchors>
+                    <TexCoords left="0" right="1" top="0" bottom="0.71875" />
+				</Texture>
+				<Texture name="$parentBotRightCover" file="Interface\AuctionFrame\UI-AuctionFrame-Bid-BotRight">
+					<Size x="256" y="256" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="0" y="0" />
+					</Anchors>
+                    <TexCoords left="0" right="1" top="0" bottom="0.71875" />
+				</Texture>
+                <Texture name="$parentBotCover" file="Interface\AuctionFrame\UI-AuctionFrame-Auction-Bot">
 					<Size x="320" y="256" />
 					<Anchors>
-						<Anchor point="TOPRIGHT" relativeTo="$parentTopRight" relativePoint="TOPLEFT" />
+						<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" relativeTo="$parentBotLeftCover"/>
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT" relativeTo="$parentBotRightCover"/>
 					</Anchors>
+                    <TexCoords left="0" right="1" top="0" bottom="0.71875" />
 				</Texture>
-				<Texture name="$parentBot2" file="Interface\AuctionFrame\UI-AuctionFrame-Auction-Bot">
-					<Size x="320" y="256" />
-					<Anchors>
-						<Anchor point="BOTTOMRIGHT" relativeTo="$parentBotRight" relativePoint="BOTTOMLEFT" />
-					</Anchors>
-				</Texture>
-                <Texture name="$parentMiddleRight" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-MiddleRight">
-                    <Size x="256" y="256" />
-                    <Anchors>
-                        <Anchor point="BOTTOMRIGHT" relativeTo="$parentBotRight" relativePoint="TOPRIGHT" y="-100"/>
-                    </Anchors>
-                </Texture>
             </Layer>
-            <Layer level="ARTWORK" textureSubLevel="2">
-                <Texture name="$parentCenter1" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-Center">
-					<Size x="320" y="256" />
-					<Anchors>
-						<Anchor point="TOPLEFT" relativeTo="$parentTop" relativePoint="BOTTOMLEFT" y="100"/>
-					</Anchors>
-				</Texture>
-                <Texture name="$parentCenter2" file="Interface\AddOns\Altoholic\Frames\UI-AuctionFrame-Browse-Center">
-					<Size x="320" y="256" />
-					<Anchors>
-						<Anchor point="TOPLEFT" relativeTo="$parentTop2" relativePoint="BOTTOMLEFT" y="100"/>
-					</Anchors>
-				</Texture>
-            </Layer-->
 			<Layer level="OVERLAY">
 				<FontString name="$parentName" inherits="GameFontNormal" justifyH="CENTER">
 					<Size x="300" y="18" />

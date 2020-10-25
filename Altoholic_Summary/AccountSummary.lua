@@ -2243,4 +2243,4 @@ function addon:AiLTooltip()
 	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (60)"), FormatAiL("165+"))
 end
 
-AltoholicFrame:RegisterResizeEvent("AltoholicFrameSummary", 14, ns)
+AltoholicFrame:RegisterResizeEvent("AltoholicFrameSummary", 13, ns)
