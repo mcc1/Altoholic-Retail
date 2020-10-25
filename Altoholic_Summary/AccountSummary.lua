@@ -14,6 +14,7 @@ local MODE_CURRENCIES = 5
 local MODE_FOLLOWERS = 6
 local MODE_KEYSTONES = 7
 local MODE_HEARTHSTONE = 8
+local MODE_GEAR = 9
 
 local SKILL_CAP = 900
 local CURRENCY_ID_JUSTICE = 395
@@ -2083,6 +2084,48 @@ columns["RenownLevel"] = {
 		end,
 }
 
+for i = 1, 19 do
+    if i ~= 18 then
+        -- Skip ranged slot
+        columns["Equipment"..i] = {
+        	-- Header
+        	headerWidth = 25,
+        	headerLabel = format(TEXTURE_FONT, addon:GetEquipmentSlotIcon(i), 18, 18),
+        	tooltipTitle = nil,
+        	tooltipSubTitle = nil,
+        	headerOnEnter = function() end,
+        	headerOnClick = function() end,
+        	headerSort = nil,
+        	
+        	-- Content
+        	Width = 25,
+        	JustifyH = "CENTER",
+        	GetText = function(character)
+                    local item = DataStore:GetInventoryItem(character, i)
+        			if item then
+                        return format(TEXTURE_FONT, GetItemIcon(item), 18, 18)
+                    else
+                        return ""
+                    end
+        		end,
+        	OnEnter = function(frame)
+                    local character = frame:GetParent().character
+                    local item = DataStore:GetInventoryItem(character, i)
+                    if item then
+                    	local tt = AltoTooltip
+                    	
+                    	tt:ClearLines()
+                    	tt:SetOwner(frame, "ANCHOR_RIGHT")
+                    	tt:SetHyperlink(item)
+                        tt:Show()
+                    end
+        		end,
+        	OnClick = function(frame, button)
+        		end,
+        }
+    end
+end
+
 local function ColumnHeader_OnEnter(frame)
 	local column = frame.column
 	if not frame.column then return end		-- invalid data ? exit
@@ -2119,7 +2162,14 @@ local modes = {
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
     [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints", "RenownLevel", "FreeReagentBankSlots", "FreeVoidStorageSlots" },
+    [MODE_GEAR] = {"Name", }
 }
+
+for i = 1, 19 do
+    if i ~= 18 then
+        table.insert(modes[MODE_GEAR], "Equipment"..i)
+    end
+end
 
 function ns:SetMode(mode)
 	addon:SetOption("UI.Tabs.Summary.CurrentMode", mode)
