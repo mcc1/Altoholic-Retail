@@ -57,7 +57,11 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MenuItem7" relativePoint="BOTTOMLEFT" x="0" y="0" />
 				</Anchors>
 			</Button>
-            
+            <Button parentKey="MenuItem9" inherits="AltoTabSummaryMenuItemTemplate" id="9">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.MenuItem8" relativePoint="BOTTOMLEFT" x="0" y="0" />
+				</Anchors>
+			</Button>
 			
 			<Button parentKey="RealmsIcon" inherits="AltoTabSummaryIconTemplate" id="1">
 				<Anchors>
@@ -163,7 +167,7 @@
 			
 			<Frame parentKey="SortButtons" inherits="AltoSortButtonsContainerTemplate">
 				<KeyValues>
-					<KeyValue key="numButtons" value="9" type="number" />
+					<KeyValue key="numButtons" value="19" type="number" />
 					<KeyValue key="option" value="UI.Tabs.Summary.SortAscending" />
 				</KeyValues>
 			</Frame>
@@ -206,6 +210,7 @@
 				self.MenuItem6:SetText(GARRISON_FOLLOWERS_TITLE)
                 self.MenuItem7:SetText(PVEFrameTab3:GetText())
                 self.MenuItem8:SetText("Misc")
+                self.MenuItem9:SetText(L["Equipment"])
 					
 				self.RequestSharing:SetText(L["Account Sharing"])
 				
