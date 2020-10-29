@@ -866,8 +866,8 @@ L[ [=[Your confirmation will still be required any time someone requests your in
 L["Zelemar the Wrathful"] = "憤怒者塞雷瑪爾"
 L["Zone"] = "地區"
 
-L["will be returned upon expiry"] = "TRANSLATION MISSING"
-L["CLOSEST_RETURN_IN_PATTERN"] = "TRANSLATION MISSING %s" -- %s will be filled in by [# hours # minutes]
-L["CLOSEST_DELETION_IN_PATTERN"] = "TRANSLATION MISSING %s" -- ^
-L["MAIL_WILL_BE_DELETED_PATTERN"] = "|cFF00FF00%d|cFFFFFFFF will be |cFFFF0000deleted|cFFFFFFFF upon expiry"
-L["Mails found:"] = "TRANSLATION MISSING"
+L["will be returned upon expiry"] = "封信將會在到期後被退回"
+L["CLOSEST_RETURN_IN_PATTERN"] = "信件將在 %s|cFFFFFFFF 後被退回" -- %s will be filled in by [# hours # minutes]
+L["CLOSEST_DELETION_IN_PATTERN"] = "信件將在 %s|cFFFFFFFF 後被刪除" -- ^
+L["MAIL_WILL_BE_DELETED_PATTERN"] = "|cFF00FF00%d|cFFFFFFFF 在到期後將會被 |cFFFF0000刪除|cFFFFFFFF"
+L["Mails found:"] = "信件數量:"
